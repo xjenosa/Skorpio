@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: skorpio
+      POSTGRES_PASSWORD: skorpio
+      POSTGRES_DB: skorpio
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skorpio"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    # Forward everything in .env (Stage 2 auth keys live there too).
+    env_file:
+      - .env
+    # Hard overrides — beat anything in .env. DATABASE_URL is forced to point
+    # at the postgres service (not localhost) since we're inside the compose net.
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=postgresql+asyncpg://skorpio:skorpio@postgres:5432/skorpio
+    volumes:
+      - ./data:/app/data
+      # Bind-mount for `python -m backend.scripts.export_demo_fixtures` so
+      # the static JSON files it writes show up on the host filesystem and
+      # get bundled into the frontend build. Harmless when the script isn't
+      # being run — the container just sees an extra empty directory.
+      - ./frontend/src/demo/fixtures:/app/frontend/src/demo/fixtures
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      # Optional. When set, MapView renders an interactive Mapbox map.
+      # Falls back to a coords-only list when unset, so the UI still works
+      # for contributors without a token. Free token from mapbox.com.
+      - VITE_MAPBOX_TOKEN=${VITE_MAPBOX_TOKEN:-}
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
