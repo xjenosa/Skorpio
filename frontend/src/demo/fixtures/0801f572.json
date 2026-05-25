@@ -1,0 +1,389 @@
+﻿{
+  "prefix": "0801f572",
+  "pipeline_id": "datacenter-expansion",
+  "job_list_item": {
+    "job_id": "0801f572-8f11-46f0-b7f0-4dc7c9731145",
+    "workload_spec": "Plan 30 MW of expansion at our Vaughan datacenter, 18-month horizon.",
+    "stage": "completed",
+    "progress": 100.0,
+    "created_at": "2026-05-25T04:27:34.570257",
+    "pipeline_id": "datacenter-expansion",
+    "imported": false,
+    "imported_from_email": null
+  },
+  "job_status": {
+    "job_id": "0801f572-8f11-46f0-b7f0-4dc7c9731145",
+    "workload_spec": "Plan 30 MW of expansion at our Vaughan datacenter, 18-month horizon.",
+    "stage": "completed",
+    "progress": 100.0,
+    "message": "Expansion plan ready",
+    "started_at": "2026-05-25T04:27:34.584838",
+    "updated_at": "2026-05-25T04:28:45.507456",
+    "error": null,
+    "has_results": true,
+    "pipeline_id": "datacenter-expansion",
+    "paused": false,
+    "progress_log": [
+      {
+        "ts": "04:27:34",
+        "text": "Queued",
+        "level": "info"
+      },
+      {
+        "ts": "04:27:34",
+        "text": "Parsing expansion query...",
+        "level": "info"
+      },
+      {
+        "ts": "04:27:34",
+        "text": "Parsing expansion scope with AI...",
+        "level": "info"
+      },
+      {
+        "ts": "04:27:37",
+        "text": "Parsed: eStruxture Â· +30 MW Â· 1y Â· balanced",
+        "level": "info"
+      },
+      {
+        "ts": "04:27:37",
+        "text": "User named Vaughan; routed to eStruxture (ESTR-TOR-1).",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Loading operator footprint...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Loading eStruxture footprint...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Fetching live ElectricityMaps carbon intensity for 2 zone(s)...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Loaded 3 site(s) Â· 115 MW operating Â· 0 zone(s) enriched live",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Forecasting demand growth...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Projecting demand under balanced workload mix...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Year-1 demand: 120 MW (+22 MW vs baseline @ 22% CAGR)",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Generating + scoring expansion options...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Generating candidate expansion options...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:21",
+        "text": "Generating rationales for 3 expansion options in parallel...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:26",
+        "text": "Scored 3 expansion options",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:26",
+        "text": "Selected 2 option(s) covering 30 MW of 30 MW target",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:26",
+        "text": "Composing expansion plan...",
+        "level": "info"
+      },
+      {
+        "ts": "04:28:45",
+        "text": "Expansion plan ready",
+        "level": "ok"
+      }
+    ]
+  },
+  "result": {
+    "job_id": "0801f572-8f11-46f0-b7f0-4dc7c9731145",
+    "spec": {
+      "query": "Plan 30 MW of expansion at our Vaughan datacenter, 18-month horizon.",
+      "normalized_name": "eStruxture Â· +30 MW Â· 2027 balanced",
+      "operator": "eStruxture",
+      "province": "QC",
+      "target_additional_mw": 30.0,
+      "horizon_years": 1,
+      "target_year": 2027,
+      "workload_mix": "balanced",
+      "prefer_brownfield": true,
+      "context_summary": "Expansion study for eStruxture: add +30 MW over 1 years under a balanced workload mix.",
+      "city": "Vaughan",
+      "target_site_id": "ESTR-TOR-1",
+      "routing_note": "User named Vaughan; routed to eStruxture (ESTR-TOR-1)."
+    },
+    "footprint": {
+      "operator": "eStruxture",
+      "province": "QC",
+      "sites": [
+        {
+          "site_id": "ESTR-MTL-1",
+          "name": "eStruxture MTL-1 Saint-Bruno",
+          "operator": "eStruxture",
+          "city": "MontrÃ©al",
+          "province": "QC",
+          "latitude": 45.527,
+          "longitude": -73.378,
+          "year_commissioned": 2018,
+          "current_capacity_mw": 60.0,
+          "contracted_mw": 52.0,
+          "plot_acres": 14.0,
+          "transformer_headroom_mw": 18.0,
+          "fiber_providers": [
+            "Bell",
+            "Cogeco",
+            "Rogers",
+            "Telus"
+          ],
+          "cooling": "hybrid",
+          "water_available_l_s": 22.0,
+          "grid_zone": "CA-QC",
+          "avg_carbon_g_kwh": 30.0,
+          "pue": 1.22,
+          "notes": "Flagship Quebec campus, Hydro-QuÃ©bec 315 kV feed."
+        },
+        {
+          "site_id": "ESTR-MTL-2",
+          "name": "eStruxture MTL-2 Pointe-Claire",
+          "operator": "eStruxture",
+          "city": "Pointe-Claire",
+          "province": "QC",
+          "latitude": 45.451,
+          "longitude": -73.808,
+          "year_commissioned": 2020,
+          "current_capacity_mw": 40.0,
+          "contracted_mw": 36.0,
+          "plot_acres": 8.0,
+          "transformer_headroom_mw": 8.0,
+          "fiber_providers": [
+            "Bell",
+            "Cogeco",
+            "Telus"
+          ],
+          "cooling": "air",
+          "water_available_l_s": 0.0,
+          "grid_zone": "CA-QC",
+          "avg_carbon_g_kwh": 30.0,
+          "pue": 1.28,
+          "notes": "Tier-III west-island site, limited plot."
+        },
+        {
+          "site_id": "ESTR-TOR-1",
+          "name": "eStruxture TOR-1 Vaughan",
+          "operator": "eStruxture",
+          "city": "Vaughan",
+          "province": "ON",
+          "latitude": 43.836,
+          "longitude": -79.539,
+          "year_commissioned": 2022,
+          "current_capacity_mw": 15.0,
+          "contracted_mw": 10.0,
+          "plot_acres": 12.0,
+          "transformer_headroom_mw": 10.0,
+          "fiber_providers": [
+            "Bell",
+            "Rogers",
+            "Cogeco"
+          ],
+          "cooling": "hybrid",
+          "water_available_l_s": 12.0,
+          "grid_zone": "CA-ON",
+          "avg_carbon_g_kwh": 130.0,
+          "pue": 1.3,
+          "notes": "GTA expansion runway, Hydro One 230 kV."
+        }
+      ],
+      "total_current_capacity_mw": 115.0,
+      "is_synthesized": false,
+      "sources": [
+        "Cushman & Wakefield Canada DC Market 2024",
+        "DC Byte Canadian DC Insights 2024",
+        "Operator press releases + company pages"
+      ]
+    },
+    "demand_forecast": {
+      "workload_mix": "balanced",
+      "horizon_years": 1,
+      "annual_growth_rate": 0.22,
+      "baseline_mw": 98.0,
+      "annual_demand_mw": [
+        119.6
+      ],
+      "target_mw_year_n": 119.6,
+      "drivers": [
+        "Mixed AI + traditional workload pipeline",
+        "Operator hedging between training and inference revenue"
+      ]
+    },
+    "options": [
+      {
+        "option_id": "OPT-bf03070e",
+        "option_type": "brownfield",
+        "target_site_id": "ESTR-TOR-1",
+        "title": "eStruxture TOR-1 Vaughan Phase 23 , +10 MW (hybrid)",
+        "new_capacity_mw": 10.0,
+        "capex_cad": 110000000.0,
+        "capex_per_mw_cad": 11000000.0,
+        "deployment_months": 18,
+        "grid_score": 0.84,
+        "sustainability_score": 0.701,
+        "speed_score": 0.95,
+        "cost_score": 0.778,
+        "risk_score": 0.85,
+        "overall_score": 0.943,
+        "rank": 1,
+        "rationale": "eStruxture TOR-1 Vaughan Phase 23 delivers +10 MW of balanced-workload capacity at $11.0M/MW (Capex field) within 18 months (Deployment field), supported by a low grid carbon intensity of 130 g/kWh (Grid carbon field) that drives a strong sustainability score of 0.701 (Scores field), while the brownfield nature of the expansion underpins a speed score of 0.95 and risk score of 0.85 (Scores field), making this a cost-efficient, low-carbon, fast-to-market option",
+        "blockers": [],
+        "latitude": 43.836,
+        "longitude": -79.539,
+        "grid_zone": "CA-ON",
+        "avg_carbon_g_kwh": 130.0
+      },
+      {
+        "option_id": "OPT-6cf4979b",
+        "option_type": "brownfield",
+        "target_site_id": "ESTR-MTL-1",
+        "title": "eStruxture MTL-1 Saint-Bruno Phase 19 , +20 MW (hybrid)",
+        "new_capacity_mw": 20.0,
+        "capex_cad": 220000000.0,
+        "capex_per_mw_cad": 11000000.0,
+        "deployment_months": 18,
+        "grid_score": 0.86,
+        "sustainability_score": 0.909,
+        "speed_score": 0.95,
+        "cost_score": 0.778,
+        "risk_score": 0.85,
+        "overall_score": 0.87,
+        "rank": 2,
+        "rationale": "Expanding eStruxture MTL-1 Saint-Bruno by 20 MW via a brownfield hybrid build delivers a compelling sustainability profile at a grid carbon intensity of 30 g/kWh (provided data) and a sustainability score of 0.909 out of 1.0 (provided score), while the 18-month deployment timeline supports a speed score of 0.95 out of 1.0 (provided score), all at a capital cost of $220M ($11.0M/MW, provided data) that yields a cost score of 0.778 out of 1.0 (provided score),",
+        "blockers": [],
+        "latitude": 45.527,
+        "longitude": -73.378,
+        "grid_zone": "CA-QC",
+        "avg_carbon_g_kwh": 30.0
+      },
+      {
+        "option_id": "OPT-bb9d8b40",
+        "option_type": "brownfield",
+        "target_site_id": "ESTR-MTL-2",
+        "title": "eStruxture MTL-2 Pointe-Claire Phase 21 , +10 MW (air)",
+        "new_capacity_mw": 10.0,
+        "capex_cad": 95000000.0,
+        "capex_per_mw_cad": 9500000.0,
+        "deployment_months": 18,
+        "grid_score": 0.72,
+        "sustainability_score": 0.722,
+        "speed_score": 0.95,
+        "cost_score": 0.944,
+        "risk_score": 0.85,
+        "overall_score": 0.831,
+        "rank": 3,
+        "rationale": "Expanding eStruxture MTL-2 Pointe-Claire Phase 21 by 10 MW via brownfield development is justified by its exceptionally low grid carbon intensity of 30 g/kWh (grid score 0.72), a competitive all-in capex of $9.5M/MW totaling $95M (cost score 0.944), and a rapid 18-month deployment timeline (speed score 0.95), together with a strong risk profile (risk score 0.85) that collectively make this a low-carbon, fast-to-market, cost-efficient capacity addition for balanced workloads",
+        "blockers": [],
+        "latitude": 45.451,
+        "longitude": -73.808,
+        "grid_zone": "CA-QC",
+        "avg_carbon_g_kwh": 30.0
+      }
+    ],
+    "funded_options": [
+      {
+        "option_id": "OPT-bf03070e",
+        "option_type": "brownfield",
+        "target_site_id": "ESTR-TOR-1",
+        "title": "eStruxture TOR-1 Vaughan Phase 23 , +10 MW (hybrid)",
+        "new_capacity_mw": 10.0,
+        "capex_cad": 110000000.0,
+        "capex_per_mw_cad": 11000000.0,
+        "deployment_months": 18,
+        "grid_score": 0.84,
+        "sustainability_score": 0.701,
+        "speed_score": 0.95,
+        "cost_score": 0.778,
+        "risk_score": 0.85,
+        "overall_score": 0.943,
+        "rank": 1,
+        "rationale": "eStruxture TOR-1 Vaughan Phase 23 delivers +10 MW of balanced-workload capacity at $11.0M/MW (Capex field) within 18 months (Deployment field), supported by a low grid carbon intensity of 130 g/kWh (Grid carbon field) that drives a strong sustainability score of 0.701 (Scores field), while the brownfield nature of the expansion underpins a speed score of 0.95 and risk score of 0.85 (Scores field), making this a cost-efficient, low-carbon, fast-to-market option",
+        "blockers": [],
+        "latitude": 43.836,
+        "longitude": -79.539,
+        "grid_zone": "CA-ON",
+        "avg_carbon_g_kwh": 130.0
+      },
+      {
+        "option_id": "OPT-6cf4979b",
+        "option_type": "brownfield",
+        "target_site_id": "ESTR-MTL-1",
+        "title": "eStruxture MTL-1 Saint-Bruno Phase 19 , +20 MW (hybrid)",
+        "new_capacity_mw": 20.0,
+        "capex_cad": 220000000.0,
+        "capex_per_mw_cad": 11000000.0,
+        "deployment_months": 18,
+        "grid_score": 0.86,
+        "sustainability_score": 0.909,
+        "speed_score": 0.95,
+        "cost_score": 0.778,
+        "risk_score": 0.85,
+        "overall_score": 0.87,
+        "rank": 2,
+        "rationale": "Expanding eStruxture MTL-1 Saint-Bruno by 20 MW via a brownfield hybrid build delivers a compelling sustainability profile at a grid carbon intensity of 30 g/kWh (provided data) and a sustainability score of 0.909 out of 1.0 (provided score), while the 18-month deployment timeline supports a speed score of 0.95 out of 1.0 (provided score), all at a capital cost of $220M ($11.0M/MW, provided data) that yields a cost score of 0.778 out of 1.0 (provided score),",
+        "blockers": [],
+        "latitude": 45.527,
+        "longitude": -73.378,
+        "grid_zone": "CA-QC",
+        "avg_carbon_g_kwh": 30.0
+      }
+    ],
+    "phased_rollout": [
+      {
+        "year": 1,
+        "options": [
+          "OPT-bf03070e",
+          "OPT-6cf4979b"
+        ],
+        "cumulative_new_mw": 30.0,
+        "cumulative_capex_cad": 330000000.0
+      }
+    ],
+    "total_new_capacity_mw": 30.0,
+    "total_capex_cad": 330000000.0,
+    "blended_carbon_g_kwh": 63.3,
+    "coverage_pct": 100.0,
+    "executive_summary": "# Executive Summary: 30 MW Expansion Plan. Vaughan / eStruxture TOR-1 & MTL-1, 2027\n\n**Target Fully Funded**\n\nGrounded at the Vaughan, Ontario market and anchored to eStruxture's TOR-1 facility, this expansion plan meets the operator's full 30 MW target by 2027 with no greenfield development required. Two brownfield hybrid options together deliver exactly 30 new MW against a year-1 projected demand of 120 MW (up from a baseline of 98 MW contracted today), at a total capital commitment of $0.33B (plan data). The blended grid carbon intensity across both options stands at 63 g/kWh (plan data), a figure that compares favorably to typical North American grid averages and reflects the low-carbon character of Quebec and Ontario's generation mix.\n\n**Two Options Carry the Plan**\n\nThe primary option, eStruxture TOR-1 Vaughan Phase 23, contributes 10 MW via a hybrid power configuration and directly serves the Vaughan demand node identified by the operator (plan data). The secondary option, eStruxture MTL-1 Saint-Bruno Phase 19, adds the remaining 20 MW under the same hybrid model, leveraging eStruxture's established Quebec footprint where hydroelectric generation typically underpins some of the lowest-carbon and lowest-cost grid conditions in North America (plan data; industry context). Together, these two phases achieve 100% coverage of the 30 MW target (plan data).\n\n**Shortfall and Demand Risk**\n\nNo capacity shortfall exists within the funded plan itself, as coverage reaches 100% of the stated target (plan data). However, the 22 MW gap between today's baseline of 98 MW and the year-1 projected demand of 120 MW (plan data) must be absorbed entirely by these two options on schedule, leaving no buffer if either phase experiences permitting delays or equipment procurement slippage. Risks that are elevated in the current transformer and switchgear supply environment. Any demand acceleration beyond the balanced workload mix assumed here would expose the operator to an uncovered position before additional phases could be brought online.\n\n**Analytical Caveats**\n\nThis analysis is grounded in the funded options catalog and plan-level data provided; latency benchmarks, per-site LCOE figures, and customer proximity metrics were not available in the source data and have been omitted rather than estimated. Operator routing was resolved from the user-named city of Vaughan directly to eStruxture ESTR-TOR-1, as eStruxture is the catalog operator with an established site serving that market. The workload mix is characterized as balanced (plan data), meaning neither compute-heavy GPU density nor storage-heavy cold-tier assumptions have been applied to refine per-MW cost or cooling load modeling.\n\n**Strategic Recommendation**\n\nFor the next budget cycle, leadership should prioritize securing long-lead electrical equipment. Particularly transformers. For both the TOR-1 and MTL-1 phases immediately, given that the 2027 in-service date leaves limited schedule contingency. Given the 63 g/kWh blended carbon intensity (plan data) and the operator's Quebec-Ontario corridor positioning, this portfolio is well-situated to support sustainability commitments, and leadership should evaluate whether an additional phase at either site could be optioned now to create headroom against demand upside without triggering a new greenfield entitlement process.",
+    "methodology_notes": "Brownfield capacity per site capped at min(transformer headroom, 5 MW/acre plot density). Capex per MW: $9.5M (air), $11M (hybrid), $13.5M (liquid), with +10% AI-training premium and +25% greenfield premium (anchored on JLL + Cushman 2024 Canadian DC build benchmarks). Demand growth assumed: traditional 12% / inference 25% / training 40% / balanced 22% CAGR. Live ElectricityMaps reading enriches per-site carbon when the API key is set. Greedy scoring weighted grid 25% Â· sustainability 20% Â· speed 20% Â· cost 20% Â· risk 15%.",
+    "safety_flags": [],
+    "limitations": [
+      "Permitting risk not explicitly modeled. Schedule assumes typical municipal timelines.",
+      "Grid interconnection queue position not factored. Operators should validate with the utility.",
+      "Currency assumed CAD with no FX hedge consideration.",
+      "Workload-mix CAGR is a market average. Individual operator pipelines may diverge."
+    ],
+    "chart_paths": {}
+  }
+}

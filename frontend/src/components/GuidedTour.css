@@ -1,0 +1,285 @@
+/* Custom cursor while the tour is active. Body data attribute is set
+   by GuidedTour.tsx on open. The cursor is a white stroke-icon right
+   arrow that mirrors the orange submit-arrow glyph in the composer,
+   reinforcing the "click anywhere to continue" affordance. Falls back
+   to pointer if the SVG cursor can't load (older browsers, strict CSP).
+   The 12 12 hot spot puts the click point at the arrow's center. */
+body[data-tour-active="true"],
+body[data-tour-active="true"] * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/><path d='M13 6l6 6-6 6'/></svg>") 12 12, pointer;
+}
+
+/* Hard-lock page-level scroll while the tour is active. The
+   window-level wheel/touch/keydown blockers in GuidedTour catch
+   most scroll inputs, but a user can still drag the scrollbar
+   directly. Setting overflow:hidden on the document root makes
+   it impossible to scroll the page at all (programmatic scrolls
+   like scrollIntoView are unaffected only because the relevant
+   anchors are already in viewport). Critical for step 6/7 where
+   even a few pixels of scroll shift the spotlight off the cards.
+   Scoped to html/body only; tried scoping to per-view containers
+   too but that disrupted the column flex layout and pushed cards
+   out of position. */
+html:has(body[data-tour-active="true"]),
+body[data-tour-active="true"] {
+  overflow: hidden !important;
+}
+/* The workspace stage uses a custom JS smooth-scroll (SmoothStage.tsx)
+   that animates scrollTop imperatively, so plain `preventDefault` on
+   the wheel won't stop it. The GuidedTour effect already intercepts
+   wheel events in the capture phase before SmoothStage sees them,
+   but pin overflow to hidden here too so a scrollbar-drag or any
+   programmatic scrollTop assignment still hits a wall. */
+body[data-tour-active="true"] .smooth-stage,
+body[data-tour-active="true"] .smooth-scroll {
+  overflow: hidden !important;
+}
+
+/* Disable scroll within the agent-pipeline log box while the tour
+   is active. The window-level wheel/keydown blockers in GuidedTour
+   stop most scroll attempts, but a scrollable inner container with
+   `overflow: auto` can still be dragged via its scrollbar or
+   scrolled programmatically. Collapsing overflow here is the
+   simplest hard-stop. */
+body[data-tour-active="true"] #view-agent-pipeline .log {
+  overflow: hidden !important;
+}
+
+/* Strip the .stage-viz panel's reserved min-height while the tour
+   is active. In the live app these min-heights stop the panel from
+   shrinking as the agent's stage data populates incrementally, but
+   during the tour the data is already complete and the reserved
+   empty space ends up inside the step 7 spotlight (the bottom of
+   the panel falls below the visible PASS card content, and the
+   spotlight rect grows accordingly). With min-height neutralized,
+   the panel hugs its actual content so the spotlight ends at the
+   PASS card's bottom border. */
+body[data-tour-active="true"] #view-agent-pipeline .stage-viz,
+body[data-tour-active="true"] #view-agent-pipeline .stage-viz-body {
+  min-height: 0 !important;
+}
+
+/* ── Guided tour overlay ────────────────────────────────────────────────── *
+ * Full-screen dim used for centered-modal steps and as a transient dim
+ * while the spotlight anchor is being located on anchored steps. */
+.tour-fullscreen-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 9997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Spotlight cutout. The 9999px box-shadow paints the dim "frame"
+   everywhere except the small lit rectangle over the anchor. pointer-
+   events: none lets clicks fall through to whatever is underneath
+   (typically the actual anchor element), which is what gives the tour
+   its "click the thing AND advance" feel. */
+.tour-spotlight {
+  position: fixed;
+  border-radius: 10px;
+  pointer-events: none;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65);
+  z-index: 9997;
+  transition: top 180ms ease-out, left 180ms ease-out, width 180ms ease-out, height 180ms ease-out;
+}
+
+/* Orange pulsing ring drawn on top of the spotlight to mark "click here".
+   Lives at the same coordinates as the spotlight; the pulse is on its
+   own box-shadow so it can grow outward without warping the cutout. */
+.tour-pulse {
+  position: fixed;
+  border-radius: 10px;
+  pointer-events: none;
+  border: 2px solid rgba(243, 135, 100, 0.85);
+  z-index: 9998;
+  animation: tour-pulse-ring 1.6s ease-out infinite;
+}
+@keyframes tour-pulse-ring {
+  0%   { box-shadow: 0 0 0 0   rgba(243, 135, 100, 0.55); }
+  70%  { box-shadow: 0 0 0 14px rgba(243, 135, 100, 0);    }
+  100% { box-shadow: 0 0 0 14px rgba(243, 135, 100, 0);    }
+}
+
+/* Tooltip near the anchor. Positioned by JS (below the anchor by default,
+   flipped above when near the viewport bottom). Borrows the site modal
+   chrome (bg-1 surface, shadow-3, ease-out fade-in) but keeps an
+   orange-tinted border so the tour pieces read as a separate language
+   from the regular .modal — and a slightly tighter radius-md since
+   tooltips are smaller. */
+.tour-tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: var(--bg-1);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-md);
+  padding: 20px 22px 16px;
+  box-shadow: var(--shadow-3);
+  font-family: var(--font-sans);
+  color: var(--fg-1);
+  animation: tour-card-in 180ms var(--ease-out);
+}
+
+/* Centered card for the welcome modal (no anchor). Matches the site's
+   .modal radius (radius-xl, 28px) and padding so it reads as part of
+   the modal family. Orange border kept to distinguish from neutral
+   modals. */
+.tour-modal {
+  width: min(520px, 100%);
+  background: var(--bg-1);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px 20px;
+  box-shadow: var(--shadow-3);
+  font-family: var(--font-sans);
+  color: var(--fg-1);
+  animation: tour-card-in 180ms var(--ease-out);
+}
+
+@keyframes tour-card-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Skorpio-native "STEP X OF Y" eyebrow: mono caps in muted orange,
+   matching the eyebrow language used across reports and stage cards. */
+.tour-step-indicator {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(243, 135, 100, 0.85);
+  margin-bottom: 8px;
+}
+
+/* Headlines use Instrument Serif at weight 400, matching .modal-head h2.
+   Same hierarchy as the rest of the site's modals: serif for the
+   headline, sans for the body. */
+.tour-headline {
+  margin: 0 0 10px;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--fg-1);
+}
+.tour-headline--modal {
+  font-size: 24px;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+/* Body copy at the site's 13px modal-sub size with fg-2, sans family. */
+.tour-body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--fg-2);
+}
+.tour-body--modal {
+  font-size: 14px;
+}
+/* Tight, explicit gap between adjacent paragraphs. The bottom row's
+   margin-top handles spacing to the controls so paragraphs themselves
+   carry no trailing margin. */
+.tour-body + .tour-body {
+  margin-top: 10px;
+}
+
+/* Bottom row: Skip flush left as the escape hatch, [Back] [Next/Done]
+   flush right as the primary/secondary action pair — mirrors the
+   site's .modal-actions layout but with Skip pulled to the opposite
+   end so the destructive-ish action stays distinct from the forward
+   pair. The "Click anywhere to continue" hint (step 1 only) sits
+   inline next to Skip. */
+.tour-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  min-height: 34px;
+}
+.tour-bottom-left,
+.tour-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Sentence case, sans, fg-3 — quieter than the previous mono caps so
+   it reads as a passive hint instead of a label demanding attention.
+   Extra right margin pushes the hint away from the Next pill so the
+   two don't visually cluster as one element. */
+.tour-hint-inline {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-3);
+  line-height: 1;
+  margin-right: 8px;
+}
+
+/* Action buttons match .modal-actions button: 34px tall, radius-md,
+   sans 13px, sentence case (no text-transform). Primary = accent,
+   secondary = transparent with rule-2 border. */
+.tour-btn {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 1;
+  border: 1px solid var(--rule-2);
+  background: var(--bg-1);
+  color: var(--fg-2);
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.tour-btn:hover {
+  background: var(--bg-2);
+  color: var(--fg-1);
+}
+.tour-btn--primary {
+  background: var(--accent);
+  color: var(--fg-on-accent);
+  border-color: var(--accent);
+  box-shadow: var(--glow-accent);
+}
+.tour-btn--primary:hover {
+  background: var(--accent-2);
+  color: var(--fg-on-accent);
+  border-color: var(--accent-2);
+}
+
+/* ── Help (?) button bottom-right ───────────────────────────────────────── *
+ * Anchored at right: 24px in every mode. The demo toggle (when present
+ * on localhost) shifts left to clear space — see .demo-toggle override
+ * lower in this file. */
+.help-button {
+  position: fixed;
+  right: 24px;
+  bottom: 20px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--fg-3, #908a82);
+  cursor: pointer;
+  z-index: 50;
+  transition: color var(--dur-fast, 160ms);
+}
+.help-button:hover {
+  color: rgba(243, 135, 100, 0.95);
+}
+.help-button svg {
+  display: block;
+}

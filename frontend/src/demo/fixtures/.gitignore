@@ -1,0 +1,8 @@
+# Demo fixture JSON files MUST be committed to git so Vercel includes
+# them in its build. The Vercel deploy has no backend or DB to regenerate
+# them from — git is the source of truth for the demo data shipped to
+# judges.
+#
+# This .gitignore intentionally tracks nothing. Re-run the export script
+# (docker compose exec api python -m backend.scripts.export_demo_fixtures)
+# whenever a demo prompt changes, then commit the updated JSON files.

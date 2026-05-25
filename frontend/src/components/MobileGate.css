@@ -1,0 +1,125 @@
+/* Soft mobile gate. Full-viewport overlay shown on narrow screens so
+   the judge sees an explanation and a copy-link button instead of a
+   broken Mapbox layout. */
+
+.mobile-gate {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-0, #1f1e1d);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* Dot-grid background. Mirrors `.stage::before` in home.css so the
+   gate shares the same texture as the home page. Cream dots at 4.5%
+   opacity, 28 px grid, masked to fade at the edges so the pattern
+   feels like a vignette instead of wallpaper. */
+.mobile-gate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(250, 249, 245, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(80% 60% at 50% 50%, black 30%, transparent 75%);
+          mask-image: radial-gradient(80% 60% at 50% 50%, black 30%, transparent 75%);
+  pointer-events: none;
+}
+
+.mobile-gate-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Brand mark — matches the LoginPage / HomePage topbar pattern:
+   inline orange-drop SVG logo + SKORPIO wordmark in sans-serif. */
+.mobile-gate-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  color: var(--fg-1, #faf9f5);
+}
+.mobile-gate-brand svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  flex-shrink: 0;
+}
+.mobile-gate-wordmark {
+  font-family: var(--font-sans, system-ui);
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--fg-1, #faf9f5);
+}
+
+.mobile-gate-title {
+  font-family: var(--font-serif, var(--font-sans, system-ui));
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--fg-1, #faf9f5);
+  margin: 0 0 14px;
+}
+
+.mobile-gate-body {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fg-2, #c9c5bb);
+  margin: 0 0 26px;
+}
+
+.mobile-gate-copy {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 18px;
+  background: var(--accent, #F38764);
+  color: var(--bg-0, #0a0908);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.05s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-gate-copy:hover { filter: brightness(1.08); }
+.mobile-gate-copy:active { transform: scale(0.98); }
+
+.mobile-gate-url {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--fg-4, #6c685f);
+  margin: 12px 0 0;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+
+.mobile-gate-continue {
+  margin-top: 28px;
+  background: transparent;
+  border: none;
+  padding: 8px 0;
+  color: var(--fg-3, #8b867a);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  align-self: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-gate-continue:hover {
+  color: var(--fg-1, #faf9f5);
+}

@@ -1,0 +1,86 @@
+/* Global demo toggle — fixed bottom-right on every page except /login.
+ * Visually unrelated to the legacy `.demo-toggle` in home.css (which is
+ * position: absolute and lived inside the new-session view); this one is
+ * the single source of truth across all routes. */
+.skorpio-demo-toggle {
+  position: fixed;
+  /* Shifted left of the (?) help button (right: 24px, 34px wide) so the
+     two coexist without overlap on localhost. On Vercel the toggle
+     returns null so the help button stays alone at the rightmost slot. */
+  right: 70px;
+  /* Vertically centered with the (?) help button. Help is 32px tall at
+     bottom: 20px → center ≈ 36px. This pill is ~28px tall (the 14px
+     toggle track is taller than the 11px label, so flex items-center
+     stretches the content box to 14px), so bottom: 22px puts its
+     center at the same 36px. The two buttons live in different DOM
+     trees (App-level <HelpButton/> vs sidebar-rendered <DemoToggle/>),
+     so this hand-tuned offset is the only way to align them. */
+  bottom: 22px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: var(--bg-1, #15140f);
+  border: 1px solid var(--rule-2, #2a2823);
+  border-radius: 999px;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 11px;
+  letter-spacing: var(--tracking-eyebrow, 0.08em);
+  text-transform: uppercase;
+  color: var(--fg-4, #8a857c);
+  cursor: pointer;
+  transition: border-color var(--dur-fast, 120ms), color var(--dur-fast, 120ms),
+    background var(--dur-fast, 120ms);
+}
+
+.skorpio-demo-toggle:hover {
+  color: var(--fg-2, #d8d4c8);
+  border-color: var(--rule-1, #3a3830);
+}
+
+.skorpio-demo-toggle:focus-visible {
+  outline: 2px solid var(--accent, #f38764);
+  outline-offset: 2px;
+}
+
+.skorpio-demo-toggle__label {
+  line-height: 1;
+}
+
+.skorpio-demo-toggle__track {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 14px;
+  background: var(--rule-2, #2a2823);
+  border-radius: 999px;
+  transition: background var(--dur-fast, 120ms);
+}
+
+.skorpio-demo-toggle__thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 12px;
+  height: 12px;
+  background: var(--fg-3, #b6b1a4);
+  border-radius: 999px;
+  transition: transform var(--dur-fast, 120ms), background var(--dur-fast, 120ms);
+}
+
+.skorpio-demo-toggle--on {
+  color: var(--fg-2, #d8d4c8);
+  border-color: var(--accent, #f38764);
+}
+.skorpio-demo-toggle--on .skorpio-demo-toggle__track {
+  background: var(--accent, #f38764);
+}
+.skorpio-demo-toggle--on .skorpio-demo-toggle__thumb {
+  transform: translateX(12px);
+  background: var(--bg-0, #0e0d0a);
+}
+
+@media print {
+  .skorpio-demo-toggle { display: none; }
+}
