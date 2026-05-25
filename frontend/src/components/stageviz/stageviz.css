@@ -1,0 +1,235 @@
+/* Per-stage visualization panels. Lives inside .panel-pipeline above the
+   log, swapped by StageViz based on stream.stage. */
+
+.stage-viz {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid var(--rule-1);
+  border-radius: var(--radius-md);
+  background: var(--bg-1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 280px;
+}
+.stage-viz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stage-viz-body {
+  flex: 1;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Sparklines (stage 1) ───────────────────────────────────────────── */
+.viz-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.viz-tile {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  border: 1px solid var(--rule-1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.viz-tile-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.viz-tile-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.viz-tile-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+}
+.viz-tile-value small {
+  font-size: 10px;
+  margin-left: 4px;
+  color: var(--fg-3);
+  letter-spacing: 0.04em;
+}
+.viz-spark {
+  height: 80px;
+}
+/* Used by the rebuilt stage-1 panel: a short market-outlook blurb under
+   each region tile (replaces the old fake sparkline chart). */
+.viz-tile-body {
+  display: flex;
+  flex-direction: column;
+}
+.viz-tile-blurb {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--fg-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Empty-state slot inside a viz-card (e.g., radar without pareto data). */
+.viz-card-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+  padding: 16px;
+}
+
+/* ── Funnel (stage 2) ───────────────────────────────────────────────── */
+.viz-funnel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+.funnel-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+.funnel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule-2);
+  transition: width var(--dur-base) var(--ease-out);
+  min-height: 44px;
+}
+.funnel-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-2);
+  letter-spacing: 0.04em;
+}
+.funnel-count {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+  font-weight: 500;
+}
+.funnel-arrow {
+  color: var(--fg-4);
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* ── Generation map (stage 3) ───────────────────────────────────────── */
+.viz-map {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Flat backdrop in login's bg-1 — no gradient, no dotted pattern. */
+.viz-map-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 600 / 320;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule-2);
+  overflow: hidden;
+  background: var(--bg-1);
+}
+.viz-map-canvas-el {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hover tooltip — mirrors LoginPage `.tip` so the pipeline map and the login
+   globe share one tooltip vocabulary. */
+.viz-map .map-tip {
+  position: absolute;
+  z-index: 4;
+  transform: translate(-50%, calc(-100% - 12px));
+  pointer-events: none;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--rule-2);
+  background: rgba(38, 38, 36, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-1);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+  box-shadow: var(--shadow-1);
+}
+.viz-map .map-tip.show { opacity: 1; }
+.viz-map .map-tip .row { display: flex; align-items: center; gap: 8px; }
+.viz-map .map-tip .city { color: var(--fg-1); font-weight: 500; }
+.viz-map .map-tip .meta { color: var(--fg-3); }
+.viz-map-foot {
+  display: flex;
+  justify-content: flex-end;
+  color: var(--fg-3);
+}
+
+/* ── Pareto (stage 4) ───────────────────────────────────────────────── */
+.viz-pareto {
+  flex: 1;
+  min-height: 260px;
+}
+
+/* ── Synthesis split (stage 5 / completed) ──────────────────────────── */
+.viz-split {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  min-height: 280px;
+}
+.viz-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  border: 1px solid var(--rule-1);
+}
+.viz-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.viz-card-body {
+  flex: 1;
+  min-height: 220px;
+}
+
+@media (max-width: 1100px) {
+  .viz-grid { grid-template-columns: 1fr; }
+  .viz-split { grid-template-columns: 1fr; }
+}

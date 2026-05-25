@@ -1,0 +1,163 @@
+/* MapView — wraps the official Mapbox CSS and adds Skorpio-styled markers
+   and popups. The mapbox-gl base CSS is required for the canvas to render
+   correctly (zoom controls, attribution, popup arrow positioning, etc). */
+@import url('mapbox-gl/dist/mapbox-gl.css');
+
+.skorpio-map {
+  position: relative;
+  width: 100%;
+  background: var(--bg-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  /* Force a stacking context so the popups stay above sibling charts. */
+  isolation: isolate;
+  /* Stop any wheel scroll from chaining to the parent / page. Pairs with
+     the wheel-preventDefault listener in MapView.tsx — that handler stops
+     page scroll when the cursor is over the map; this CSS rule is the
+     belt-and-suspenders backstop. */
+  overscroll-behavior: contain;
+}
+
+.skorpio-map .mapboxgl-canvas {
+  outline: none;
+}
+
+/* Hide the default Mapbox logo + attribution text — we surface attribution
+   ourselves below the map. The logo is required per Mapbox TOS for free
+   tier; we keep it as a small chip in the corner instead of cluttering UI. */
+.skorpio-map .mapboxgl-ctrl-bottom-left,
+.skorpio-map .mapboxgl-ctrl-bottom-right {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  opacity: 0.55;
+}
+.skorpio-map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-attrib {
+  background: rgba(22, 22, 20, 0.6);
+  color: var(--fg-3);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.skorpio-map .mapboxgl-ctrl-attrib a { color: var(--fg-2); }
+
+/* Zoom + compass controls — restyle to match the dark UI. */
+.skorpio-map .mapboxgl-ctrl-group {
+  background: var(--bg-1);
+  border: 1px solid var(--rule-2);
+  box-shadow: var(--shadow-2);
+}
+.skorpio-map .mapboxgl-ctrl-group button {
+  background: transparent;
+  border: 0;
+}
+.skorpio-map .mapboxgl-ctrl-group button:hover {
+  background: var(--bg-2);
+}
+.skorpio-map .mapboxgl-ctrl-icon {
+  filter: invert(1) brightness(0.85);
+}
+
+/* Custom markers — circles with a halo. Color is set inline per-marker. */
+.skorpio-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(22, 22, 20, 0.85);
+  box-shadow: 0 0 0 2px currentColor, 0 2px 8px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform var(--dur-fast);
+}
+.skorpio-marker:hover {
+  transform: scale(1.25);
+}
+.skorpio-marker.skorpio-marker--sm {
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+}
+.skorpio-marker.skorpio-marker--lg {
+  width: 22px;
+  height: 22px;
+}
+.skorpio-marker.skorpio-marker--diamond {
+  border-radius: 3px;
+  transform: rotate(45deg);
+}
+.skorpio-marker.skorpio-marker--diamond:hover {
+  transform: rotate(45deg) scale(1.25);
+}
+
+/* Popups — match our panel aesthetic. */
+.skorpio-map .mapboxgl-popup-content {
+  background: var(--bg-1);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-1);
+  box-shadow: var(--shadow-2);
+  min-width: 180px;
+}
+.skorpio-map .mapboxgl-popup-tip {
+  border-top-color: var(--bg-1);
+  border-bottom-color: var(--bg-1);
+}
+.skorpio-popup-title {
+  font-family: var(--serif);
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--fg-1);
+}
+.skorpio-popup-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  margin-bottom: 2px;
+}
+.skorpio-popup-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  margin-top: 4px;
+}
+
+/* Legend rail — a small chip strip below the map explaining colors. */
+.skorpio-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-3);
+  letter-spacing: 0.04em;
+}
+.skorpio-map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.skorpio-map-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Fallback when no Mapbox token is set — show a static list of coords. */
+.skorpio-map-fallback {
+  padding: 16px;
+  background: var(--bg-2);
+  border: 1px dashed var(--rule-2);
+  border-radius: var(--radius-md);
+  color: var(--fg-3);
+  font-size: 12px;
+}
+.skorpio-map-fallback strong { color: var(--fg-2); }
+.skorpio-map-fallback ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}

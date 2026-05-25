@@ -1,0 +1,40 @@
+/* VizPanel — shared 4-slot body template. Same vertical rhythm whether
+   the panel sits inside a live stage viz card or a final-report section. */
+
+.viz-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.viz-panel-caption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-3);
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+}
+.viz-panel-caption strong {
+  color: var(--fg-1);
+  font-weight: 600;
+}
+
+/* Viz slot — children control their own height (e.g., ResponsiveContainer
+   wrapping a fixed-height div, or MapView with `height` prop). */
+.viz-panel-viz {
+  width: 100%;
+  min-width: 0; /* recharts needs this to size properly inside flex columns */
+}
+
+.viz-panel-details {
+  margin-top: 4px;
+}
+
+.viz-panel-note {
+  font-size: 11px;
+  color: var(--fg-3);
+  font-style: italic;
+  line-height: 1.4;
+  padding-top: 6px;
+  border-top: 1px dashed var(--rule-1);
+}
