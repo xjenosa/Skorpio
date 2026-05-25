@@ -1,0 +1,85 @@
+/* App-level overrides for the React port. The original CSS sets
+   `body { overflow: hidden }` which fights routed pages — relax it. */
+#root { height: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+/* Severity colours for pipeline log lines streamed from the backend. */
+.line .lvl.ok    { color: var(--ok); }
+.line .lvl.info  { color: var(--info); }
+.line .lvl.warn  { color: var(--warn); }
+.line .lvl.error { color: var(--err); }
+
+.error-banner {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--err);
+  border-radius: var(--radius-sm);
+  background: rgba(226, 107, 74, 0.08);
+  color: var(--err);
+  font-size: var(--fs-small);
+}
+/* Reports view variant — sits between the page-head (Export button on
+   the right) and the runs table. `.page-head` has `margin-bottom: 24px`
+   baked into home.css, so equal banner margins produce 24+X above vs
+   X below — visually closer to the table by 24px. To restore symmetry
+   the banner's bottom margin needs to ABSORB that 24px:
+     margin-bottom = margin-top + 24px (the page-head's own bottom margin)
+   With margin-top: 4px and margin-bottom: 28px:
+     - Export button bottom → banner top = 24 + 4 = 28px
+     - Banner bottom → table top = 28 + 0 = 28px ✓ */
+.error-banner.reports-export-error {
+  margin-top: 4px;
+  margin-bottom: 28px;
+}
+
+/* New session view variant — sits between the prompt composer above
+   and the suggestion cards below. The `.suggestions` container has
+   `margin-top: 22px` baked in PLUS a 12px "TRY" eyebrow label PLUS a
+   10px flex gap before the first card. That makes the default 10px
+   bottom margin balloon to ~54px of visual whitespace below the
+   banner — vs. just 10px above. To restore symmetry:
+     1. Reset the suggestions block's top margin to 0 when an
+        error-banner precedes it (adjacent-sibling override).
+     2. Give the banner a 28px top margin + 6px bottom so the visual
+        gap above (28px) equals the visual gap below (6 + 0 + 12 + 10
+        = 28px). */
+.error-banner.new-session-error {
+  margin-top: 28px;
+  margin-bottom: 6px;
+}
+.error-banner.new-session-error + .suggestions {
+  margin-top: 0;
+}
+
+/* Permanent demo-mode notice that sits in the same below-composer slot
+   as the validation error. Reuses the .error-banner shell so the
+   .new-session-error margin compensation still applies, but overrides
+   the red error palette with the same orange-tinted scheme the
+   ReportChatBar follow-up notice uses (orange dot, orange "Demo
+   preview", neutral fg-2 body). Border and background tints match
+   the chatbar version 1:1 so the two demo notices read as one
+   product surface. */
+.error-banner.demo-notice {
+  border-color: rgba(243, 135, 100, 0.35);
+  background: rgba(243, 135, 100, 0.08);
+  color: var(--fg-2, #cfcbc6);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.error-banner.demo-notice strong {
+  color: #F38764;
+  font-weight: 600;
+}
+.error-banner.demo-notice .banner-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F38764;
+  flex-shrink: 0;
+}
+.error-banner.demo-notice.new-session-error + .suggestions {
+  margin-top: 0;
+}

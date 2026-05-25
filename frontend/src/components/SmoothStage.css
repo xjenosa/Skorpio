@@ -1,0 +1,62 @@
+/* ============================================================
+   Smooth-scrolling stage + custom scroll indicator
+   ============================================================ */
+
+/* Native scrollbar is hidden — we paint our own. Applied to any element that
+   opts in via the .smooth-scroll class (workspace stage, legal pages, …). */
+.smooth-stage,
+.smooth-scroll {
+  scrollbar-width: none;
+  will-change: scroll-position;
+  scroll-behavior: auto; /* we animate scrollTop ourselves */
+}
+.smooth-stage::-webkit-scrollbar,
+.smooth-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ── Indicator thumb ────────────────────────────────────── */
+/* Position is driven by translateY (sub-pixel + no reflow). The thumb is a
+   soft accent-gradient pill on the right edge that fades after idle. */
+.scroll-indicator {
+  position: absolute;
+  top: 0;
+  right: 6px;
+  width: 3px;
+  border-radius: 999px;
+  pointer-events: none;
+  /* Sit above page content but below sticky/fixed chrome like ReportChatBar (z:30). */
+  z-index: 20;
+  background: linear-gradient(
+    180deg,
+    var(--accent-2) 0%,
+    var(--accent) 55%,
+    var(--accent-3) 100%
+  );
+  box-shadow:
+    0 0 10px rgba(243, 135, 100, 0.45),
+    0 0 1px rgba(243, 135, 100, 0.9);
+  transition: opacity 360ms var(--ease-out), width 180ms var(--ease-out);
+  /* Subtle inner gleam so the thumb reads as a carved object, not a flat bar. */
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* When the user's pointer is near the rail, fatten the thumb so it's easy
+   to see scroll position even after the fade. */
+.smooth-stage:hover .scroll-indicator,
+.smooth-scroll:hover .scroll-indicator {
+  width: 4px;
+}
+
+/* Print: drop our chrome entirely so reports flow natively across pages. */
+@media print {
+  .smooth-stage,
+  .smooth-scroll {
+    overflow: visible !important;
+  }
+  .scroll-indicator {
+    display: none !important;
+  }
+}

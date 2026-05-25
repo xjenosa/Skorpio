@@ -1,0 +1,171 @@
+/* Shared legal page shell — Privacy Policy and Terms of Use.
+   .legal-root is the scroll container because body has overflow:hidden globally. */
+.legal-root {
+  position: relative;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg-0);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+}
+
+/* Dot-grid background. Mirrors `.stage::before` in home.css, the
+   login screen, and the mobile gate so every top-level page shares
+   the same texture. ``background-attachment: fixed`` keeps the
+   pattern locked to the viewport while the legal content scrolls. */
+.legal-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(250, 249, 245, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(80% 60% at 50% 50%, black 30%, transparent 75%);
+          mask-image: radial-gradient(80% 60% at 50% 50%, black 30%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
+}
+.legal-root > * { position: relative; z-index: 1; }
+
+.legal-root .topbar {
+  position: sticky;
+  top: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 64px;
+  background: var(--bg-0);
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.legal-root .topbar > span:first-child { display: none; }
+
+.legal-root .brand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--fg-1);
+  text-decoration: none;
+}
+.legal-root .brand img, .legal-root .brand svg { width: 22px; height: 22px; display: block; flex-shrink: 0; }
+.legal-root .brand .wordmark {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+}
+
+.legal-root .back {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  text-decoration: none;
+  border: 1px solid var(--rule-2);
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+}
+.legal-root .back { justify-self: unset; }
+.legal-root .back:hover { color: var(--fg-1); border-color: var(--rule-3); }
+
+.legal-root .content {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 60px 40px 120px;
+}
+
+.legal-root .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.legal-root h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+
+.legal-root .meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-4);
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--rule-1);
+}
+
+.legal-root h2 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin: 40px 0 12px;
+}
+
+.legal-root p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--fg-2);
+  margin: 0 0 16px;
+}
+
+.legal-root ul {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+.legal-root ul li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--fg-2);
+  margin-bottom: 6px;
+}
+
+.legal-root a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-line);
+}
+.legal-root a:hover { border-color: var(--accent); }
+
+.legal-root .brand {
+  color: inherit;
+  border-bottom: none;
+}
+.legal-root .brand:hover { border-bottom: none; }
+.legal-root .back {
+  color: var(--fg-3);
+  border-bottom: 1px solid var(--rule-2);
+  justify-self: end;
+}
+.legal-root .back:hover { color: var(--fg-1); border-bottom-color: var(--rule-3); }
+
+.legal-root .section-divider {
+  height: 1px;
+  background: var(--rule-1);
+  margin: 40px 0;
+}
+
+@media (max-width: 640px) {
+  .legal-root .topbar { padding: 0 20px; height: 64px; }
+  .legal-root .content { padding: 40px 20px 80px; }
+  .legal-root h1 { font-size: 28px; }
+}

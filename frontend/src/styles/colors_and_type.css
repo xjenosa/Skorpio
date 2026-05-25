@@ -1,0 +1,199 @@
+/* ============================================================
+   SKORPIO — Colors & Type Foundations
+   Dark-first, Claude-inspired surfaces with #F38764 accent.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+  /* ── Surfaces (Claude dark) ───────────────────────────── */
+  --bg-0:        #1f1e1d;   /* deepest – page background */
+  --bg-1:        #262624;   /* cards / panels */
+  --bg-2:        #30302e;   /* raised surfaces, hover */
+  --bg-3:        #3a3a37;   /* selected, input */
+  --bg-inverse:  #faf9f5;   /* light surface tokens */
+
+  /* ── Foreground ───────────────────────────────────────── */
+  --fg-1:        #faf9f5;   /* primary text */
+  --fg-2:        #c2c0b6;   /* secondary text */
+  --fg-3:        #8c897e;   /* tertiary / labels */
+  --fg-4:        #5e5c54;   /* disabled / hairline copy */
+  --fg-on-accent:#1f1e1d;
+
+  /* ── Borders ──────────────────────────────────────────── */
+  --rule-1:      rgba(250, 249, 245, 0.08);
+  --rule-2:      rgba(250, 249, 245, 0.14);
+  --rule-3:      rgba(250, 249, 245, 0.22);
+
+  /* ── Brand / accent ───────────────────────────────────── */
+  --accent:      #F38764;   /* Skorpio orange — secondary */
+  --accent-2:    #f5a385;   /* hover / lighter */
+  --accent-3:    #d96a45;   /* press / deeper */
+  --accent-soft: rgba(243, 135, 100, 0.14);
+  --accent-line: rgba(243, 135, 100, 0.32);
+
+  /* Energy semantic colors – datacenter telemetry */
+  --energy-clean:  #6FCF8E;   /* renewable / online */
+  --energy-mid:    #E5C46B;   /* mixed grid */
+  --energy-dirty:  #E26B4A;   /* fossil-heavy */
+  --energy-off:    #6B6862;   /* offline / cold */
+
+  /* Status */
+  --ok:          #6FCF8E;
+  --warn:        #E5C46B;
+  --err:         #E26B4A;
+  --info:        #88B8D9;
+
+  /* ── Type families ────────────────────────────────────── */
+  --font-sans:   "Geist", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono:   "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif:  "Instrument Serif", "Source Serif Pro", Georgia, serif;
+
+  /* ── Type scale ───────────────────────────────────────── */
+  --fs-display:  56px;   /* hero numbers / title cards */
+  --fs-h1:       40px;
+  --fs-h2:       28px;
+  --fs-h3:       20px;
+  --fs-body:     15px;
+  --fs-small:    13px;
+  --fs-micro:    11px;
+
+  --lh-tight:    1.05;
+  --lh-snug:     1.25;
+  --lh-body:     1.55;
+
+  --tracking-display: -0.02em;
+  --tracking-tight:   -0.01em;
+  --tracking-mono:     0.04em;
+  --tracking-eyebrow:  0.16em;
+
+  /* ── Radii (rounded — per brief) ──────────────────────── */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-pill: 999px;
+
+  /* ── Shadows / elevation (subtle on dark) ─────────────── */
+  --shadow-1: 0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.35);
+  --shadow-2: 0 1px 0 rgba(255,255,255,0.05) inset, 0 6px 18px rgba(0,0,0,0.45);
+  --shadow-3: 0 1px 0 rgba(255,255,255,0.06) inset, 0 18px 40px rgba(0,0,0,0.55);
+  --glow-accent: 0 0 0 1px var(--accent-line), 0 8px 28px rgba(243,135,100,0.18);
+
+  /* ── Spacing scale ────────────────────────────────────── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:    140ms;
+  --dur-base:    220ms;
+  --dur-slow:    420ms;
+}
+
+/* ============================================================
+   Semantic typography classes
+   ============================================================ */
+
+.t-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--fs-display);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  color: var(--fg-1);
+}
+
+.t-h1 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  color: var(--fg-1);
+}
+
+.t-h2 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+
+.t-h3 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+
+.t-body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+}
+
+.t-small {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--fg-2);
+}
+
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-mono);
+  color: var(--fg-2);
+}
+
+.t-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--fg-1);
+}
+
+.t-eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.t-label {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.t-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.35;
+  color: var(--fg-1);
+}

@@ -1,0 +1,407 @@
+/* Print stylesheet for the report tabs. Activated only by `window.print()`
+   (via the PrintReportButton). Goals:
+   - Hide app chrome (sidebar, topbar, chatbar, live agent log)
+   - Re-color the dark UI as a paper-friendly light theme so the PDF an
+     employee sends to their boss prints cleanly on white paper
+   - Force every collapsed section to render via the `printing` flag in
+     each report's `usePrintReport()` hook (this stylesheet only handles
+     visual de-darkening — DOM presence is owned by the React side) */
+
+@media print {
+  @page {
+    margin: 14mm 12mm;
+    /* A4 landscape so the wide chart sections (Pareto frontier, multi-
+       column Recharts, asset risk tables, Mapbox panels) fit without
+       clipping. The prose sections don't suffer from the extra width.
+       Mixed-orientation per section is possible via named pages but
+       only fully works in Chrome, so we keep the whole report on one
+       orientation. */
+    size: A4 landscape;
+  }
+
+  html,
+  body,
+  #root,
+  main.workspace,
+  .stage,
+  .view {
+    background: #ffffff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    box-shadow: none !important;
+  }
+
+  /* `.app` is a CSS grid with a 248px sidebar column on screen — that
+     column track is still reserved even with the sidebar hidden, which
+     squeezes content to the right half of the page. Flatten the grid so
+     the report uses the full printable width. */
+  .app {
+    display: block !important;
+    grid-template-columns: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background: #ffffff !important;
+  }
+
+  /* Hide chrome the user doesn't want in the PDF. The Mapbox layers
+     (.skorpio-map) are deliberately NOT hidden here: with
+     preserveDrawingBuffer enabled on the map (see MapView.tsx), the
+     WebGL canvas survives Chrome's print snapshot and renders into
+     the PDF. The error banner and pending placeholder are dev-time
+     chrome. */
+  .sidebar,
+  .topbar,
+  .report-chatbar-shell,
+  .panel-pipeline:not(.fr-panel),
+  .page-head:not(.fr-page-head),
+  .page-head .actions,
+  .fr-section-wrap .stage-caret,
+  .error-banner,
+  .stage-viz-pending,
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Map panel: keep the WebGL canvas visible and bound it to a
+     reasonable height so it doesn't blow out the page. Drop the
+     interactive controls (zoom/pan/navigation) since they're
+     non-functional in print. */
+  .skorpio-map {
+    height: 360px !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .mapboxgl-ctrl-top-right,
+  .mapboxgl-ctrl-bottom-right,
+  .mapboxgl-ctrl-bottom-left {
+    display: none !important;
+  }
+
+  /* Kill on-screen animations — pulsing dots and transitions confuse some
+     print engines and slow snapshot capture. */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Reset the view + stage layout — drop the centering flex so content
+     flows top-to-bottom like a document and spans the full page width. */
+  .stage,
+  .view,
+  .view.active {
+    display: block !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+
+  /* `.page-head` is capped at min(1100px, 100%) for screen — let it
+     stretch to fill the printable area. */
+  .page-head,
+  .fr-page-head {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* The report panel itself — clean white card on the page. */
+  .panel-pipeline.fr-panel,
+  .fr-panel {
+    background: #ffffff !important;
+    border: 1px solid #d0d0d0 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    padding: 16px 18px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Page heading — "Final report" title. */
+  .fr-page-head {
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+  }
+  .fr-page-head .title {
+    color: #000 !important;
+  }
+  .fr-page-head .title em {
+    color: #000 !important;
+  }
+  /* "Run · <shortId> · <user prompt>" subtitle below the title. On screen
+     it uses fg-2 (a mid-grey tuned for the dark UI) which fades to
+     near-invisible on white paper. Force black so the prompt that
+     generated the report — essential context for the printed PDF — stays
+     legible. */
+  .fr-page-head .sub {
+    color: #000 !important;
+  }
+
+  /* Header stats row. */
+  .pp-head.fr-head,
+  .fr-head {
+    background: #fafafa !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    color: #000 !important;
+  }
+  .fr-head-stat-label,
+  .t-eyebrow {
+    color: #000 !important;
+  }
+  .fr-head-stat-value {
+    color: #000 !important;
+  }
+  .pp-head .meta,
+  .pp-head .meta strong {
+    color: #000 !important;
+  }
+
+  /* "Winners" cards — keep accent colours but on light backgrounds. */
+  .fr-winners {
+    gap: 10px !important;
+  }
+  .fr-winner {
+    background: #fafafa !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: none !important;
+    color: #000 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .fr-winner strong {
+    color: #000 !important;
+  }
+  .fr-winner span {
+    color: #000 !important;
+  }
+
+  /* Section header cards — flatten to a labelled strip; we hide the caret
+     above. */
+  .fr-sections,
+  .stages.fr-sections {
+    gap: 8px !important;
+  }
+  .fr-section-wrap .stage-card,
+  .stage-card {
+    background: #f5f5f5 !important;
+    color: #000 !important;
+    border: 1px solid #d8d8d8 !important;
+    box-shadow: none !important;
+    cursor: default !important;
+  }
+  .stage-card .num,
+  .stage-card .label {
+    color: #000 !important;
+  }
+  .stage-card .label {
+    color: #000 !important;
+  }
+  .stage-card .corner {
+    display: none !important;
+  }
+
+  /* Section bodies (forced open by the `printing` flag). */
+  .stage-viz.fr-section-body,
+  .fr-section-body {
+    background: #ffffff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-top: 0 !important;
+    padding: 12px !important;
+    color: #000 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Insight cards inside section bodies. */
+  .fr-insight,
+  .fr-insights .fr-insight {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: none !important;
+    color: #000 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .fr-insight dt {
+    color: #000 !important;
+  }
+  .fr-insight dd,
+  .fr-insight strong {
+    color: #000 !important;
+  }
+  /* Card rationale paragraphs ("eStruxture TOR-1 Vaughan Phase 23
+     delivers...", "Implementing cycle-cut ROW management..."). The
+     description uses inline `style={{ color: 'var(--fg-2)' }}` which
+     wins over a plain `.fr-insight p` rule, so scope by attribute the
+     same way the .reports caption override does below. fg-2 reads as
+     faded grey on white paper; force black for legibility now that the
+     card sits on a white print background. */
+  .fr-insight p[style*="var(--fg-2)"] {
+    color: #000 !important;
+  }
+
+  /* Reports tables. */
+  .reports table {
+    background: #ffffff !important;
+    color: #000 !important;
+  }
+  .reports th {
+    background: #f5f5f5 !important;
+    color: #000 !important;
+    border-bottom: 1px solid #d0d0d0 !important;
+  }
+  .reports td {
+    background: transparent !important;
+    color: #000 !important;
+    border-bottom: 1px solid #ececec !important;
+  }
+  .reports tbody tr {
+    background: transparent !important;
+  }
+
+  /* Executive summary markdown. */
+  .fr-exec {
+    background: transparent !important;
+    border-top: 1px solid #e0e0e0 !important;
+    padding-top: 12px !important;
+    margin-top: 12px !important;
+  }
+
+  /* Sources block: the .fr-sources-list bullets inherit fg-2 (a light
+     grey tuned for the dark-theme UI) which is invisible on white.
+     Force the legible dark body colour and switch the left rule
+     border to a paper-friendly grey so the citation strip still reads
+     as a quote-style block. The eyebrow label inside .fr-exec.fr-sources
+     also needs the medium-grey treatment (same as other eyebrows). */
+  .fr-sources-list li {
+    color: #000 !important;
+    border-left-color: #c0c0c0 !important;
+  }
+  .fr-sources .t-eyebrow {
+    color: #000 !important;
+  }
+  .fr-md,
+  .fr-md p,
+  .fr-md li,
+  .fr-md strong,
+  .fr-md h2,
+  .fr-md h3,
+  .fr-md h4 {
+    color: #000 !important;
+  }
+  .fr-md em {
+    color: #000 !important;
+  }
+  .fr-md code {
+    background: #f3f3f3 !important;
+    color: #000 !important;
+    border: 1px solid #e0e0e0 !important;
+  }
+
+  /* Recharts uses inline `stroke`/`fill` SVG attributes for grid + axes.
+     Override those specific dark values so charts render legibly on white.
+     Bar/area fill colours (orange/blue/green/etc) stay as-is — they look
+     fine on white. */
+  svg [stroke="#2a2824"] {
+    stroke: #e0e0e0 !important;
+  }
+  svg [stroke="#6f6c63"] {
+    stroke: #888 !important;
+  }
+  svg [stroke="#3a3835"] {
+    stroke: #c0c0c0 !important;
+  }
+  .recharts-cartesian-axis-tick-value,
+  .recharts-text {
+    fill: #000 !important;
+  }
+  .recharts-legend-item-text {
+    color: #000 !important;
+  }
+  .recharts-default-tooltip {
+    background: #ffffff !important;
+    color: #000 !important;
+    border: 1px solid #d0d0d0 !important;
+  }
+
+  /* Avoid page breaks tearing through charts. */
+  .recharts-wrapper,
+  .recharts-responsive-container {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* .fr-meta cards (Methodology / Limitations / Safety flags /
+     Recommended interventions / Demand drivers) keep their dark
+     dark-theme background in print: the print stylesheet doesn't
+     override .fr-meta > div, so its var(--bg-2) fill stays dark.
+     Eyebrows inside those dark cards use .t-eyebrow, which the
+     global `.t-eyebrow { color: #000 }` rule above would force to
+     invisible. Restore --fg-3 so the labels read against the dark
+     card the same way they do on screen. */
+  .fr-meta .t-eyebrow {
+    color: var(--fg-3) !important;
+  }
+
+  /* VizPanel chrome sits inside .fr-section-body which is forced
+     white in print. The default --fg-3 (#8c897e) reads as faded
+     grey on white paper, which shows up as the illegible captions
+     above charts/maps ("Capacity-type mix ...", "Hazard exposure
+     breakdown ...", "Worst-case scenario ...", etc). Promote caption
+     to black and note to a darker grey so they stay legible. */
+  .viz-panel-caption {
+    color: #000 !important;
+  }
+  .viz-panel-note {
+    color: #555 !important;
+  }
+
+  /* Table-caption divs inside .reports use inline
+     `style={{ color: 'var(--fg-3)' }}` ("Top 5 assets ...",
+     "Multi-dimensional readiness ...", "Top 10 of 176 feeders ...").
+     These captions render INSIDE the dark `.reports` header bar (its
+     --bg-2 fill is not overridden in print, so it stays dark), which
+     means the existing var(--fg-3) value already produces the same
+     faded-eyebrow look the website uses on screen — no override
+     needed. The inline style wins over print rules, so this is a
+     no-op left as a marker; previous attempts to brighten to white
+     or darken to #444 read as jarring on paper because they broke
+     the screen color hierarchy the reader is used to. */
+
+  /* Map legend strip below every MapView ("TOP 3 / OTHERS",
+     "EXISTING (anchor) / BROWNFIELD expansion", "READY / CONSTRAINED /
+     BLOCKED", "CRITICAL / HIGH / MEDIUM / LOW"). The strip sits on the
+     white .fr-section-body in print, but .skorpio-map-legend inherits
+     the dark-theme body text color so the labels print as faded grey.
+     Force black for legibility — the colored dot still encodes the
+     legend's meaning, the label just needs to read on white paper. */
+  .skorpio-map-legend,
+  .skorpio-map-legend-item {
+    color: #000 !important;
+  }
+
+  /* Ensure backgrounds actually print (most browsers strip them by default).
+     Scope this to elements that actually have meaningful background fills —
+     a universal `*` selector here makes Chrome's print pipeline crawl on
+     pages with thousands of SVG nodes (e.g. recharts). */
+  html,
+  body,
+  .fr-panel,
+  .fr-head,
+  .fr-winner,
+  .stage-card,
+  .fr-section-body,
+  .fr-insight,
+  .reports th,
+  .reports td,
+  .fr-md code {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
