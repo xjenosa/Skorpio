@@ -1,0 +1,402 @@
+/* Final report — visually mirrors the Agent pipeline panel above so the two
+   feel like one continuous dossier. The h1 lives outside the panel; the
+   panel itself reuses .panel-pipeline + .pp-head + .stages from home.css. */
+
+.fr-page-head {
+  margin-top: 36px;
+}
+
+.fr-panel {
+  /* Inherits sizing/border/background from .panel-pipeline. */
+}
+
+/* ── Stats header (left) ───────────────────────────────────────────── */
+.fr-head-stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.fr-head-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fr-head-stat-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.fr-head-stat-value {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--fg-1);
+  margin: 0;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Headline winners ──────────────────────────────────────────────── */
+.fr-winners {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.fr-winner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--rule-2);
+}
+.fr-winner strong {
+  font-size: 16px;
+  color: var(--fg-1);
+  font-weight: 500;
+}
+.fr-winner span:last-child {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-3);
+  letter-spacing: 0.04em;
+}
+
+/* ── Section cards (01/02/03) ──────────────────────────────────────── */
+.fr-sections {
+  /* Reuses .stages (home.css) for grid layout. fr-section-wrap groups each
+     button + its expanded body. */
+}
+.fr-section-wrap {
+  display: contents;
+}
+/* Body matches the live pipeline's `.stage-viz` panel exactly — subtle gray
+   border (--rule-1), fully rounded, separated from the button above so the
+   panel doesn't read as one big orange-highlighted block. */
+.fr-section-body {
+  border-color: var(--rule-1);
+}
+.fr-empty {
+  margin: 0;
+  color: var(--fg-3);
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* ── Region insights (section 02) ──────────────────────────────────── */
+.fr-insights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 12px;
+}
+.fr-insight {
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  border: 1px solid var(--rule-1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fr-insight-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.fr-insight-head strong {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+.fr-insight dl {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fr-insight dt {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--fg-3);
+}
+.fr-insight dd {
+  margin: 2px 0 0;
+  color: var(--fg-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── Methodology / caveats (section 03) ────────────────────────────── */
+/* Each labeled section (methodology / safety / limitations / mitigations)
+   stacks vertically full-width, but lists inside flow horizontally so 4-6
+   short items don't turn into a long scroll column. */
+.fr-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.fr-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  border: 1px solid var(--rule-1);
+}
+.fr-meta p {
+  margin: 0;
+  color: var(--fg-2);
+  font-size: 13px;
+  line-height: 1.55;
+  max-width: 80ch;  /* keep prose readable instead of a 2000px line */
+}
+/* Lists become horizontal card grids — each li reads as its own micro-card
+   instead of a vertical bullet list. Fits 1-N items per row based on width. */
+.fr-meta ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.fr-meta li {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-1);
+  border: 1px solid var(--rule-1);
+  color: var(--fg-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── Sources block (citations under exec summary) ──────────────────── */
+/* Inherits .fr-exec styling; only the inner list is custom so each citation
+   sits as its own line/card. The block sizes itself naturally to however
+   many sources the pipeline used. */
+.fr-sources-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fr-sources-list li {
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 6px 10px;
+  border-left: 2px solid var(--rule-2);
+}
+
+/* ── Executive summary (markdown) ──────────────────────────────────── */
+.fr-exec {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--rule-2);
+}
+.fr-md {
+  font-family: var(--font-sans);
+  color: var(--fg-2);
+  font-size: 14px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fr-md p { margin: 0; }
+.fr-md h2 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--fg-1);
+  margin: 8px 0 0;
+  letter-spacing: -0.01em;
+}
+.fr-md h3 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--fg-1);
+  margin: 6px 0 0;
+}
+.fr-md h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--fg-3);
+  margin: 4px 0 0;
+}
+.fr-md strong { color: var(--fg-1); font-weight: 500; }
+.fr-md em { color: var(--fg-2); font-style: italic; }
+.fr-md code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(243, 135, 100, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.fr-md ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fr-md li { color: var(--fg-2); }
+
+/* ── Report feedback (copy + 👍 / 👎 → centered modal) ──────────────── */
+.fr-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.fr-feedback-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+.fr-thumb {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--fg-3);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.fr-thumb svg { width: 16px; height: 16px; display: block; }
+.fr-thumb:hover:not(:disabled) {
+  background: var(--bg-2);
+  color: var(--fg-1);
+}
+.fr-thumb.active {
+  /* `--accent-soft` (0.14) is Skorpio's canonical "selected toggle"
+     tint — used by `.collision-choice.active`, `.pipeline-pill`,
+     `.imported-badge`, `.nav-pill`, etc. Previously hard-coded as
+     0.16 here; switched to the token so every toggle in the site
+     uses one shared intensity. */
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.fr-thumb:disabled { opacity: 0.4; cursor: default; }
+
+/* ── Modal (centered on screen, click-outside / ESC to dismiss) ────── */
+.fr-feedback-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fr-feedback-fade 140ms ease-out;
+}
+@keyframes fr-feedback-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fr-feedback-modal {
+  width: 100%;
+  max-width: 520px;
+  padding: 24px;
+  background: var(--bg-1);
+  border: 1px solid var(--rule-2);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: fr-feedback-pop 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes fr-feedback-pop {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fr-feedback-modal-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--fg-1);
+  letter-spacing: -0.01em;
+}
+.fr-feedback-modal-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--fg-3);
+  margin-bottom: 8px;
+}
+.fr-feedback-textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 12px;
+  background: var(--bg-0);
+  border: 1px solid var(--rule-1);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--fg-1);
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+}
+.fr-feedback-textarea::placeholder { color: var(--fg-3); }
+.fr-feedback-textarea:focus { border-color: var(--accent); }
+
+.fr-feedback-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.fr-feedback-cancel,
+.fr-feedback-submit {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--rule-1);
+  background: transparent;
+  color: var(--fg-2);
+  transition: background .15s ease, color .15s ease, border-color .15s ease, filter .15s ease;
+}
+.fr-feedback-cancel:hover { color: var(--fg-1); border-color: var(--rule-2); }
+.fr-feedback-submit {
+  background: var(--accent);
+  color: var(--bg-0);
+  border-color: var(--accent);
+}
+.fr-feedback-submit:hover { filter: brightness(1.08); }
+
+@media (max-width: 900px) {
+  .fr-head-stats { gap: 18px; }
+  .fr-winners { grid-template-columns: 1fr; }
+}

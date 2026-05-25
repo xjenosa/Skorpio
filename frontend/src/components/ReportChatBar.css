@@ -1,0 +1,480 @@
+/* ReportChatBar — sticky follow-up composer that stays pinned to the bottom
+   of the viewport on every report page. Mirrors the New session composer's
+   look (textarea + model pill + send) but the routing slot is replaced by a
+   static topic badge that shows which pipeline the chat is grounded in. */
+
+.report-chatbar-shell {
+  position: fixed;
+  bottom: 0;
+  /* Stick to the right edge of the workspace flex column. main.workspace is
+     the only flex sibling next to the sidebar; we use 100vw + sidebar offset
+     because the workspace itself is not position:relative. */
+  left: 0;
+  right: 0;
+  /* Defer to the sidebar layout: when expanded, sidebar is ~248px; collapsed
+     is ~64px. The .app.sidebar-collapsed body class lets us shift accordingly
+     without coupling to JS. The base value matches the default sidebar width. */
+  padding: 14px 24px 18px;
+  pointer-events: none;
+  z-index: 30;
+  background: linear-gradient(
+    to top,
+    var(--bg-0) 0%,
+    var(--bg-0) 55%,
+    rgba(22, 22, 20, 0.0) 100%
+  );
+}
+
+.report-chatbar-inner {
+  pointer-events: auto;
+  margin: 0 auto;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Push the bar to the right of the sidebar so it doesn't overlap nav. The
+   numbers mirror aside.sidebar widths in home.css (~248px / 64px). */
+.app .report-chatbar-shell {
+  left: 248px;
+}
+.app.sidebar-collapsed .report-chatbar-shell {
+  left: 64px;
+}
+
+/* Composer overrides — squeeze the padding so the bar feels like a chat
+   input, not the full-size New session card. */
+.report-chatbar-composer {
+  width: 100%;
+  padding: 10px 12px 10px;
+}
+.report-chatbar-composer textarea {
+  min-height: 36px;
+  max-height: 160px;
+  font-size: 14px;
+  padding: 4px 4px;
+}
+.report-chatbar-composer .composer-row {
+  padding-top: 6px;
+  margin-top: 4px;
+}
+
+/* Topic badge — display-only pill that mirrors the pipeline routing color.
+   Uses the same shape as .pipeline-pill (without the dropdown affordance). */
+.report-chatbar-topic {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  /* 30px to match `.model-pill` (and the starter chips). All three
+     composer-row controls share a height so the row reads as one
+     band of pills instead of staggered chrome. */
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--rule-2);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-2);
+  cursor: default;
+  user-select: none;
+}
+.report-chatbar-topic-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+/* Clickable variant — used when the chatbar is wired with onPipelineChange.
+   Adds the hover/open affordances borrowed from .pipeline-pill so the user
+   sees this is interactive (the static .report-chatbar-topic <span> stays
+   plain when no callback is provided). */
+.report-chatbar-topic--button {
+  cursor: pointer;
+  transition: filter var(--dur-fast);
+}
+/* The accent-tinted background + border are set inline from the
+   pipeline's `meta.accent` so the pill matches the routing pill in the
+   Agent Pipeline page header and the Reports-row badges. Hover/open use
+   a brightness lift rather than swapping the background, otherwise the
+   accent colour would get replaced by a generic grey on interaction. */
+.report-chatbar-topic--button:hover,
+.report-chatbar-topic--button[aria-expanded="true"] {
+  filter: brightness(1.15);
+}
+.report-chatbar-topic--button .ico {
+  width: 12px;
+  height: 12px;
+  color: var(--fg-3);
+}
+/* The PipelineTagPicker wraps its trigger in a .pipeline-picker div which is
+   `position: relative` by default. We don't need any wrapper styling here. */
+.report-chatbar-topic-picker {
+  display: inline-flex;
+}
+
+/* Conversation thread — sits directly above the composer, scrolls
+   internally, capped height so the report content stays partially visible. */
+.report-chatbar-thread {
+  background: var(--bg-1);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  padding: 12px 14px;
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.report-chatbar-thread-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: -12px;
+  background: var(--bg-1);
+  padding: 4px 0 6px;
+  margin: -4px 0 0;
+  z-index: 1;
+}
+.report-chatbar-thread-head .t-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+/* Right-side action group inside the thread head — keeps the clear pill
+   and the hide-icon button visually together while the eyebrow sits on
+   the left. */
+.report-chatbar-thread-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.report-chatbar-thread-close {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border: 1px solid var(--rule-2);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+.report-chatbar-thread-close:hover {
+  background: var(--bg-2);
+  color: var(--fg-1);
+  border-color: var(--rule-3);
+}
+/* Icon-only hide button — same pill shape as `.thread-close` so they read
+   as siblings, but square aspect + chevron-down to suggest "collapse this
+   panel". Messages stay in state and localStorage; only the visual panel
+   hides so the user can see the report behind it. */
+.report-chatbar-thread-hide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--rule-2);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-3);
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+.report-chatbar-thread-hide:hover {
+  background: var(--bg-2);
+  color: var(--fg-1);
+  border-color: var(--rule-3);
+}
+/* Starter-chip row — surfaces 2 suggested follow-ups for the active
+   pipeline when the thread is empty. Lives INSIDE the composer-row
+   between the topic pill and the model picker; replaces the row's
+   spacer so it expands (`flex: 1`) to fill the middle and centers
+   its contents. Once a message is sent, the chip strip is unmounted
+   and the spacer comes back, so the model picker snaps back to the
+   right edge as before. Pipeline accent tint comes from the inline
+   `borderColor` / `color` set in ReportChatBar.tsx so chips visually
+   match the routing pill and the report's accent. */
+.report-chatbar-starters {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  /* Right-aligned: chips sit immediately to the LEFT of the model
+     picker. The wrapper still claims `flex: 1` so the topic pill
+     stays pinned to the left edge and the model picker stays right
+     — only the chips' alignment within the wrapper changes. */
+  justify-content: flex-end;
+  align-items: center;
+  /* 6px between the two chips — slightly tighter than the row's
+     base 8px gap so the suggestion pair reads as a clustered group
+     rather than two separate controls. */
+  gap: 6px;
+  min-width: 0;
+  /* All three composer-row controls (topic pill, chips, model pill)
+     share a 30px height so the row reads as a single band.
+     `margin: 0 -2px 0 12px` produces the documented spacing:
+       last chip → model picker = -2px (margin-right) + 8px (row gap) = 6px
+       topic pill → first chip   = 8px (row gap) + 12px (margin-left) = 20px
+     Negative margin-right is the only way to get the gap below the
+     row's base 8px without touching `.composer-row` (shared with
+     the New session composer, where the 8px is intentional). The
+     6px right gap matches the 6px chip-to-chip gap so the model
+     picker reads as part of the suggestion cluster. */
+  margin: 0 -2px 0 12px;
+}
+.report-chatbar-starter {
+  /* `inline-block` rather than `inline-flex` because `text-overflow:
+     ellipsis` is unreliable on flex containers that hold a raw text
+     node — the ellipsis silently doesn't appear. inline-block
+     centers text vertically via `line-height` (28px on a 30px-tall
+     pill accounting for 1px borders top/bottom). Height matches
+     `.report-chatbar-topic` and `.model-pill` so all three
+     composer-row controls share one baseline. */
+  display: inline-block;
+  height: 30px;
+  line-height: 28px;
+  padding: 0 11px;
+  border: 1px solid var(--rule-2);
+  border-radius: 999px;
+  background: var(--bg-1);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  white-space: nowrap;
+  /* `max-width` (not `width`) — chips size to their content so a
+     short prompt produces a short pill, but anything longer than
+     220px truncates with `…`. Fixed-width was ugly because a
+     33-character question rendered as a wide pill with a lot of
+     empty space inside; max-width gives consistency only on the
+     CAP, not on the floor. Full text remains accessible via the
+     `title` attribute on hover. */
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Right-align text so the truncation `…` sits flush against the
+     model picker on the right — matches the right-aligned strip
+     layout and reads as "suggestions feeding into the send action". */
+  text-align: right;
+  cursor: pointer;
+  transition: filter var(--dur-fast), background var(--dur-fast);
+}
+.report-chatbar-starter:hover {
+  background: var(--bg-2);
+  filter: brightness(1.08);
+}
+.report-chatbar-starter:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* "show conversation" toggle — appears above the composer (right side)
+   when the thread is hidden but messages exist. Self-aligns flex-end
+   so it sits over the composer's right edge — mirrors the chat-bubble
+   layout below where assistant bubbles align left and user bubbles
+   align right. */
+/* Single-row band holding the empty-tip pill (left) + the "show
+   conversation" pill (right). justify-content: space-between pushes
+   them to opposite ends; an empty <span /> placeholder is rendered in
+   TSX when only one pill is visible so the present pill stays on its
+   own side instead of drifting to center. The row reserves the
+   vertical band whether zero, one, or both pills are visible. */
+.report-chatbar-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 22px;
+}
+
+/* Empty-prompt error pill — left-aligned counterpart to the "show
+   conversation · N" pill on the right. Only appears after the user
+   submits an empty prompt; shape, height, and vertical position match
+   the thread-show pill so the pair reads as one row of matched chrome.
+   Colour palette mirrors the NewSession `.error-banner`: 1px --err
+   border, faint --err-tinted fill, --err text colour. Default-cursor
+   (no hover affordance) because it isn't actionable — typing into the
+   textbox dismisses it via the onChange handler. The shorter --fs-small
+   sentence-case copy is allowed to render wider than the mono pill
+   above; max-width: 72% keeps it from crowding the right-side pill on
+   narrow viewports. */
+.report-chatbar-empty-error {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border: 1px solid var(--err);
+  border-radius: 999px;
+  /* Solid surface so the red text reads against whatever sits behind
+     the chatbar (transparent backdrop on light report content, the
+     dot-grid on dark surfaces, etc.). The previous 8% --err tint was
+     borrowed from .error-banner, which lives on the opaque NewSession
+     card background — same colour against the chatbar's translucent
+     gutter became unreadable. Matches the `.report-chatbar-thread-show`
+     pill's --bg-1 fill so the two pills sit on the same solid
+     foundation; the red border + red text carry the error semantics. */
+  background: var(--bg-1);
+  color: var(--err);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 72%;
+}
+
+.report-chatbar-thread-show {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 10px;
+  border: 1px solid var(--rule-2);
+  border-radius: 999px;
+  background: var(--bg-1);
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+.report-chatbar-thread-show:hover {
+  background: var(--bg-2);
+  color: var(--fg-1);
+  border-color: var(--rule-3);
+}
+
+.report-chatbar-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* Cap each message at 80% of the thread width so they read as chat
+     bubbles, not full-width paragraphs. The per-role align-self below
+     pushes user bubbles right and assistant bubbles left. */
+  max-width: 80%;
+}
+.report-chatbar-msg--user {
+  align-self: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+.report-chatbar-msg--assistant {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+.report-chatbar-msg-role {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.report-chatbar-msg--user .report-chatbar-msg-role { color: var(--accent); }
+.report-chatbar-msg-body {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--fg-1);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+/* User prompt sits inside a soft-rounded bubble, matching Claude.ai's
+   composer chrome — a darker fill than the page background, generous
+   inner padding, right-aligned via the parent's flex-end. Assistant
+   responses stay unboxed (plain text on the page surface) so the visual
+   weight stays on the human input — same pattern as ChatGPT, Claude.ai,
+   etc. Bubble is also given a left-align inside the box so wrapped lines
+   read naturally regardless of the parent's text-align: right. */
+.report-chatbar-msg--user .report-chatbar-msg-body {
+  background: var(--bg-2);
+  border: 1px solid var(--rule-2);
+  border-radius: 14px;
+  padding: 10px 14px;
+  text-align: left;
+  /* Bubble shouldn't stretch the whole 80% of the thread when the
+     message is short — let it size to its content. */
+  max-width: 100%;
+}
+/* When the body contains a rendered markdown tree (assistant messages),
+   pre-wrap would preserve the gaps between block elements as literal
+   whitespace. Switch to normal so <p>/<ul>/<h*> margins work. */
+.report-chatbar-msg--assistant .report-chatbar-msg-body {
+  white-space: normal;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body p {
+  margin: 0 0 8px;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body p:last-child {
+  margin-bottom: 0;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body ul {
+  margin: 0 0 8px;
+  padding-left: 20px;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body li {
+  margin-bottom: 2px;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body strong {
+  color: var(--fg-1);
+  font-weight: 600;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body em {
+  font-style: italic;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body h2,
+.report-chatbar-msg--assistant .report-chatbar-msg-body h3,
+.report-chatbar-msg--assistant .report-chatbar-msg-body h4 {
+  font-family: var(--serif);
+  font-weight: 600;
+  margin: 8px 0 4px;
+}
+.report-chatbar-msg--assistant .report-chatbar-msg-body h2 { font-size: 16px; }
+.report-chatbar-msg--assistant .report-chatbar-msg-body h3 { font-size: 14.5px; }
+.report-chatbar-msg--assistant .report-chatbar-msg-body h4 { font-size: 13.5px; color: var(--fg-2); }
+.report-chatbar-msg--assistant .report-chatbar-msg-body code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 1px 4px;
+  background: var(--bg-2);
+  border-radius: 3px;
+}
+.report-chatbar-typing {
+  color: var(--fg-3);
+  font-style: italic;
+}
+.report-chatbar-error {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #f38764;
+  padding: 6px 8px;
+  border: 1px dashed #f38764;
+  border-radius: var(--radius-sm);
+}
+
+/* Open-upward — the model picker is near the bottom of the viewport, so its
+   default top-anchored menu would render below the fold. Flip it above the
+   pill instead. */
+.report-chatbar-model-menu {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+/* Page-level breathing room so the fixed bar never covers the last
+   paragraph of a report. ~200px clears the thread + composer + glow. */
+.view#view-agent-pipeline {
+  padding-bottom: 200px;
+}
