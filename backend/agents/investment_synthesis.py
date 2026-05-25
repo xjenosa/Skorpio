@@ -1,0 +1,179 @@
+"""
+Stage 5 of Investment Optimizer — final InvestmentPlan.
+"""
+from backend.agents.base_agent import BaseAgent
+from backend.agents.grounding import GROUNDING_RULES
+from backend.models.investment import (
+    ClimateRiskProfile,
+    FundedProject,
+    GridAsset,
+    InvestmentPlan,
+    InvestmentSpec,
+    UpgradeProject,
+)
+from backend.utils.reconciliation import reconcile
+
+
+SYSTEM = """You are a senior utility planner writing the executive summary
+of a climate-adapted capital investment plan for the utility's board. Be
+specific, numeric, and confident. No bullet lists, flowing prose. Avoid
+em dashes in the prose; use commas, periods, or parentheses.""" + GROUNDING_RULES
+
+
+class InvestmentSynthesisAgent(BaseAgent):
+    async def synthesize(
+        self,
+        *,
+        job_id: str,
+        spec: InvestmentSpec,
+        assets: list[GridAsset],
+        is_synthesized_catalog: bool,
+        risk_profiles: list[ClimateRiskProfile],
+        candidate_projects: list[UpgradeProject],
+        funded: list[FundedProject],
+        unfunded: list[UpgradeProject],
+        progress_callback=None,
+    ) -> InvestmentPlan:
+        if progress_callback:
+            await progress_callback("Composing investment plan...", 88)
+
+        total_capex = sum(f.project.capex_cad for f in funded)
+        total_annual_relief = sum(f.project.risk_reduction_cad_per_year for f in funded)
+        portfolio_roi = (total_annual_relief * spec.horizon_years) / max(1.0, total_capex)
+        customers_protected = sum(f.project.customers_protected for f in funded)
+
+        summary = await self._exec_summary(spec, assets, funded, unfunded, total_capex, total_annual_relief)
+
+        # Pattern 3 — reconcile Claude's exec summary against portfolio facts.
+        # Drifted budget, customer count, and capex figures are rewritten to
+        # match the actual computed values.
+        recon_facts = {
+            "budget_cad": spec.budget_cad,
+            "customers_protected": float(customers_protected),
+            "total_capex_committed_cad": total_capex,
+        }
+        summary = reconcile(summary, recon_facts).corrected_text
+
+        limitations = [
+            "Climate hazard frequencies use provincial base rates; sub-provincial variation (urban heat island, micro-flooding) is not modeled.",
+            "Asset replacement costs are estimates; real bids will vary ±25%.",
+            "Optimizer is greedy on ROI only and does not enforce geographic balance or political constraints.",
+            "Reliability metric is customer-hours-lost per event; does not weight medical or industrial criticality.",
+        ]
+        if is_synthesized_catalog:
+            limitations.append(
+                f"Asset catalog for {spec.utility} was synthesized from province-average templates because we don't have a calibrated registry for this utility."
+            )
+        # If any Claude call (per-project rationales or exec summary) hit the
+        # max_tokens cap on this agent, surface it. See base_agent._truncation_count.
+        if self.had_truncation():
+            limitations.append(
+                f"{self._truncation_count} Claude response(s) hit the max_tokens "
+                "cap, so executive summary or per-project rationale may be incomplete. "
+                "Raise the cap in REPORTS_COHESION.md §8b and re-run."
+            )
+
+        plan = InvestmentPlan(
+            job_id=job_id,
+            spec=spec,
+            assets=assets,
+            risk_profiles=risk_profiles,
+            candidate_projects=candidate_projects,
+            funded_projects=funded,
+            unfunded_projects=unfunded,
+            total_capex_committed_cad=round(total_capex, 0),
+            total_annual_loss_avoided_cad=round(total_annual_relief, 0),
+            portfolio_roi_ratio=round(portfolio_roi, 2),
+            customers_protected=int(customers_protected),
+            executive_summary=summary,
+            methodology_notes=(
+                "Per-asset climate risk uses provincial hazard base rates from ECCC CCCS "
+                "scaled by IBC/CatIQ insurance loss share and asset-type susceptibility. "
+                "Climate scaling: 1.0× by 2025, 1.15× by 2030, 1.30× by 2035, 1.60× by 2050. "
+                "Asset age multiplier: 0.7× (<20y) → 1.6× (>60y). Project menu generated "
+                "from 11 hardening templates × asset type × dominant hazard. Selection "
+                "is a greedy ROI-ordered knapsack with horizon = "
+                f"{spec.horizon_years}y."
+            ),
+            safety_flags=self._safety_flags(risk_profiles, funded, unfunded),
+            limitations=limitations,
+        )
+        return plan
+
+    def _safety_flags(
+        self,
+        profiles: list[ClimateRiskProfile],
+        funded: list[FundedProject],
+        unfunded: list[UpgradeProject],
+    ) -> list[str]:
+        flags: list[str] = []
+        critical = [p for p in profiles if p.risk_tier == "critical"]
+        if critical:
+            unfunded_critical = {p.target_assets[0] for p in unfunded if p.target_assets}
+            crit_unfunded = [p for p in critical if p.asset_id in unfunded_critical]
+            if crit_unfunded:
+                flags.append(
+                    f"{len(crit_unfunded)} critical-tier asset(s) have no hardening project funded. "
+                    "Budget shortfall, or no high-ROI candidate was available."
+                )
+        if not funded:
+            flags.append("Budget is too small to fund any project at projected ROI; consider raising the floor or extending the horizon.")
+        return flags
+
+    async def _exec_summary(
+        self,
+        spec: InvestmentSpec,
+        assets: list[GridAsset],
+        funded: list[FundedProject],
+        unfunded: list[UpgradeProject],
+        total_capex: float,
+        total_annual_relief: float,
+    ) -> str:
+        if not funded:
+            return (
+                f"No projects met the ROI threshold within ${spec.budget_cad/1e6:.0f}M for {spec.utility}. "
+                "Either the budget is too small or the candidate menu needs deeper exposure modeling."
+            )
+        top_titles = "; ".join(f.project.title for f in funded[:3])
+        prompt = f"""Write a 4-5 paragraph executive summary for a utility board.
+
+Format: open with `# Executive Summary: <one-line topic>`. Each paragraph
+begins with `**<2-5 word bold title>**` on its own line, then a blank line,
+then the prose. Separate paragraphs with blank lines only. Do NOT insert
+`---` or any horizontal-rule dividers, and do NOT use markdown tables
+(the renderer does not display them). Avoid em dashes anywhere in the
+prose; use commas, periods, or parentheses.
+
+Utility: {spec.utility} ({spec.province})
+Budget: ${spec.budget_cad/1e6:.0f}M over {spec.horizon_years} years
+Target year: {spec.target_year}
+
+Funded projects: {len(funded)}
+Unfunded but recommended: {len(unfunded)}
+Capex committed: ${total_capex/1e6:.0f}M
+Avoided annual loss: ${total_annual_relief/1e6:.1f}M/yr
+Lifetime ROI: {(total_annual_relief * spec.horizon_years) / max(1.0, total_capex):.2f}×
+
+Top three funded:
+{top_titles}
+
+Paragraph 1: the verdict (does the budget cover the critical risk?) and the
+headline numbers.
+Paragraph 2: which specific funded projects matter most and why.
+Paragraph 3: what's still unprotected (biggest unfunded asset / hazard) and
+how that translates to residual customer-hours-lost.
+Paragraph 4: caveats / limitations of the analysis.
+Paragraph 5: the one strategic move the board should make in the next
+budget cycle.
+
+Tone: confident, expert, plain English. Write for an executive who will skim.
+Each paragraph is 2-4 sentences."""
+        try:
+            return (await self.ask_claude(SYSTEM, prompt, max_tokens=900)).strip()
+        except Exception as e:
+            self.logger.warning(f"Exec summary failed: {e}")
+            return (
+                f"Funded {len(funded)} of {len(funded) + len(unfunded)} candidate projects "
+                f"with ${total_capex/1e6:.0f}M of ${spec.budget_cad/1e6:.0f}M budget. "
+                f"Avoided loss: ${total_annual_relief/1e6:.1f}M/year."
+            )
