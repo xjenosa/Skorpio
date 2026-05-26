@@ -4,7 +4,7 @@ from typing import Optional
 
 class RegionEvidence(BaseModel):
     """A sourced claim about a region — used to justify ranking decisions."""
-    source: str                         # e.g. "EIA", "ElectricityMaps", "PJM"
+    source: str                         # e.g. "EIA", "IPCC AR5", "IESO", "PJM"
     score: float = Field(ge=0.0, le=1.0)
     bulletins: list[str] = []           # bulletin / docket IDs supporting the claim
     description: str = ""

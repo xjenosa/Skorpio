@@ -102,7 +102,7 @@ from backend.models.workload import Workload, Region, RegionEvidence, BalancingA
 from backend.services.eia import eia_client
 from backend.services.iso_lmp import iso_client
 from backend.services.openei import openei_client
-from backend.services.electricitymaps import electricitymaps_client
+from backend.services.carbon_intensity import carbon_intensity_client
 from backend.services.nrel import nrel_client
 from backend.services.topology_graph import get_topology_graph
 from backend.agents.grounding import GROUNDING_RULES
@@ -463,9 +463,13 @@ Return a JSON array of objects with: iso_code, name, balancing_authority, states
         lmp_rows = await iso_client.get_zone_lmp(iso_code, zone) if zone else []
         authorities_raw = iso_client.extract_authorities(topology or {})
 
-        # ── Fetch carbon intensity snapshot
+        # ── Compute carbon intensity snapshot from provincial fuel mix +
+        # IPCC AR5 emission factors. The `electricitymaps_zone` key on
+        # region_info is preserved as the lookup key (it carries the same
+        # ISO 3166-2-style codes the new client expects) so existing
+        # region descriptors keep working without rewriting.
         zone_for_em = region_info.get("electricitymaps_zone") or iso_code.split("-")[0]
-        snapshot_path: Optional[str] = await electricitymaps_client.get_snapshot(zone_for_em)
+        snapshot_path: Optional[str] = await carbon_intensity_client.get_snapshot(zone_for_em)
 
         # ── Fetch a sample utility rate at the region centroid (if known)
         rate_summary: Optional[dict] = None

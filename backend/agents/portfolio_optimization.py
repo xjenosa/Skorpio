@@ -193,6 +193,15 @@ class PortfolioOptimizationAgent(BaseAgent):
         # ── Greedy knapsack on ROI ──────────────────────────────────── #
         # ROI ratio = (annual_relief × horizon_years) / capex
         # Sort high → low; fund until budget exhausted; rest go to unfunded.
+        #
+        # One project per asset. Several templates can apply to the same
+        # asset (e.g. on a feeder under ice-storm/wind exposure both
+        # vegetation_mgmt @ 40% relief and undergrounding @ 85% relief
+        # are eligible). Without dedup, both can fund and the downstream
+        # totals claim 125% of the asset's annual loss avoided and count
+        # the same customers twice. Utility capex committees don't
+        # double-harden the same asset, so pick the highest-ROI project
+        # per asset and move the alternates to unfunded.
         def roi(p: UpgradeProject) -> float:
             return (p.risk_reduction_cad_per_year * spec.horizon_years) / max(1.0, p.capex_cad)
 
@@ -201,7 +210,12 @@ class PortfolioOptimizationAgent(BaseAgent):
         unfunded: list[UpgradeProject] = []
         spent = 0.0
         rank_idx = 1
+        funded_assets: set[str] = set()
         for project in ranked:
+            asset_key = project.target_assets[0] if project.target_assets else None
+            if asset_key and asset_key in funded_assets:
+                unfunded.append(project)
+                continue
             if spent + project.capex_cad <= spec.budget_cad:
                 spent += project.capex_cad
                 funded.append(FundedProject(
@@ -211,6 +225,8 @@ class PortfolioOptimizationAgent(BaseAgent):
                     rank=rank_idx,
                 ))
                 rank_idx += 1
+                if asset_key:
+                    funded_assets.add(asset_key)
             else:
                 unfunded.append(project)
 

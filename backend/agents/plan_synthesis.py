@@ -151,6 +151,34 @@ class PlanSynthesisAgent(BaseAgent):
 
         duration = (datetime.utcnow() - pipeline_start_time).total_seconds()
 
+        # ArcGIS enrichment — when the top candidate site sits in a known
+        # Canadian municipality, fetch Census Subdivision demographics and
+        # append a source citation. Lets the Siting report visibly show
+        # that the analysis was grounded against real Esri data instead
+        # of pure synthesis. Best-effort; silent on any failure.
+        arcgis_sources: list[str] = []
+        try:
+            from backend.services.arcgis_enrichment import (
+                enrich_city,
+                is_configured as _arcgis_ok,
+            )
+            if _arcgis_ok() and top_candidates:
+                # Extract a probable city from the top site's name field
+                # (formats like "Toronto, ON · expansion" or "Vaughan, ON").
+                top_name = top_candidates[0].site.name or ""
+                guess = top_name.split(",")[0].split("·")[0].strip()
+                if guess:
+                    city_data = await enrich_city(guess)
+                    if city_data:
+                        arcgis_sources.append(
+                            "ArcGIS GeoEnrichment (Esri Canada): "
+                            f"{city_data.get('city_name', guess)}: "
+                            f"{city_data.get('households', 0):,} households, "
+                            f"population {city_data.get('population', 0):,}"
+                        )
+        except Exception as e:
+            self.logger.debug(f"ArcGIS siting enrichment skipped: {e}")
+
         plan = SitingPlan(
             job_id=job_id,
             workload_spec=workload.query,
@@ -171,6 +199,7 @@ class PlanSynthesisAgent(BaseAgent):
             pipeline_duration_seconds=round(duration, 1),
             news_items=news_items,
             pareto_analysis=pareto_analysis,
+            sources=arcgis_sources,
         )
 
         self.logger.info(f"Siting plan generated for job {job_id}")
@@ -204,8 +233,9 @@ class PlanSynthesisAgent(BaseAgent):
         for iso_code, results in scoring_results_per_region.items():
             if not results:
                 continue
-            # Approximate region carbon as the median of placement-score interactions
-            # In production, sourced from ElectricityMaps per region.
+            # Approximate region carbon as the median of placement-score interactions.
+            # In production, sourced from carbon_intensity_client per region (provincial
+            # fuel mix x IPCC AR5 emission factors).
             region_carbon[iso_code] = None
 
         objectives_list: list[list[float]] = []

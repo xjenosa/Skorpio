@@ -1,7 +1,8 @@
 """
-Stage 2 of Neighborhood Electrification Readiness — fetch demographic +
-housing data per FSA. Combines live geocoder.ca lookups with the calibrated
-StatsCan FSA registry.
+Stage 2 of Neighborhood Electrification Readiness: fetch demographic and
+housing data per FSA. Combines live ArcGIS World Geocoding lookups (with
+zippopotam.us fallback) and ArcGIS GeoEnrichment overlays on top of the
+calibrated StatsCan FSA registry.
 """
 import asyncio
 

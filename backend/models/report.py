@@ -141,6 +141,7 @@ class SitingPlan(BaseModel):
     pipeline_duration_seconds: Optional[float] = None
     news_items: list[NewsItem] = []          # workload-level grid / policy preprints
     pareto_analysis: Optional[ParetoAnalysis] = None
+    sources: list[str] = []                  # extra dynamic citations (e.g. ArcGIS GeoEnrichment when configured)
 
 
 class PipelineJob(BaseModel):

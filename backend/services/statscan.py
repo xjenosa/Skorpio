@@ -1,9 +1,16 @@
 """
-StatsCan + Geocoder.ca client for the Neighborhood Electrification Readiness pipeline.
+StatsCan client for the Neighborhood Electrification Readiness pipeline.
 
 Live sources tried (in order):
-  1. Geocoder.ca   — free FSA → lat/lon lookup (no key needed). Real, called live.
-  2. StatsCan WDS  — census Profile via PCCF/Geosearch is gated and slow; we
+  1. ArcGIS World Geocoding (Esri) — primary FSA → lat/lon lookup, OAuth-
+                     authenticated via the org credentials in settings. Cached
+                     for a year on disk. Falls back to zippopotam.us when
+                     ArcGIS isn't configured or the credit cap trips.
+  2. ArcGIS GeoEnrichment (Esri Canada, Environics 2025) — overlays live
+                     households, median income, and dwelling mix on top of
+                     the baked-in FSA profile. Marks the profile as
+                     non-synthesized when the overlay applies.
+  3. StatsCan WDS  — census Profile via PCCF/Geosearch is gated and slow; we
                      don't hit it during a request. Instead we keep a calibrated
                      baked-in FSA registry for the demo cities, sourced from
                      2021 Census of Population (Profile by FSA tables 98-401-X
@@ -149,21 +156,38 @@ def list_supported_fsas() -> list[dict]:
     return sorted(out, key=lambda r: (r["city"], r["fsa"]))
 
 
-# ── Zippopotam.us live API ────────────────────────────────────────────── #
+# ── FSA geocoding ─────────────────────────────────────────────────────── #
 #
-# Previously this hit geocoder.ca's `?geoit=json` endpoint, which silently
-# stopped returning JSON in 2026 — every request now gets HTML back, json()
-# raises, the bare except swallows it, and every FSA ends up coordless. The
-# fallback at get_profile() also doesn't help because _FSA_REGISTRY entries
-# don't carry lat/lon. Net effect: the electrification map renders empty for
-# every run. Zippopotam is purpose-built for postal-code lookups, knows
-# Canadian FSAs natively (each FSA gets a distinct centroid, not the parent
-# city's), and needs no auth/key.
+# Primary path: ArcGIS World Geocoding (Esri sponsor, OAuth-authenticated,
+# Canadian FSA centroids returned via category=Postal). Cached on disk for
+# a year inside arcgis_enrichment.py, so repeat lookups cost zero credits.
+#
+# Fallback path: zippopotam.us. We previously called geocoder.ca's
+# `?geoit=json` endpoint, which silently stopped returning JSON in 2026
+# (HTML response, json() raises, bare except swallows it, every FSA ends
+# up coordless). Zippopotam knows Canadian FSAs natively (each FSA gets
+# a distinct centroid, not the parent city's), needs no auth/key, and
+# survives ArcGIS being unconfigured or hitting the per-process credit cap.
 
 
 async def geocode_fsa(fsa: str) -> Optional[tuple[float, float]]:
-    """Live FSA → (lat, lon) lookup via zippopotam.us. Cached on success."""
+    """FSA → (lat, lon). ArcGIS first, zippopotam.us as the fallback."""
     fsa = fsa.upper().strip()
+
+    # Primary: ArcGIS World Geocoding (Esri).
+    try:
+        from backend.services.arcgis_enrichment import (
+            geocode_fsa as _arcgis_geocode,
+            is_configured as _arcgis_ok,
+        )
+        if _arcgis_ok():
+            arcgis_result = await _arcgis_geocode(fsa)
+            if arcgis_result:
+                return arcgis_result
+    except Exception as e:
+        logger.debug(f"ArcGIS FSA geocode skipped: {e}")
+
+    # Fallback: zippopotam.us
     cache_key = f"geocoder:fsa:{fsa}"
     cached = await weather_cache.aget(cache_key)
     if cached and isinstance(cached, list) and len(cached) == 2:
@@ -265,6 +289,48 @@ async def get_profile(fsa: str) -> NeighborhoodProfile:
                 f"ECCC Climate Normals 1981-2010, station {nearest['name']} "
                 f"(id {nearest['climate_id']}, {nearest['distance_km']} km away)"
             )
+
+    # Overlay live ArcGIS GeoEnrichment data on top of the registry /
+    # synthesized base. When credentials are configured and the call
+    # succeeds, real Canadian demographics (Esri-curated StatsCan
+    # variables) replace the baked numbers and the profile is
+    # re-classified as non-synthesized so the report stops showing the
+    # synthesized-data disclaimer. Any field absent from the response
+    # (e.g. CanadianHousing not licensed under Seneca's subscription)
+    # silently keeps its current value, so a partial response is still a
+    # win over pure synthesis.
+    from backend.services.arcgis_enrichment import enrich_fsa, is_configured
+    if is_configured():
+        try:
+            enriched = await enrich_fsa(key)
+        except Exception as exc:
+            logger.warning("ArcGIS enrichment raised for %s: %s", key, exc)
+            enriched = None
+        if enriched:
+            applied: list[str] = []
+            if "households" in enriched:
+                prof.households = enriched["households"]
+                applied.append("households")
+            if "median_household_income_cad" in enriched:
+                prof.median_household_income_cad = enriched["median_household_income_cad"]
+                applied.append("median_household_income")
+            if "avg_household_size" in enriched:
+                prof.avg_household_size = enriched["avg_household_size"]
+                applied.append("avg_household_size")
+            if "avg_dwelling_age_years" in enriched:
+                prof.avg_dwelling_age_years = enriched["avg_dwelling_age_years"]
+                applied.append("dwelling_age")
+            if "dwelling_mix" in enriched:
+                prof.dwelling_mix = DwellingMix(**enriched["dwelling_mix"])
+                applied.append("dwelling_mix")
+            if applied:
+                prof.sources.append(
+                    "ArcGIS GeoEnrichment (Esri Canada): "
+                    + ", ".join(applied)
+                )
+                prof.is_synthesized = False
+                logger.info("ArcGIS overlay applied to FSA %s: %s", key, applied)
+
     return prof
 
 

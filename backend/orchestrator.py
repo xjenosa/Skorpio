@@ -146,15 +146,24 @@ class SkorpioOrchestrator:
         start_time = datetime.utcnow()
 
         async with AsyncSessionLocal() as db:
+            # Site generation and scoring fan out via asyncio.gather (one task
+            # per region). Each task calls progress(...) on the shared
+            # AsyncSession, which raises "concurrent operations are not
+            # permitted" if two write at once. Dormant today because all
+            # current prompts resolve to one region, but armed the moment a
+            # multi-region workload comes through. Lock keeps the parallel
+            # work parallel and only serialises the DB write.
+            db_lock = asyncio.Lock()
 
             async def progress(message: str, pct: int, stage: PipelineStage = None):
-                await crud.update_progress(
-                    db,
-                    job_id,
-                    message=message,
-                    progress=float(pct),
-                    stage=stage.value if stage else None,
-                )
+                async with db_lock:
+                    await crud.update_progress(
+                        db,
+                        job_id,
+                        message=message,
+                        progress=float(pct),
+                        stage=stage.value if stage else None,
+                    )
                 logger.info(f"[{job_id[:8]}] {pct}% — {message}")
 
             try:
@@ -371,14 +380,22 @@ class SkorpioOrchestrator:
         start_time = datetime.utcnow()
 
         async with AsyncSessionLocal() as db:
+            # Stage 4 fans the scenario scoring out via asyncio.gather, and
+            # each scoring task calls progress(...). SQLAlchemy AsyncSession
+            # is single-threaded, so two concurrent writes against the same
+            # session raise "concurrent operations are not permitted" and
+            # the whole pipeline dies at 70%. A simple lock keeps the
+            # scenario scoring parallel but serialises the progress writes.
+            db_lock = asyncio.Lock()
 
             async def progress(message: str, pct: int, stage: PipelineStage = None):
-                await crud.update_progress(
-                    db, job_id,
-                    message=message,
-                    progress=float(pct),
-                    stage=stage.value if stage else None,
-                )
+                async with db_lock:
+                    await crud.update_progress(
+                        db, job_id,
+                        message=message,
+                        progress=float(pct),
+                        stage=stage.value if stage else None,
+                    )
                 logger.info(f"[{job_id[:8]}] winter_peak {pct}% — {message}")
 
             try:
@@ -675,6 +692,10 @@ class SkorpioOrchestrator:
                     candidate_projects=candidates,
                     funded=funded,
                     unfunded=unfunded,
+                    # Forward the Living Atlas flood / wildfire citations
+                    # the risk modeling agent emitted (one per layer
+                    # that produced at least one empirical override).
+                    hazard_sources=list(risk_agent.last_run_sources),
                     progress_callback=progress,
                 )
 

@@ -20678,7 +20678,7 @@ EV_CHARGERS_BY_CITY: dict[str, dict] = {
         "dcfc_ports": 0,
         "province": 'NB',
     },
-    'Petite-RiviÃ¨re-St.-FranÃ§ois, QC': {
+    'Petite-Rivière-St.-François, QC': {
         "station_count": 1,
         "level1_ports": 0,
         "level2_ports": 3,
@@ -25725,7 +25725,7 @@ EV_CHARGERS_BY_CITY: dict[str, dict] = {
         "dcfc_ports": 0,
         "province": 'QC',
     },
-    'St.AndrÃ©, NB': {
+    'St.André, NB': {
         "station_count": 1,
         "level1_ports": 0,
         "level2_ports": 0,

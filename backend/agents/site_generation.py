@@ -158,6 +158,15 @@ class SiteGenerationAgent(BaseAgent):
         else:
             proximity_block = ""
 
+        # Capacity / headroom ranges scale with the workload target so a
+        # 200 MW HPC build does not get a library of 20-80 MW parcels that
+        # all fail the `capacity >= target * 0.85` feasibility floor.
+        cap_target = max(float(workload.target_capacity_mw or 50.0), 25.0)
+        cap_lo = int(round(cap_target * 0.85))
+        cap_hi = int(round(cap_target * 1.50))
+        hd_lo = int(round(cap_target * 0.85))
+        hd_hi = int(round(cap_target * 1.60))
+
         prompt = f"""Region: {region.name} ({region.iso_code})
 Country: {country}
 Balancing authority: {region.balancing_authority}
@@ -170,8 +179,8 @@ Propose {n} plausible new greenfield datacenter parcels for this region. For eac
 - lat: latitude (float)
 - lon: longitude (float)
 - address: short address (string)
-- capacity_mw: nameplate capacity if built (float, 20-80 MW)
-- transmission_headroom_mw: estimated POI headroom (float)
+- capacity_mw: nameplate capacity if built (float, {cap_lo}-{cap_hi} MW; sized for the {workload.target_capacity_mw} MW workload)
+- transmission_headroom_mw: estimated POI headroom (float, {hd_lo}-{hd_hi} MW)
 - pue: expected PUE 1.10-1.45 (float)
 - fiber_latency_ms: round-trip to nearest IXP (float)
 - water_l_per_mwh: cooling water draw (float)

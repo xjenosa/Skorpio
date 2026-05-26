@@ -70,6 +70,38 @@ class WinterGridAgent(BaseAgent):
         except Exception as e:
             self.logger.debug(f"Provincial snapshot enrichment skipped: {e}")
 
+        # ArcGIS city enrichment — anchor the synthesized per-feeder customer
+        # counts to a real Census Subdivision household total. The feeder
+        # topology is still modeled (we don't have real GIS), but the
+        # network-wide customer count now matches the actual municipality
+        # rather than the topology generator's heuristic. Adds an Esri
+        # source citation so the report shows it isn't fully synthesized.
+        try:
+            from backend.services.arcgis_enrichment import enrich_city, is_configured as _arcgis_ok
+            if _arcgis_ok():
+                city_data = await enrich_city(spec.city)
+                if city_data and city_data.get("households") and network.feeders:
+                    target_total = city_data["households"]
+                    current_total = sum(f.customer_count for f in network.feeders)
+                    if current_total > 0 and target_total > 0:
+                        scale = target_total / current_total
+                        for f in network.feeders:
+                            f.customer_count = max(1, int(round(f.customer_count * scale)))
+                        self.logger.info(
+                            "Scaled %d feeders to match ArcGIS city household total "
+                            "(%d → %d, factor %.3f)",
+                            len(network.feeders), current_total, target_total, scale,
+                        )
+                    network.sources.append(
+                        "ArcGIS GeoEnrichment (Esri Canada): "
+                        f"{city_data.get('city_name', spec.city)}: "
+                        f"{target_total:,} households, "
+                        f"population {city_data.get('population', 0):,}"
+                    )
+                    network.is_synthesized = False
+        except Exception as e:
+            self.logger.debug(f"ArcGIS city enrichment skipped: {e}")
+
         return network
 
     async def describe_network(self, network: DistributionNetwork) -> str:

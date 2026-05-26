@@ -5,21 +5,22 @@ Calibrated from public sources:
   - Operator company pages, press releases, annual reports
   - DC Byte / Cushman & Wakefield Canadian DC market reports 2023–2024
   - CRTC Network Resiliency Service Provider data (fiber count proxy)
-  - Provincial grid zone assignments (ElectricityMaps)
+  - Provincial grid zone assignments (ISO 3166-2 codes)
 
 Site coordinates are real (verifiable on OpenStreetMap / operator maps).
 Per-site MW and headroom are approximated and rounded.
 
-Live integration: `enrich_with_live_carbon()` adds current
-ElectricityMaps gCO₂/kWh per zone. If the API key is missing or the call
-fails, sites keep their baked-in `avg_carbon_g_kwh` value.
+Live integration: `enrich_with_live_carbon()` overlays the locally
+computed gCO2eq/kWh from the carbon_intensity client (provincial fuel
+mix x IPCC AR5 emission factors). If the lookup fails, sites keep their
+baked-in `avg_carbon_g_kwh` value.
 """
 from __future__ import annotations
 
 import asyncio
 
 from backend.models.expansion import ExistingSite, OperatorFootprint
-from backend.services.electricitymaps import electricitymaps_client
+from backend.services.carbon_intensity import carbon_intensity_client
 from backend.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -333,14 +334,15 @@ def _synthesize_generic(operator: str) -> list[ExistingSite]:
     ]
 
 
-# ── Live ElectricityMaps enrichment ───────────────────────────────────── #
+# ── Carbon intensity enrichment ───────────────────────────────────────── #
 
 
 async def enrich_with_live_carbon(footprint: OperatorFootprint) -> int:
     """
-    For each site with a grid_zone, fetch the current ElectricityMaps reading
-    and overwrite avg_carbon_g_kwh. Returns the count of sites successfully
-    enriched. Failures (no key, rate limit, network) are silently swallowed —
+    For each site with a grid_zone, compute the current carbon intensity
+    (provincial fuel mix x IPCC AR5 factors) and overwrite avg_carbon_g_kwh.
+    Returns the count of sites successfully enriched. Failures (unknown
+    zone, lookup error) are silently swallowed —
     the baked-in baseline value stays.
     """
     unique_zones = sorted({s.grid_zone for s in footprint.sites if s.grid_zone})
@@ -349,11 +351,11 @@ async def enrich_with_live_carbon(footprint: OperatorFootprint) -> int:
 
     async def fetch_one(zone: str) -> tuple[str, float | None]:
         try:
-            payload = await electricitymaps_client.get_carbon_intensity(zone)
+            payload = await carbon_intensity_client.get_carbon_intensity(zone)
             if payload and payload.get("g_co2_per_kwh") is not None:
                 return zone, float(payload["g_co2_per_kwh"])
         except Exception as e:
-            logger.warning(f"ElectricityMaps fetch failed for {zone}: {e}")
+            logger.warning(f"Carbon intensity lookup failed for {zone}: {e}")
         return zone, None
 
     results = await asyncio.gather(*(fetch_one(z) for z in unique_zones))

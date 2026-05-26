@@ -133,8 +133,9 @@ class ExpansionSynthesisAgent(BaseAgent):
                 "$13.5M (liquid), with +10% AI-training premium and +25% greenfield "
                 "premium (anchored on JLL + Cushman 2024 Canadian DC build benchmarks). "
                 "Demand growth assumed: traditional 12% / inference 25% / training 40% "
-                "/ balanced 22% CAGR. Live ElectricityMaps reading enriches per-site "
-                "carbon when the API key is set. Greedy scoring weighted "
+                "/ balanced 22% CAGR. Per-site carbon intensity is computed from "
+                "provincial fuel mix and IPCC AR5 emission factors. Greedy scoring "
+                "weighted "
                 "grid 25% · sustainability 20% · speed 20% · cost 20% · risk 15%."
             ),
             safety_flags=self._safety_flags(funded, coverage, footprint, spec),

@@ -1,5 +1,5 @@
 """
-Live telemetry + ad-hoc lookups: transmission file serving, ElectricityMaps
+Live telemetry + ad-hoc lookups: transmission file serving, grid
 carbon snapshots, live carbon intensity, live weather, arXiv search, and
 the operator metrics that power the Dashboard.
 
@@ -21,7 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.config import settings
 from backend.db.session import get_db
 from backend.services.arxiv import arxiv_client
-from backend.services.electricitymaps import electricitymaps_client
+from backend.services.carbon_intensity import carbon_intensity_client
 from backend.services.open_meteo import open_meteo_client
 from backend.utils.logger import get_logger
 
@@ -54,12 +54,12 @@ async def get_transmission_file(filename: str):
     return FileResponse(str(path), media_type="application/json")
 
 
-@router.get("/api/electricitymaps/{zone}")
+@router.get("/api/grid-snapshot/{zone}")
 async def get_carbon_snapshot(zone: str):
     """Persist (and return) the latest carbon intensity snapshot for a zone."""
     if not re.match(r"^[A-Za-z0-9\-_]+$", zone):
         raise HTTPException(status_code=400, detail="Invalid zone code")
-    local_path = await electricitymaps_client.get_snapshot(zone)
+    local_path = await carbon_intensity_client.get_snapshot(zone)
     if not local_path:
         raise HTTPException(status_code=404, detail=f"No carbon snapshot available for {zone}")
     return JSONResponse({"filename": f"EM-{zone}.json", "zone": zone})
@@ -84,18 +84,16 @@ _CITY_COORDS: dict[str, tuple[float, float, str]] = {
 
 @router.get("/api/grid-carbon/{zone}")
 async def grid_carbon_live(zone: str):
-    """Live carbon intensity (gCO₂eq/kWh) for an ElectricityMaps zone."""
+    """Carbon intensity (gCO2eq/kWh) for a Canadian provincial zone,
+    computed locally from the provincial fuel mix and IPCC AR5 emission
+    factors. No external API key required.
+    """
     if not re.match(r"^[A-Za-z0-9\-_]+$", zone):
         raise HTTPException(status_code=400, detail="Invalid zone code")
-    if not settings.electricitymaps_api_key:
-        return JSONResponse(
-            {"data_missing": True, "reason": "ELECTRICITYMAPS_API_KEY not configured"},
-            status_code=503,
-        )
-    payload = await electricitymaps_client.get_carbon_intensity(zone)
+    payload = await carbon_intensity_client.get_carbon_intensity(zone)
     if not payload:
         return JSONResponse(
-            {"data_missing": True, "reason": f"No live data for zone {zone}"},
+            {"data_missing": True, "reason": f"No provincial profile for zone {zone}"},
             status_code=503,
         )
     return payload

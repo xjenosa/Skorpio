@@ -4,9 +4,11 @@ Canadian grid data layer.
 Combines:
   - Provincial reference constants (always available, hardcoded from public
     NRCan / CER / IESO / AESO / Hydro-Québec annual reports).
-  - Live carbon intensity from ElectricityMaps (when ELECTRICITYMAPS_API_KEY
-    is set; CA-ON, CA-QC, CA-AB, CA-BC, CA-MB, CA-SK, CA-NS, CA-NB, CA-NL,
-    CA-PE, CA-YT, CA-NT, CA-NU are all supported zones).
+  - Carbon intensity from carbon_intensity.py, computed locally as the
+    energy-weighted average of each provincial fuel mix times the IPCC
+    AR5 Annex III lifecycle emission factors. CA-ON, CA-QC, CA-AB, CA-BC,
+    CA-MB, CA-SK, CA-NS, CA-NB, CA-NL, CA-PE, CA-YT, CA-NT, CA-NU are
+    all supported zones.
   - Light HTTP fetches of public IESO / AESO / Hydro-Québec CSV/JSON
     reports for live demand. Endpoints are *public, no auth required*; if
     a fetch fails the client returns the provincial reference snapshot so
@@ -27,7 +29,7 @@ from typing import Optional
 import httpx
 
 from backend.config import settings
-from backend.services.electricitymaps import electricitymaps_client
+from backend.services.carbon_intensity import carbon_intensity_client
 from backend.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -35,8 +37,8 @@ logger = get_logger(__name__)
 
 # ── Provincial reference data ─────────────────────────────────────────── #
 # Sources: Canada Energy Regulator (CER) Provincial Energy Profiles 2024,
-# NRCan EIST tables, ElectricityMaps annual Canada report. Numbers are
-# annual-mean order-of-magnitude — fine as a backstop, replace with the
+# NRCan EIST tables, IPCC AR5 lifecycle emission factors. Numbers are
+# annual-mean order-of-magnitude — fine as a backstop, replace with a
 # live snapshot when one is available.
 
 @dataclass(frozen=True)
@@ -190,8 +192,9 @@ class ProvincialSnapshot:
 
 
 async def get_provincial_snapshot(iso_code: str) -> Optional[ProvincialSnapshot]:
-    """Best-effort: live carbon from ElectricityMaps when available, otherwise
-    the provincial reference. Always returns something for known provinces."""
+    """Best-effort: locally computed carbon intensity when available,
+    otherwise the provincial reference. Always returns something for
+    known provinces."""
     profile = get_province(iso_code)
     if not profile:
         return None
@@ -199,10 +202,10 @@ async def get_provincial_snapshot(iso_code: str) -> Optional[ProvincialSnapshot]
     sources = ["CER provincial energy profile"]
     carbon = profile.typical_carbon_g_co2_kwh
 
-    em = await electricitymaps_client.get_carbon_intensity(profile.iso_code)
-    if em and em.get("g_co2_per_kwh") is not None:
-        carbon = int(em["g_co2_per_kwh"])
-        sources.append("ElectricityMaps")
+    ci = await carbon_intensity_client.get_carbon_intensity(profile.iso_code)
+    if ci and ci.get("g_co2_per_kwh") is not None:
+        carbon = int(ci["g_co2_per_kwh"])
+        sources.append("IPCC AR5 emission factors")
 
     return ProvincialSnapshot(
         iso_code=profile.iso_code,

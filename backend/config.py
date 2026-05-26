@@ -32,10 +32,6 @@ class Settings(BaseSettings):
     eia_api_key: str = ""
     eia_base_url: str = "https://api.eia.gov/v2"
 
-    # Electricity Maps — real-time grid carbon intensity
-    electricitymaps_api_key: str = ""
-    electricitymaps_base_url: str = "https://api.electricitymap.org/v3"
-
     # NREL — renewable resource / cost data
     nrel_api_key: str = ""
     nrel_base_url: str = "https://developer.nrel.gov/api"
@@ -71,6 +67,25 @@ class Settings(BaseSettings):
     # arXiv — energy / grid policy preprints (no key required)
     arxiv_base_url: str = "https://export.arxiv.org/api/query"
     arxiv_max_results: int = 5
+
+    # ArcGIS / Esri — OAuth 2.0 app-authentication credentials minted in an
+    # ArcGIS Online org (Content → New item → Developer credentials →
+    # OAuth 2.0 app auth → privileges: Basemaps, Geocoding, Data enrichment,
+    # Premium content). Backend mints short-lived access tokens via the
+    # client_credentials grant and attaches them to GeoEnrichment /
+    # Geocoding calls. Both blank = integration disabled, all callers fall
+    # back to their existing synthesized / StatsCan-registry path.
+    arcgis_client_id: str = ""
+    arcgis_client_secret: str = ""
+    arcgis_oauth_token_url: str = "https://www.arcgis.com/sharing/rest/oauth2/token"
+    arcgis_geoenrichment_url: str = (
+        "https://geoenrich.arcgis.com/arcgis/rest/services/World/"
+        "geoenrichmentserver/Geoenrichment/enrich"
+    )
+    arcgis_geocoding_url: str = (
+        "https://geocode-api.arcgis.com/arcgis/rest/services/"
+        "World/GeocodeServer/findAddressCandidates"
+    )
 
     # Placement scoring
     scoring_horizon_months: int = 18      # how far forward LMP/carbon forecasts are evaluated
@@ -132,7 +147,7 @@ class Settings(BaseSettings):
 
     # Default Canadian provinces considered when no specific region is given.
     # ISO 3166-2 codes prefixed with "CA-" so they round-trip to the
-    # ElectricityMaps zone codes (CA-ON, CA-QC, CA-AB, etc.).
+    # carbon-intensity zone keys (CA-ON, CA-QC, CA-AB, etc.).
     default_canadian_provinces: list[str] = [
         "CA-ON", "CA-QC", "CA-AB", "CA-BC", "CA-MB",
     ]

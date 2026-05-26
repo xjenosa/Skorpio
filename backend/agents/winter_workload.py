@@ -93,8 +93,8 @@ Required JSON shape:
 {{
   "city_key": "mississauga",  // one of the supported cities
   "cold_event_id": "polar_vortex_2014",  // one of the supported events
-  "custom_min_temp_c": null,  // only if cold_event_id == "custom"
-  "custom_duration_hours": null,  // only if cold_event_id == "custom"
+  "custom_min_temp_c": null,  // REQUIRED numeric value if cold_event_id == "custom", null otherwise
+  "custom_duration_hours": null,  // REQUIRED numeric value if cold_event_id == "custom", null otherwise
   "scenario_keys": ["conservative", "moderate", "aggressive"],  // include all 3 unless user is specific
   "horizon_year": 2030,  // year context for the analysis
   "explicit_hp_pct": null,  // 0.0-1.0 if user gave a specific HP %
@@ -105,7 +105,20 @@ Required JSON shape:
 If the user mentioned a specific city not in the list, default to "mississauga".
 If they didn't mention a cold event, default to "polar_vortex_2014".
 If they gave a specific HP%, set explicit_hp_pct (0.30 for "30%") and put
-"custom" as the only scenario_keys entry."""
+"custom" as the only scenario_keys entry.
+
+COLD EVENT RULES (important):
+- Only set cold_event_id to "custom" when the user gave BOTH a specific
+  temperature AND a specific duration. Extract them numerically:
+  "-30C" or "minus 30 degrees" -> custom_min_temp_c: -30.0
+  "4 days" or "96 hours" or "four-day cold snap" -> custom_duration_hours: 96
+  ("3 days" -> 72, "5 days" -> 120, "1 week" -> 168)
+- If the user described a cold event vaguely (e.g. "a really cold snap",
+  "a few days of arctic weather") without both numbers, use a preset
+  event id instead of "custom". Default to "polar_vortex_2014".
+- If you set cold_event_id = "custom" you MUST set both
+  custom_min_temp_c (a negative float in Celsius) AND custom_duration_hours
+  (a positive integer). Never leave either as null when picking custom."""
 
         try:
             parsed = await self.ask_claude_json(SYSTEM_WINTER_WORKLOAD, prompt)
@@ -136,6 +149,16 @@ If they gave a specific HP%, set explicit_hp_pct (0.30 for "30%") and put
         # Resolve cold event id
         cold_event_id = parsed.get("cold_event_id") or "polar_vortex_2014"
         if cold_event_id not in {"polar_vortex_2014", "elliott_2022", "custom"}:
+            cold_event_id = "polar_vortex_2014"
+        # Claude sometimes labels the event "custom" when the user's prompt
+        # doesn't match a preset, without actually extracting a temperature
+        # and duration. The downstream get_event() refuses to build a custom
+        # ColdEvent without both numbers, so fall back to the reference
+        # polar vortex rather than crashing the pipeline.
+        if cold_event_id == "custom" and (
+            parsed.get("custom_min_temp_c") is None
+            or parsed.get("custom_duration_hours") is None
+        ):
             cold_event_id = "polar_vortex_2014"
 
         spec = WinterPeakSpec(

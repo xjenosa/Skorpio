@@ -215,24 +215,50 @@ def _detect_unit(text: str, num_start: int, num_end: int) -> Optional[str]:
     return after_unit
 
 
+# Currency-magnitude suffix scaling. The `_NUM_RE` capture only grabs the
+# digit portion of "$200M", so the unit-detector returns "$m" but the
+# parsed `claimed` value is 200, not 200_000_000. Without scaling, a
+# budget fact of 200_000_000 looks like a 99.9999% drift, and the
+# reconciler rewrites the digits to "200000000" while leaving the "M"
+# suffix in place — yielding "$200000000M of $200000000M". Each entry
+# maps a detected unit to its multiplier; "$m" / "$k" / "$b" lift the
+# claimed value into raw currency before the drift check, and the
+# replacement is divided back down so the suffix in the surrounding
+# text stays correct.
+_CURRENCY_MAGNITUDE: dict[str, float] = {
+    "$k": 1_000.0,
+    "$m": 1_000_000.0,
+    "$b": 1_000_000_000.0,
+}
+
+
 def _unit_compatible(fact_key: str, claimed_unit: Optional[str]) -> bool:
     """True when a candidate number is unit-compatible with the fact.
 
     Rules:
-      - Bare numbers (no unit detected) always pass — keyword proximity
-        and drift threshold are the only guards in that case.
       - When the fact has no entry in `_FACT_UNITS`, no unit constraint
         is applied (backwards compatible with any new facts that haven't
         been classified yet).
-      - When the fact lists an empty set, only bare numbers pass —
-        e.g. unitless scores.
-      - Otherwise, the claimed unit must be in the fact's accepted set.
+      - When the fact lists an empty set, only bare numbers pass, e.g.
+        unitless scores.
+      - When the fact lists at least one explicit unit, the candidate
+        MUST carry one of those units. Bare numbers do NOT pass. This
+        prevents stray years, counts, and horizon figures near a
+        keyword like "budget" or "heat pump" from being rewritten to
+        the fact's value. Historical bugs: "26-year capital plan" was
+        rewritten to "50000000-year" near a $50M budget fact, and the
+        year "2035" near "heat pump" was rewritten to a 50% adoption
+        figure. The cost is missing the rare case where Claude omits
+        a unit Claude was told to include; keyword proximity is too
+        coarse a guard on its own.
     """
-    if claimed_unit is None:
-        return True
     accepted = _FACT_UNITS.get(fact_key)
     if accepted is None:
         return True
+    if not accepted:
+        return claimed_unit is None
+    if claimed_unit is None:
+        return False
     return claimed_unit in accepted
 
 
@@ -361,7 +387,7 @@ def reconcile(
                     # Unit guard: skip when the candidate has an explicit
                     # unit that conflicts with the fact's expected unit.
                     # This is what prevents the historical "30% near
-                    # 'peak demand' gets rewritten to MW value" bug — the
+                    # 'peak demand' gets rewritten to MW value" bug. The
                     # candidate's '%' suffix is incompatible with the
                     # peak_load_mw fact, so the drift check is skipped
                     # before it can do damage. Bare numbers still flow
@@ -370,15 +396,27 @@ def reconcile(
                     if not _unit_compatible(fact_key, claimed_unit):
                         continue
 
-                    if abs(claimed - compare_expected) < 0.05:
+                    # Currency-magnitude lift: when Claude wrote "$200M"
+                    # the captured digits are 200 but the fact stores
+                    # 200_000_000. Compare and replace in the same
+                    # magnitude so the suffix in the surrounding prose
+                    # remains correct.
+                    magnitude = _CURRENCY_MAGNITUDE.get(claimed_unit or "", 1.0)
+                    claimed_scaled = claimed * magnitude
+                    compare_for_drift = compare_expected
+                    replace_value = compare_expected
+                    if magnitude != 1.0:
+                        replace_value = compare_expected / magnitude
+
+                    if abs(claimed_scaled - compare_for_drift) < 0.05:
                         continue   # close enough — not a drift
 
-                    denom = max(abs(compare_expected), 1e-6)
-                    drift_pct = abs(claimed - compare_expected) / denom * 100.0
-                    if drift_pct <= tolerance_pct or abs(claimed - compare_expected) <= 0.5:
+                    denom = max(abs(compare_for_drift), 1e-6)
+                    drift_pct = abs(claimed_scaled - compare_for_drift) / denom * 100.0
+                    if drift_pct <= tolerance_pct or abs(claimed_scaled - compare_for_drift) <= 0.5:
                         continue   # within tolerance
 
-                    replacement = _format_replacement(compare_expected, num_match.group())
+                    replacement = _format_replacement(replace_value, num_match.group())
                     drifts.append(NumericDrift(
                         fact_key=fact_key,
                         expected=round(expected_f, 4),

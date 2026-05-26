@@ -117,6 +117,7 @@ class InvestmentPlan(BaseModel):
     methodology_notes: str = ""
     safety_flags: list[str] = []
     limitations: list[str] = []
+    sources: list[str] = []                                    # populated by agents (ArcGIS citation lands here)
     chart_paths: dict[str, str] = {}
 
 

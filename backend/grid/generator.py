@@ -609,11 +609,24 @@ class SiteGenerationEngine:
         # container restart and the same prompt produces different jitter
         # across runs. See REPORTS_COHESION.md §8c.
         rng = random.Random(zlib.crc32(region.iso_code.encode()))
+        # Scale jittered capacity/headroom to the workload's target so candidates
+        # can actually clear the `capacity >= target * 0.85` check in
+        # compute_site_profile. The previous hardcoded 20-70 MW range made any
+        # workload above ~80 MW target structurally infeasible (every candidate
+        # would fail and the engine would silently fall through to the skeleton
+        # ring). Capacity now jitters 0.7x-1.6x the target so most sites pass
+        # the 85% threshold; headroom jitters 0.6x-1.5x target so it stays
+        # plausible relative to the planned load.
+        cap_target = max(float(workload.target_capacity_mw or 50.0), 25.0)
+        cap_lo = cap_target * 0.70
+        cap_hi = cap_target * 1.60
+        hd_lo = cap_target * 0.60
+        hd_hi = cap_target * 1.50
         sites: list[Site] = []
         for raw in raw_candidates:
             # Fill missing engineering attributes with sensible jittered defaults
-            raw.setdefault("capacity_mw", rng.uniform(20, 70))
-            raw.setdefault("transmission_headroom_mw", rng.uniform(15, 75))
+            raw.setdefault("capacity_mw", rng.uniform(cap_lo, cap_hi))
+            raw.setdefault("transmission_headroom_mw", rng.uniform(hd_lo, hd_hi))
             raw.setdefault("pue", round(rng.uniform(1.15, 1.40), 2))
 
             # Real fiber latency: haversine to nearest IXP from peeringdb.com
@@ -722,8 +735,19 @@ class SiteGenerationEngine:
                 "lat": lat,
                 "lon": lon,
                 "address": f"Synthesized parcel near ({lat:.2f}, {lon:.2f})",
-                "capacity_mw": rng.uniform(25, 65),
-                "transmission_headroom_mw": rng.uniform(20, 60),
+                # Skeleton ring jitter scales with the workload target for the
+                # same reason as the main feasibility filter: a fallback site
+                # that reports 25 MW capacity for a 200 MW workload looks
+                # broken to the operator, even though the skeleton path
+                # bypasses the strict feasibility check.
+                "capacity_mw": rng.uniform(
+                    max(float(workload.target_capacity_mw or 50.0), 25.0) * 0.7,
+                    max(float(workload.target_capacity_mw or 50.0), 25.0) * 1.6,
+                ),
+                "transmission_headroom_mw": rng.uniform(
+                    max(float(workload.target_capacity_mw or 50.0), 25.0) * 0.6,
+                    max(float(workload.target_capacity_mw or 50.0), 25.0) * 1.5,
+                ),
                 "pue": round(rng.uniform(1.18, 1.40), 2),
                 "fiber_latency_ms": ixp["rtt_ms"] if ixp else round(rng.uniform(10, 40), 1),
                 "water_l_per_mwh": round(rng.uniform(0.6, 2.2), 2),

@@ -42,8 +42,28 @@ from backend.utils.logger import get_logger
 # behaviour: long enough to ride out a typical Anthropic blip, short
 # enough that users don't think the pipeline is hung.
 
-_RETRY_DELAYS_SECONDS: tuple[float, ...] = (1.0, 2.0, 4.0)
-_RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({503, 529})
+# Backoff curve: 5s, 15s, 30s. The 5s first wait is the polite minimum for
+# a 429 on Anthropic's per-minute output-token cap (a tight burst usually
+# clears within seconds once one in-flight request finishes); the 30s
+# ceiling guarantees the second retry sits past the next minute boundary
+# in the worst case so the cap window has already rolled.
+_RETRY_DELAYS_SECONDS: tuple[float, ...] = (5.0, 15.0, 30.0)
+# 429 is included here because Anthropic's rate-limit responses are
+# genuinely transient: the per-minute output-token cap rolls every minute,
+# so a polite backoff almost always succeeds on retry. Previously 429s
+# bubbled up on the first attempt (per a stale comment claiming retries
+# would "waste credits"). The actual failure mode was worse: the
+# orchestrator caught the exception, marked the stage incomplete, and
+# the pipeline silently hung at the stage that hit the cap until a
+# manual cancel. 503 / 529 are Anthropic's overload codes.
+_RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 503, 529})
+
+# Per-call wall-clock timeout for the Anthropic SDK. Without this the SDK
+# defaults to ~10 minutes, which means a single hung Claude call can hold
+# a whole pipeline stage open for up to 10 min before raising. 120s is
+# generous enough for the longest legitimate synthesis-agent call (≥4000
+# token responses on Sonnet) while still failing fast on a true hang.
+_ANTHROPIC_REQUEST_TIMEOUT_S: float = 120.0
 
 
 def _is_retryable(exc: BaseException) -> bool:
@@ -111,7 +131,10 @@ class BaseAgent(ABC):
     """
 
     def __init__(self, model: str | None = None) -> None:
-        self.client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
+        self.client = anthropic.AsyncAnthropic(
+            api_key=settings.anthropic_api_key,
+            timeout=_ANTHROPIC_REQUEST_TIMEOUT_S,
+        )
         self.model = model or settings.anthropic_model
         self.logger = get_logger(self.__class__.__name__)
         self._stats = _CallStats()

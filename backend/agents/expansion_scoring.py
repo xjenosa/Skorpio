@@ -121,16 +121,39 @@ def _score_option(
     return opt
 
 
+# Allow the funded portfolio to overshoot the MW target by up to this
+# fraction. Used by the greedy selector to skip a high-score option whose
+# size would push cumulative way past the requested target. 1.10 lands
+# most realistic prompts within 100 to 110 percent of target; before this
+# guard, a single 50 MW option added to a 40 MW running total against a
+# 60 MW target produced 150 to 180 percent coverage and a "non-physical"
+# capex number in the report.
+_OVERSHOOT_CEILING = 1.10
+
+
 def _greedy_fund(options: list[ExpansionOption], target_mw: float) -> list[ExpansionOption]:
-    """Take highest-overall options until cumulative MW meets target_mw × 1.0."""
+    """Take highest-overall options until cumulative MW meets target_mw.
+
+    Each candidate is gated by an overshoot ceiling so the funded total
+    does not blow past the target on the option that crosses the line.
+    The first option always funds even if it overshoots (operator needs
+    a plan to deliver), and a smaller deeper-ranked option can backfill
+    a remaining gap that the next-best option is too big to take.
+    """
     ranked = sorted(options, key=lambda o: o.overall_score, reverse=True)
     funded: list[ExpansionOption] = []
     total = 0.0
+    ceiling = max(target_mw * _OVERSHOOT_CEILING, target_mw + 1.0)
     for opt in ranked:
-        if total >= target_mw and len(funded) >= 1:
+        if total >= target_mw:
             break
+        proposed = total + opt.new_capacity_mw
+        if funded and proposed > ceiling:
+            continue
         funded.append(opt)
-        total += opt.new_capacity_mw
+        total = proposed
+    if not funded and ranked:
+        funded.append(min(ranked, key=lambda o: o.new_capacity_mw))
     return funded
 
 

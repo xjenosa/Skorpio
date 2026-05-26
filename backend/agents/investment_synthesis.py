@@ -20,6 +20,41 @@ specific, numeric, and confident. No bullet lists, flowing prose. Avoid
 em dashes in the prose; use commas, periods, or parentheses.""" + GROUNDING_RULES
 
 
+# Utility → representative Census Subdivision name used when calling
+# ArcGIS GeoEnrichment for the Investment report's sources citation.
+# Each entry is the most demographically representative single
+# municipality for the utility's primary service territory. Add new
+# rows as new utilities ship in the demo.
+_UTILITY_PRIMARY_CITY = {
+    "Hydro One":             "Toronto",
+    "Toronto Hydro":         "Toronto",
+    "Alectra":               "Mississauga",
+    "Alectra Utilities":     "Mississauga",
+    "Hydro Ottawa":          "Ottawa",
+    "EPCOR":                 "Edmonton",
+    "ENMAX":                 "Calgary",
+    "BC Hydro":              "Vancouver",
+    "Hydro-Québec":          "Montreal",
+    "Hydro-Quebec":          "Montreal",
+    "Manitoba Hydro":        "Winnipeg",
+    "Nova Scotia Power":     "Halifax",
+}
+
+
+def _primary_city_for_utility(utility: str) -> str | None:
+    """Best-fit single municipality for ArcGIS enrichment given a utility name."""
+    if not utility:
+        return None
+    direct = _UTILITY_PRIMARY_CITY.get(utility.strip())
+    if direct:
+        return direct
+    # Loose suffix match — "Hydro One Networks Inc" → "Hydro One".
+    for key, city in _UTILITY_PRIMARY_CITY.items():
+        if utility.strip().lower().startswith(key.lower()):
+            return city
+    return None
+
+
 class InvestmentSynthesisAgent(BaseAgent):
     async def synthesize(
         self,
@@ -32,6 +67,7 @@ class InvestmentSynthesisAgent(BaseAgent):
         candidate_projects: list[UpgradeProject],
         funded: list[FundedProject],
         unfunded: list[UpgradeProject],
+        hazard_sources: list[str] | None = None,
         progress_callback=None,
     ) -> InvestmentPlan:
         if progress_callback:
@@ -73,6 +109,39 @@ class InvestmentSynthesisAgent(BaseAgent):
                 "Raise the cap in REPORTS_COHESION.md §8b and re-run."
             )
 
+        # ArcGIS enrichment — surface real Census Subdivision demographics
+        # for the cities served by the top funded projects. Each unique
+        # city resolved becomes one source citation, so the Investment
+        # report's sources block explicitly shows the Esri pull when
+        # credentials are configured. Asset.name encodes the city in
+        # most templates (e.g. "Erin Mills MS substation" — Mississauga
+        # area). Falls through silently when ArcGIS isn't configured.
+        # Seeded with any hazard-layer citations the climate_risk
+        # agent emitted (NRCan flood + wildfire layers, via Esri
+        # Living Atlas).
+        arcgis_sources: list[str] = list(hazard_sources or [])
+        try:
+            from backend.services.arcgis_enrichment import enrich_city, is_configured as _arcgis_ok
+            if _arcgis_ok():
+                # Pull a small set of demo cities relevant to the funded
+                # projects. Best-effort: we lean on the spec.utility's
+                # primary service area rather than reverse-geocoding each
+                # asset (which would burn credits). Hydro One / Alectra /
+                # Toronto Hydro all anchor to the GTA — Mississauga is a
+                # representative CSD for the demo.
+                primary_city = _primary_city_for_utility(spec.utility)
+                if primary_city:
+                    city_data = await enrich_city(primary_city)
+                    if city_data:
+                        arcgis_sources.append(
+                            "ArcGIS GeoEnrichment (Esri Canada): "
+                            f"{city_data.get('city_name', primary_city)}: "
+                            f"{city_data.get('households', 0):,} households, "
+                            f"population {city_data.get('population', 0):,}"
+                        )
+        except Exception as e:
+            self.logger.debug(f"ArcGIS investment enrichment skipped: {e}")
+
         plan = InvestmentPlan(
             job_id=job_id,
             spec=spec,
@@ -86,6 +155,7 @@ class InvestmentSynthesisAgent(BaseAgent):
             portfolio_roi_ratio=round(portfolio_roi, 2),
             customers_protected=int(customers_protected),
             executive_summary=summary,
+            sources=arcgis_sources,
             methodology_notes=(
                 "Per-asset climate risk uses provincial hazard base rates from ECCC CCCS "
                 "scaled by IBC/CatIQ insurance loss share and asset-type susceptibility. "
