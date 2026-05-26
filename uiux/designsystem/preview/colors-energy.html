@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Energy semantic colors</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 24px; }
+  .cell { border-radius: var(--radius-md); border: 1px solid var(--rule-2); background: var(--bg-1); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-height: 120px; }
+  .dot { width: 14px; height: 14px; border-radius: 999px; }
+  .name { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+  .hex { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); margin-top: auto; }
+  .meta { font-size: 12px; color: var(--fg-3); }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="dot" style="background: var(--energy-clean);"></div><div class="name">Clean</div><div class="meta">Renewable / online</div><div class="hex">#6FCF8E</div></div>
+  <div class="cell"><div class="dot" style="background: var(--energy-mid);"></div><div class="name">Mid</div><div class="meta">Mixed grid</div><div class="hex">#E5C46B</div></div>
+  <div class="cell"><div class="dot" style="background: var(--energy-dirty);"></div><div class="name">Dirty</div><div class="meta">Fossil-heavy</div><div class="hex">#E26B4A</div></div>
+  <div class="cell"><div class="dot" style="background: var(--energy-off);"></div><div class="name">Off</div><div class="meta">Offline / cold</div><div class="hex">#6B6862</div></div>
+</div>
+</body>
+</html>

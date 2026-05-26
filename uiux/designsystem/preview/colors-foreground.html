@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Foreground</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-1); color: var(--fg-1); font-family: var(--font-sans); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 24px; }
+  .row { padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--rule-2); background: var(--bg-1); display: flex; flex-direction: column; gap: 6px; }
+  .sample { font-size: 17px; font-weight: 500; }
+  .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-3); }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="row"><div class="sample" style="color: var(--fg-1);">Primary text</div><div class="label">fg-1 Â· #faf9f5</div></div>
+  <div class="row"><div class="sample" style="color: var(--fg-2);">Secondary text</div><div class="label">fg-2 Â· #c2c0b6</div></div>
+  <div class="row"><div class="sample" style="color: var(--fg-3);">Tertiary Â· labels</div><div class="label">fg-3 Â· #8c897e</div></div>
+  <div class="row"><div class="sample" style="color: var(--fg-4);">Disabled</div><div class="label">fg-4 Â· #5e5c54</div></div>
+</div>
+</body>
+</html>

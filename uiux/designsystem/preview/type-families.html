@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Type families</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); padding: 24px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .fam { background: var(--bg-1); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; }
+  .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); }
+  .name { font-size: 14px; color: var(--fg-2); }
+  .specimen { font-size: 38px; line-height: 1.05; letter-spacing: -0.02em; color: var(--fg-1); margin-top: auto; }
+  .alpha { font-size: 12px; color: var(--fg-3); font-family: inherit; }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="fam">
+    <span class="label">Sans Â· UI</span><span class="name">Geist</span>
+    <div class="specimen" style="font-family: var(--font-sans); font-weight: 500;">Aa Mg 24</div>
+    <div class="alpha" style="font-family: var(--font-sans);">300 Â· 400 Â· 500 Â· 600 Â· 700</div>
+  </div>
+  <div class="fam">
+    <span class="label">Mono Â· Telemetry</span><span class="name">Geist Mono</span>
+    <div class="specimen" style="font-family: var(--font-mono); font-weight: 500;">47.2 MW</div>
+    <div class="alpha" style="font-family: var(--font-mono);">tabular-nums Â· 0123456789</div>
+  </div>
+  <div class="fam">
+    <span class="label">Serif Â· Display</span><span class="name">Instrument Serif</span>
+    <div class="specimen" style="font-family: var(--font-serif); font-style: italic;">Quietly</div>
+    <div class="alpha" style="font-family: var(--font-serif);">regular Â· italic</div>
+  </div>
+</div>
+</body>
+</html>

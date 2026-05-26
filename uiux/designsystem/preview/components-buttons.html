@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Buttons</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); padding: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: center; }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); }
+  .btn {
+    font-family: var(--font-sans); font-weight: 500; font-size: 14px;
+    padding: 10px 16px; border-radius: var(--radius-md); border: 1px solid transparent;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    transition: all var(--dur-fast) var(--ease-out);
+  }
+  .btn-primary { background: var(--accent); color: var(--fg-on-accent); }
+  .btn-primary.hover { background: var(--accent-2); }
+  .btn-primary.press { background: var(--accent-3); transform: scale(0.98); }
+  .btn-secondary { background: var(--bg-2); color: var(--fg-1); border-color: var(--rule-2); }
+  .btn-ghost { background: transparent; color: var(--fg-2); border-color: var(--rule-2); }
+  .btn-ghost:hover { color: var(--fg-1); background: var(--bg-2); }
+  .btn-danger { background: transparent; color: var(--err); border-color: rgba(226,107,74,0.4); }
+  .dot { width: 8px; height: 8px; border-radius: 999px; background: currentColor; opacity: 0.9; }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="col"><span class="label">Primary</span>
+    <button class="btn btn-primary">Run siting</button>
+    <button class="btn btn-primary hover">Run siting</button>
+    <button class="btn btn-primary press">Run siting</button>
+  </div>
+  <div class="col"><span class="label">Secondary</span>
+    <button class="btn btn-secondary">Open report</button>
+    <button class="btn btn-secondary"><span class="dot" style="color: var(--energy-clean);"></span>Live</button>
+  </div>
+  <div class="col"><span class="label">Ghost</span>
+    <button class="btn btn-ghost">Cancel</button>
+    <button class="btn btn-ghost">+ Add candidate</button>
+  </div>
+  <div class="col"><span class="label">Danger</span>
+    <button class="btn btn-danger">Abort run</button>
+  </div>
+</div>
+</body>
+</html>

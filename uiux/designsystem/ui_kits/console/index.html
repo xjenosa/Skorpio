@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Skorpio Â· Console</title>
+<link rel="stylesheet" href="../../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; height: 100%; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); }
+  #root { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: var(--rule-2); border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  button { font-family: inherit; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<script src="data.js"></script>
+<script type="text/babel" src="Shell.jsx"></script>
+<script type="text/babel" src="SiteCard.jsx"></script>
+<script type="text/babel" src="SitingComposer.jsx"></script>
+<script type="text/babel" src="PipelinePanel.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+const D = window.SkorpioData;
+const { Topbar, Sidebar } = window.SkorpioShell;
+const { SiteCard, MetricsRail, EnergyDot } = window.SkorpioCards;
+const { SitingComposer } = window.SkorpioComposer;
+const { PipelinePanel } = window.SkorpioPipeline;
+
+function PageHeader({ eyebrow, title, sub, right }) {
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 24 }}>
+      <div>
+        <div className="t-eyebrow" style={{ marginBottom: 6 }}>{eyebrow}</div>
+        <div className="t-h1" style={{ marginBottom: sub ? 8 : 0 }}>{title}</div>
+        {sub && <div className="t-body" style={{ color: "var(--fg-2)", maxWidth: 600 }}>{sub}</div>}
+      </div>
+      {right}
+    </div>
+  );
+}
+
+function DashboardPage({ onNewRun, onOpenReport }) {
+  const [picked, setPicked] = useState(null);
+  return (
+    <div data-screen-label="Dashboard">
+      <PageHeader
+        eyebrow={`${D.workspace.name} Â· 14:02 UTC`}
+        title="Where should the next 42 MW go?"
+        sub="A live view of grid availability, recent siting runs, and the current top candidates from the agentic pipeline."
+        right={
+          <button onClick={onNewRun} style={{
+            background: "var(--accent)", color: "var(--fg-on-accent)", border: 0,
+            padding: "10px 16px", borderRadius: "var(--radius-md)", fontWeight: 500, fontSize: 14, cursor: "pointer",
+            display: "inline-flex", alignItems: "center", gap: 8, boxShadow: "var(--glow-accent)",
+          }}>
+            <i data-lucide="play" style={{ width: 14, height: 14 }}/> New siting run
+          </button>
+        }
+      />
+      <MetricsRail/>
+
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", margin: "32px 0 14px" }}>
+        <div className="t-h3">Top candidate sites</div>
+        <span className="t-mono" style={{ color: "var(--fg-3)" }}>run 2810 Â· best 0.42 t COâ‚‚/MWh</span>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+        {D.sites.slice(0, 6).map(s => (
+          <SiteCard key={s.id} site={s} selected={picked === s.id} onClick={() => { setPicked(s.id); onOpenReport && onOpenReport(s); }}/>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ComposerPage({ onLaunch }) {
+  return (
+    <div data-screen-label="Composer">
+      <PageHeader
+        eyebrow="New siting Â· run 2811"
+        title="Compose a run"
+        sub="Pick regions, set carbon and latency caps, and let the pipeline rank candidates. Drafts autosave; runs execute in seconds."
+      />
+      <SitingComposer regions={D.regions} onLaunch={onLaunch}/>
+    </div>
+  );
+}
+
+function PipelinePage({ onComplete }) {
+  useEffect(() => {
+    const t = setTimeout(() => onComplete && onComplete(), 7600);
+    return () => clearTimeout(t);
+  }, [onComplete]);
+  return (
+    <div data-screen-label="Pipeline">
+      <PageHeader
+        eyebrow="â— Pipeline"
+        title="Running"
+        sub="Six stages, one ranked plan. The agentic pipeline is reading grid telemetry, applying constraints, and proving the result before showing it."
+      />
+      <PipelinePanel stages={D.pipelineStages} log={D.pipelineLog}/>
+    </div>
+  );
+}
+
+function ReportPage() {
+  const ranked = [...D.sites].sort((a, b) => b.score - a.score);
+  return (
+    <div data-screen-label="Report">
+      <PageHeader
+        eyebrow="Run 2811 Â· complete Â· 04.220s"
+        title="Siting plan ready"
+        sub="12 candidates ranked. ALPHA-04 (Sterling, OH) leads on the Pareto front of carbon and cost."
+        right={
+          <div style={{ display: "flex", gap: 10 }}>
+            <button style={{ background: "transparent", color: "var(--fg-2)", border: "1px solid var(--rule-2)", padding: "10px 14px", borderRadius: "var(--radius-md)", fontWeight: 500, fontSize: 13, cursor: "pointer" }}>Export JSON</button>
+            <button style={{ background: "var(--accent)", color: "var(--fg-on-accent)", border: 0, padding: "10px 16px", borderRadius: "var(--radius-md)", fontWeight: 500, fontSize: 14, cursor: "pointer" }}>Sign off plan</button>
+          </div>
+        }
+      />
+
+      <div style={{
+        background: "var(--bg-1)", border: "1px solid var(--rule-2)",
+        borderRadius: "var(--radius-xl)", padding: 0, overflow: "hidden",
+        boxShadow: "var(--shadow-1)",
+      }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "var(--font-sans)", fontSize: 13 }}>
+          <thead>
+            <tr style={{ background: "var(--bg-0)" }}>
+              {["Rank", "Site", "Region", "Capacity", "Carbon", "Spot", "PUE", "Score", "State"].map(h => (
+                <th key={h} style={{
+                  textAlign: "left", padding: "12px 16px",
+                  fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em",
+                  textTransform: "uppercase", color: "var(--fg-3)", fontWeight: 500,
+                  borderBottom: "1px solid var(--rule-2)",
+                }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {ranked.map((s, i) => (
+              <tr key={s.id} style={{ borderBottom: "1px solid var(--rule-1)" }}>
+                <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: i === 0 ? "var(--accent)" : "var(--fg-3)", fontVariantNumeric: "tabular-nums" }}>{String(i + 1).padStart(2, "0")}</td>
+                <td style={{ padding: "14px 16px" }}><span style={{ color: "var(--fg-1)", fontWeight: 500 }}>{s.name}</span><span style={{ color: "var(--fg-3)", marginLeft: 8, fontFamily: "var(--font-mono)", fontSize: 11 }}>{s.id}</span></td>
+                <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--fg-2)" }}>{s.region}</td>
+                <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--fg-1)", fontVariantNumeric: "tabular-nums" }}>{s.capacityMW.toFixed(1)} <span style={{ color: "var(--fg-3)" }}>MW</span></td>
+                <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--fg-1)", fontVariantNumeric: "tabular-nums" }}>{s.carbon} <span style={{ color: "var(--fg-3)" }}>gCOâ‚‚</span></td>
+                <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--fg-1)", fontVariantNumeric: "tabular-nums" }}>${s.spot.toFixed(2)}</td>
+                <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--fg-2)", fontVariantNumeric: "tabular-nums" }}>{s.pue.toFixed(2)}</td>
+                <td style={{ padding: "14px 16px", fontFamily: "var(--font-mono)", color: "var(--fg-1)", fontVariantNumeric: "tabular-nums" }}>{s.score.toFixed(2)}</td>
+                <td style={{ padding: "14px 16px" }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "var(--font-mono)", fontSize: 11, color: `var(--energy-${s.state})`, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                    <EnergyDot state={s.state}/> {s.state}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [page, setPage] = useState("dashboard");
+
+  // refresh lucide on page changes
+  useEffect(() => {
+    const t = setTimeout(() => window.lucide && window.lucide.createIcons(), 50);
+    return () => clearTimeout(t);
+  });
+
+  const onLaunch = () => setPage("pipeline");
+  const onComplete = () => setPage("report");
+
+  return (
+    <>
+      <Topbar workspace={D.workspace} user={D.user} page={page}/>
+      <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
+        <Sidebar page={page} onNav={setPage} regions={D.regions} recentRuns={D.recentRuns}/>
+        <main style={{
+          flex: 1, overflow: "auto", padding: "32px 40px 80px",
+          background: `radial-gradient(1100px 500px at 90% -10%, rgba(243,135,100,0.05), transparent 60%), var(--bg-0)`,
+        }}>
+          {page === "dashboard" && <DashboardPage onNewRun={() => setPage("composer")} onOpenReport={() => setPage("report")}/>}
+          {page === "composer"  && <ComposerPage onLaunch={onLaunch}/>}
+          {page === "pipeline"  && <PipelinePage onComplete={onComplete}/>}
+          {page === "report"    && <ReportPage/>}
+          {page === "regions"   && <DashboardPage onNewRun={() => setPage("composer")}/>}
+          {page === "settings"  && <DashboardPage onNewRun={() => setPage("composer")}/>}
+        </main>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

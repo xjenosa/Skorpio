@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Skorpio — Operator Console</title>
+<link rel="icon" href="assets/skorpio-drop.svg" />
+<link rel="stylesheet" href="colors_and_type.css" />
+<link rel="stylesheet" href="home.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ───────────── Sidebar ───────────── -->
+  <aside class="sidebar" aria-label="Primary">
+    <div class="sidebar-head">
+      <a class="brand" href="login.html" aria-label="Skorpio">
+        <img src="assets/skorpio-drop.svg" alt="" />
+        <span class="wordmark">SKORPIO</span>
+      </a>
+      <button class="icon-btn" aria-label="Collapse sidebar" title="Collapse">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      </button>
+    </div>
+
+    <button class="nav-item primary active" data-route="new-siting">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/></svg>
+      New siting
+    </button>
+
+    <button class="nav-item" data-route="agent-pipeline">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h6"/><path d="M14 7h6"/><path d="M4 12h16"/><path d="M4 17h6"/><path d="M14 17h6"/><circle cx="12" cy="7" r="2"/><circle cx="12" cy="17" r="2"/></svg>
+      Agent pipeline
+    </button>
+
+    <button class="nav-item" data-route="reports">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+      Reports
+    </button>
+
+    <button class="nav-item" data-route="dashboard">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/></svg>
+      Dashboard
+    </button>
+
+    <button class="nav-item" data-route="settings">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      Settings
+    </button>
+
+    <div class="sidebar-foot">
+      <button class="profile" aria-label="Account menu">
+        <span class="avatar">M</span>
+        <span class="who">
+          <span class="name">Max</span>
+          <span class="plan">Pro plan</span>
+        </span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l4-4 4 4"/><path d="M8 15l4 4 4-4"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ───────────── Main ───────────── -->
+  <main class="workspace">
+
+    <header class="topbar">
+      <div class="crumbs">
+        <span class="live"><span class="dot"></span> Grid · Live</span>
+        <span class="sep">·</span>
+        <span>Console</span>
+        <span class="sep">/</span>
+        <span class="here">New siting</span>
+      </div>
+      <div class="telemetry">
+        <span class="tcell">Region <strong>PJM-WEST</strong></span>
+        <span class="tcell ok">Avg gCO₂/kWh <strong id="t-co2">312</strong></span>
+        <span class="tcell warn">Spot $/MWh <strong id="t-spot">48</strong></span>
+        <span class="tcell">Capacity <strong>47.2 MW</strong></span>
+      </div>
+    </header>
+
+    <section class="stage">
+      <div class="view active" id="view-new-siting">
+      <div class="greeting">
+        <img src="assets/skorpio-drop.svg" alt="" />
+        <h1 id="hello"><em>Evening,</em> Max</h1>
+      </div>
+
+      <form class="composer" id="composer" novalidate>
+        <textarea id="prompt" rows="2" placeholder="Describe a workload — e.g. “Place 12 MW training run, 72h, lowest carbon, US/EU only.”"></textarea>
+        <div class="composer-row">
+          <button class="chip add" type="button" aria-label="Add data source" title="Attach data source">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button class="chip" type="button">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4z"/><path d="M3 7v6l9 4 9-4V7"/><path d="M3 13l9 4 9-4"/></svg>
+            Region · PJM-WEST
+          </button>
+          <button class="chip" type="button">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18M3 12h18"/></svg>
+            Carbon · g/kWh
+          </button>
+
+          <span class="spacer"></span>
+
+          <button class="model-pill" type="button">
+            Skorpio · Sonnet 4.6
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <button class="send accent" type="submit" aria-label="Run siting" title="Run siting">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </form>
+
+      <div class="stage-foot">
+        <span class="item"><strong>v0.1.0</strong> Operator console</span>
+        <span class="sep"></span>
+        <span class="item">Pipeline · <strong>Idle</strong></span>
+        <span class="sep"></span>
+        <span class="item">Last sync · <strong id="last-sync">just now</strong></span>
+      </div>
+      </div><!-- /view-new-siting -->
+
+      <!-- ── Agent pipeline ────────────────────────────── -->
+      <div class="view" id="view-agent-pipeline">
+        <div class="page-head">
+          <div>
+            <h1 class="title"><em>Agent</em> pipeline</h1>
+            <div class="sub">Live · Run #SK-2417 · 8.0 MW training, lowest carbon</div>
+          </div>
+          <div class="actions">
+            <button type="button">Pause</button>
+            <button type="button" class="primary" onclick="document.querySelector('[data-route=reports]').click()">Open run</button>
+          </div>
+        </div>
+
+        <div class="panel-pipeline">
+          <div class="pp-head">
+            <div>
+              <div class="live"><i></i> Live · Stage 3 of 6</div>
+              <h2>Placing 8.0 MW · 72h training run</h2>
+            </div>
+            <div class="meta">
+              <span>ETA <strong>02:14</strong></span>
+              <span>gCO₂/kWh <strong id="pp-co2">198</strong></span>
+              <span>Spot $/MWh <strong>41</strong></span>
+            </div>
+          </div>
+
+          <div class="stages">
+            <div class="stage-card">
+              <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+              <span class="num">01 · Analysis</span>
+              <span class="label">Pull grid telemetry, energy pricing, weather, and carbon intensity data.</span>
+              <span class="detail">PJM-WEST · ERCOT-N · MISO-S · 412k samples</span>
+              <div class="bar"><i style="width:100%"></i></div>
+            </div>
+            <div class="stage-card">
+              <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+              <span class="num">02 · Constraints</span>
+              <span class="label">Filter regions by transmission access, cooling feasibility, water, and regulation.</span>
+              <span class="detail">228 → 41 candidates</span>
+              <div class="bar"><i style="width:100%"></i></div>
+            </div>
+            <div class="stage-card live">
+              <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+              <span class="num">03 · Generation · Running</span>
+              <span class="label">Generate optimized datacenter layouts, cooling systems, and renewable strategies.</span>
+              <span class="detail">Evaluating 41 candidates · 3 worker agents</span>
+              <div class="bar"><i id="pp-bar" style="width:42%"></i></div>
+            </div>
+            <div class="stage-card">
+              <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+              <span class="num">04 · Simulation</span>
+              <span class="label">Simulate power demand, outages, renewable fluctuations, and cooling loads.</span>
+              <span class="detail">Pending</span>
+              <div class="bar"><i style="width:0%"></i></div>
+            </div>
+            <div class="stage-card">
+              <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+              <span class="num">05 · Synthesis</span>
+              <span class="label">Rank deployment strategies by cost, sustainability, resilience, and efficiency.</span>
+              <span class="detail">Pending</span>
+              <div class="bar"><i style="width:0%"></i></div>
+            </div>
+          </div>
+
+          <div class="pp-body">
+            <div class="log" id="pp-log">
+              <div class="line"><span class="t">14:02:11</span><span class="lvl ok">OK</span><span>Ingest complete · 412,118 samples across 3 ISOs</span></div>
+              <div class="line"><span class="t">14:02:18</span><span class="lvl info">INFO</span><span>Filter pruned 187 sites (latency, permitting)</span></div>
+              <div class="line"><span class="t">14:02:26</span><span class="lvl info">INFO</span><span>Scoring agents online · 3 workers</span></div>
+              <div class="line"><span class="t">14:02:39</span><span class="lvl ok">OK</span><span>Candidate SK-W-014 · 162 gCO₂ · $38/MWh · 8.4 MW</span></div>
+              <div class="line"><span class="t">14:02:47</span><span class="lvl warn">WARN</span><span>Candidate SK-N-022 · curtailment risk &gt; 0.18, demoted</span></div>
+              <div class="line"><span class="t">14:02:51</span><span class="lvl ok">OK</span><span>Candidate SK-W-019 · 178 gCO₂ · $41/MWh · 9.2 MW</span></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /view-agent-pipeline -->
+
+      <!-- ── Reports ───────────────────────────────────── -->
+      <div class="view" id="view-reports">
+        <div class="page-head">
+          <div>
+            <h1 class="title"><em>Reports</em></h1>
+            <div class="sub">Last 30 days · 18 runs · 142.6 MWh placed</div>
+          </div>
+          <div class="actions">
+            <button type="button">Sort by</button>
+            <button type="button" class="primary">Export CSV</button>
+          </div>
+        </div>
+
+        <div class="reports">
+          <table>
+            <thead>
+              <tr>
+                <th>Run</th>
+                <th>Workload</th>
+                <th>Region</th>
+                <th>Load</th>
+                <th>gCO₂/kWh</th>
+                <th>$/MWh</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="id">SK-2416</td><td class="label">Inference cluster · 18h</td><td>PJM-WEST</td><td class="num">12.4 MW</td><td class="num">184</td><td class="num">39</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+              <tr><td class="id">SK-2415</td><td class="label">Training run · 72h</td><td>ERCOT-N</td><td class="num">8.0 MW</td><td class="num">202</td><td class="num">44</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+              <tr><td class="id">SK-2414</td><td class="label">Batch fine-tune · 24h</td><td>MISO-S</td><td class="num">4.2 MW</td><td class="num">241</td><td class="num">36</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+              <tr><td class="id">SK-2413</td><td class="label">Eval sweep · 6h</td><td>CAISO-N</td><td class="num">2.8 MW</td><td class="num">112</td><td class="num">52</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+              <tr><td class="id">SK-2412</td><td class="label">Inference burst · 4h</td><td>NYISO</td><td class="num">5.6 MW</td><td class="num">228</td><td class="num">47</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+              <tr><td class="id">SK-2411</td><td class="label">Training run · 48h</td><td>SPP-S</td><td class="num">10.0 MW</td><td class="num">156</td><td class="num">33</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+              <tr><td class="id">SK-2410</td><td class="label">Inference cluster · 24h</td><td>PJM-WEST</td><td class="num">14.2 MW</td><td class="num">196</td><td class="num">42</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+              <tr><td class="id">SK-2409</td><td class="label">Backtest · 12h</td><td>ERCOT-W</td><td class="num">3.4 MW</td><td class="num">218</td><td class="num">38</td><td class="status"><span class="pill"><i></i>Settled</span></td><td class="action"><a href="#">Open ›</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- /view-reports -->
+
+      <!-- ── Dashboard ─────────────────────────────────── -->
+      <div class="view" id="view-dashboard">
+        <div class="page-head">
+          <div>
+            <h1 class="title"><em>Dashboard</em></h1>
+            <div class="sub">Estate · 6 active sites · refreshed 12s ago</div>
+          </div>
+          <div class="actions">
+            <button type="button">Last 24h</button>
+            <button type="button" class="primary">+ Add site</button>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="tile"><span class="lbl">Capacity online</span><span class="val" id="d-cap">47.2<small>MW</small></span><span class="delta up">▲ 2.4 vs yesterday</span></div>
+          <div class="tile"><span class="lbl">Avg carbon</span><span class="val" id="d-co2">198<small>gCO₂/kWh</small></span><span class="delta up">▼ 14 vs week</span></div>
+          <div class="tile"><span class="lbl">Spot price</span><span class="val" id="d-spot">41<small>$/MWh</small></span><span class="delta down">▲ $3 vs avg</span></div>
+          <div class="tile"><span class="lbl">Renewable share</span><span class="val">68<small>%</small></span><span class="delta up">▲ 5 pts</span></div>
+        </div>
+
+        <div class="grid-3">
+          <div class="site">
+            <div class="top">
+              <div><div class="eyebrow">SK-W-014 · PJM-WEST</div><div class="name">Driftwood, OH</div></div>
+              <span class="estate clean"><i></i> Clean</span>
+            </div>
+            <div class="site-stats">
+              <div class="site-stat"><span class="k">Load</span><span class="v">8.4<small>MW</small></span></div>
+              <div class="site-stat"><span class="k">gCO₂</span><span class="v">162</span></div>
+              <div class="site-stat"><span class="k">$/MWh</span><span class="v">38</span></div>
+            </div>
+            <div class="foot"><span>Wind 41% · Solar 22%</span><span class="open">View ›</span></div>
+          </div>
+          <div class="site">
+            <div class="top">
+              <div><div class="eyebrow">SK-W-019 · PJM-WEST</div><div class="name">Cardinal, IN</div></div>
+              <span class="estate clean"><i></i> Clean</span>
+            </div>
+            <div class="site-stats">
+              <div class="site-stat"><span class="k">Load</span><span class="v">9.2<small>MW</small></span></div>
+              <div class="site-stat"><span class="k">gCO₂</span><span class="v">178</span></div>
+              <div class="site-stat"><span class="k">$/MWh</span><span class="v">41</span></div>
+            </div>
+            <div class="foot"><span>Wind 38% · Hydro 18%</span><span class="open">View ›</span></div>
+          </div>
+          <div class="site">
+            <div class="top">
+              <div><div class="eyebrow">SK-N-007 · ERCOT-N</div><div class="name">Llano Mesa, TX</div></div>
+              <span class="estate mid"><i></i> Mixed</span>
+            </div>
+            <div class="site-stats">
+              <div class="site-stat"><span class="k">Load</span><span class="v">12.0<small>MW</small></span></div>
+              <div class="site-stat"><span class="k">gCO₂</span><span class="v">242</span></div>
+              <div class="site-stat"><span class="k">$/MWh</span><span class="v">36</span></div>
+            </div>
+            <div class="foot"><span>Wind 52% · Gas 31%</span><span class="open">View ›</span></div>
+          </div>
+          <div class="site">
+            <div class="top">
+              <div><div class="eyebrow">SK-S-003 · MISO-S</div><div class="name">Bayou Glen, LA</div></div>
+              <span class="estate dirty"><i></i> Fossil</span>
+            </div>
+            <div class="site-stats">
+              <div class="site-stat"><span class="k">Load</span><span class="v">4.2<small>MW</small></span></div>
+              <div class="site-stat"><span class="k">gCO₂</span><span class="v">412</span></div>
+              <div class="site-stat"><span class="k">$/MWh</span><span class="v">31</span></div>
+            </div>
+            <div class="foot"><span>Gas 78% · Solar 6%</span><span class="open">View ›</span></div>
+          </div>
+          <div class="site">
+            <div class="top">
+              <div><div class="eyebrow">SK-W-031 · CAISO-N</div><div class="name">Coastal Ridge, CA</div></div>
+              <span class="estate clean"><i></i> Clean</span>
+            </div>
+            <div class="site-stats">
+              <div class="site-stat"><span class="k">Load</span><span class="v">6.8<small>MW</small></span></div>
+              <div class="site-stat"><span class="k">gCO₂</span><span class="v">112</span></div>
+              <div class="site-stat"><span class="k">$/MWh</span><span class="v">52</span></div>
+            </div>
+            <div class="foot"><span>Solar 61% · Hydro 14%</span><span class="open">View ›</span></div>
+          </div>
+          <div class="site">
+            <div class="top">
+              <div><div class="eyebrow">SK-N-019 · NYISO</div><div class="name">Hudson Falls, NY</div></div>
+              <span class="estate mid"><i></i> Mixed</span>
+            </div>
+            <div class="site-stats">
+              <div class="site-stat"><span class="k">Load</span><span class="v">6.6<small>MW</small></span></div>
+              <div class="site-stat"><span class="k">gCO₂</span><span class="v">228</span></div>
+              <div class="site-stat"><span class="k">$/MWh</span><span class="v">47</span></div>
+            </div>
+            <div class="foot"><span>Hydro 44% · Gas 28%</span><span class="open">View ›</span></div>
+          </div>
+        </div>
+      </div><!-- /view-dashboard -->
+
+      <!-- ── Settings ──────────────────────────────────── -->
+      <div class="view" id="view-settings">
+        <div class="page-head">
+          <div>
+            <h1 class="title"><em>Settings</em></h1>
+            <div class="sub">WORKSPACE · MAX@SKORPIO.AI</div>
+          </div>
+        </div>
+        <div class="reports" style="max-width:760px;">
+          <table>
+            <tbody>
+              <tr><td class="label" style="width:240px;">Default region</td><td>PJM-WEST</td><td class="action"><a href="#">Edit ›</a></td></tr>
+              <tr><td class="label">Carbon target</td><td>≤ 220 gCO₂/kWh</td><td class="action"><a href="#">Edit ›</a></td></tr>
+              <tr><td class="label">Spot ceiling</td><td>$60 / MWh</td><td class="action"><a href="#">Edit ›</a></td></tr>
+              <tr><td class="label">Notifications</td><td>Slack · #skorpio-ops</td><td class="action"><a href="#">Edit ›</a></td></tr>
+              <tr><td class="label">Plan</td><td>Pro · seats 4 / 8</td><td class="action"><a href="#">Manage ›</a></td></tr>
+              <tr><td class="label">API keys</td><td>2 active</td><td class="action"><a href="#">Rotate ›</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- /view-settings -->
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   Home page — small interactions only.
+   ============================================================ */
+(() => {
+  // Time-aware greeting
+  const h = new Date().getHours();
+  const part = h < 5 ? 'Up late' : h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : h < 21 ? 'Evening' : 'Tonight';
+  const hello = document.getElementById('hello');
+  hello.innerHTML = `<em>${part},</em> Max`;
+
+  // Sidebar nav: just toggle active and update breadcrumb
+  const here = document.querySelector('.crumbs .here');
+  const labels = {
+    'new-siting': 'New siting',
+    'agent-pipeline': 'Agent pipeline',
+    'reports': 'Reports',
+    'dashboard': 'Dashboard',
+    'settings': 'Settings',
+  };
+  const stage = document.querySelector('.stage');
+  function setView(route) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const t = document.getElementById('view-' + route);
+    if (t) t.classList.add('active');
+    if (labels[route]) here.textContent = labels[route];
+    // Center the new-siting hero, top-align everything else
+    if (stage) stage.style.justifyContent = (route === 'new-siting') ? 'center' : 'flex-start';
+  }
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const r = btn.dataset.route;
+      if (r) setView(r);
+    });
+  });
+
+  // Live-ish telemetry tickers
+  let co2 = 312, spot = 48;
+  setInterval(() => {
+    co2 += (Math.random() - 0.5) * 4;
+    co2 = Math.max(280, Math.min(360, co2));
+    document.getElementById('t-co2').textContent = Math.round(co2);
+    spot += (Math.random() - 0.5) * 1.2;
+    spot = Math.max(38, Math.min(64, spot));
+    document.getElementById('t-spot').textContent = spot.toFixed(0);
+  }, 1500);
+
+  // Last-sync ticker
+  const sync = document.getElementById('last-sync');
+  let secs = 0;
+  setInterval(() => {
+    secs += 5;
+    sync.textContent = secs < 60 ? `${secs}s ago` : `${Math.floor(secs/60)}m ago`;
+  }, 5000);
+
+  // Cmd/Ctrl+N → focus composer (simulating "New siting")
+  window.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      prompt.focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>

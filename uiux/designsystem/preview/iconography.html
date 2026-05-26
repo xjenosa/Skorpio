@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Iconography</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); padding: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; }
+  .icon-tile { aspect-ratio: 1; background: var(--bg-1); border: 1px solid var(--rule-2); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--fg-2); }
+  .icon-tile svg { width: 22px; height: 22px; stroke-width: 1.5; }
+  .footer { margin-top: 16px; display: flex; gap: 16px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-3); }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="icon-tile"><i data-lucide="zap"></i></div>
+  <div class="icon-tile"><i data-lucide="server"></i></div>
+  <div class="icon-tile"><i data-lucide="cpu"></i></div>
+  <div class="icon-tile"><i data-lucide="map"></i></div>
+  <div class="icon-tile"><i data-lucide="activity"></i></div>
+  <div class="icon-tile"><i data-lucide="bar-chart-3"></i></div>
+  <div class="icon-tile"><i data-lucide="leaf"></i></div>
+  <div class="icon-tile"><i data-lucide="thermometer"></i></div>
+  <div class="icon-tile"><i data-lucide="play"></i></div>
+  <div class="icon-tile"><i data-lucide="pause"></i></div>
+  <div class="icon-tile"><i data-lucide="search"></i></div>
+  <div class="icon-tile"><i data-lucide="settings"></i></div>
+  <div class="icon-tile"><i data-lucide="bell"></i></div>
+  <div class="icon-tile"><i data-lucide="filter"></i></div>
+  <div class="icon-tile" style="color: var(--accent);"><i data-lucide="arrow-up-right"></i></div>
+  <div class="icon-tile" style="color: var(--accent);">
+    <svg viewBox="0 0 24 32" fill="currentColor" width="14" height="18"><path d="M12 0 C 12 8, 22 14, 22 22 A 10 10 0 1 1 2 22 C 2 14, 12 8, 12 0 Z"/></svg>
+  </div>
+</div>
+<div class="footer"><span>Lucide Â· 1.5px stroke</span><span>Drop Â· brand mark</span></div>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

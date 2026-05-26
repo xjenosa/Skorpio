@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Accent</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); }
+  .wrap { padding: 24px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; align-items: center; }
+  .hero { aspect-ratio: 2/1; border-radius: var(--radius-lg); background: var(--accent); color: var(--fg-on-accent); display: flex; align-items: flex-end; justify-content: space-between; padding: 18px 22px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .stack { display: grid; grid-template-rows: repeat(3, 1fr); gap: 10px; height: 100%; }
+  .tone { border-radius: var(--radius-md); padding: 12px 16px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; display: flex; justify-content: space-between; align-items: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <span>Skorpio Â· Accent</span>
+    <span style="font-weight: 600;">#F38764</span>
+  </div>
+  <div class="stack">
+    <div class="tone" style="background: var(--accent-2); color: var(--fg-on-accent);"><span>accent-2 hover</span><span>#f5a385</span></div>
+    <div class="tone" style="background: var(--accent-3); color: var(--bg-inverse);"><span>accent-3 press</span><span>#d96a45</span></div>
+    <div class="tone" style="background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-line);"><span>accent-soft</span><span>14% tint</span></div>
+  </div>
+</div>
+</body>
+</html>

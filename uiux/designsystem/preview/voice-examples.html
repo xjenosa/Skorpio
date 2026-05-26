@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Voice</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); padding: 24px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { padding: 16px 18px; border-radius: var(--radius-lg); border: 1px solid var(--rule-2); background: var(--bg-1); display: flex; flex-direction: column; gap: 10px; }
+  .tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .yes { color: var(--energy-clean); }
+  .no { color: var(--energy-dirty); }
+  .ex { font-size: 14px; line-height: 1.5; color: var(--fg-1); }
+  .ex .mono { font-family: var(--font-mono); color: var(--fg-2); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="card">
+    <span class="tag yes">âœ“ Skorpio voice</span>
+    <div class="ex">Siting plan ready Â· <span class="mono">12 candidates Â· best 0.42 t COâ‚‚/MWh</span></div>
+    <div class="ex">Derated to <span class="mono">38.4 MW</span>. Transmission constraint on PJM-WEST until <span class="mono">14:00 UTC</span>.</div>
+  </div>
+  <div class="card">
+    <span class="tag no">âœ— Off brand</span>
+    <div class="ex" style="color: var(--fg-3);">ðŸš€ Awesome news! We found a great site for you!</div>
+    <div class="ex" style="color: var(--fg-3);">Click here to see the recommendation.</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Brand mark</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); }
+  .card { padding: 24px; min-height: 200px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+  .panel {
+    background: var(--bg-1); border: 1px solid var(--rule-2);
+    border-radius: var(--radius-lg); padding: 24px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 152px;
+  }
+  .meta { display: flex; flex-direction: column; gap: 12px; }
+  .meta .row { display: flex; align-items: center; gap: 8px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--rule-2); }
+  .lockup { display: flex; align-items: center; gap: 14px; }
+  .lockup img { width: 56px; height: 56px; }
+  .word { font-family: var(--font-sans); font-weight: 600; font-size: 28px; letter-spacing: -0.02em; color: var(--fg-1); }
+  .word .o { color: var(--accent); }
+  .stamp { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .stamp svg { width: 10px; height: 14px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="panel" style="background: var(--bg-inverse);">
+    <img src="../assets/skorpio-logo.png" alt="Skorpio logo" style="width: 132px; height: 132px;"/>
+  </div>
+  <div class="meta">
+    <div class="lockup">
+      <img src="../assets/skorpio-logo-dark.png" alt=""/>
+      <span class="word">SK<span class="o">O</span>RPIO</span>
+    </div>
+    <div class="row" style="gap: 6px;">
+      <span class="t-eyebrow">Stamp</span>
+      <span class="stamp"><svg viewBox="0 0 24 32" fill="currentColor"><path d="M12 0 C 12 8, 22 14, 22 22 A 10 10 0 1 1 2 22 C 2 14, 12 8, 12 0 Z"/></svg>SKORPIO</span>
+    </div>
+    <div class="t-small" style="color: var(--fg-3);">Master mark Â· drop standalone Â· wordmark with accent O</div>
+  </div>
+</div>
+</body>
+</html>

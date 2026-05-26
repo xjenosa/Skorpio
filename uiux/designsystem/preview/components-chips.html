@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Chips & Badges</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); padding: 24px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); width: 110px; flex-shrink: 0;}
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; padding: 5px 10px; border-radius: var(--radius-pill); border: 1px solid var(--rule-2); background: var(--bg-1); color: var(--fg-2); }
+  .chip.solid { background: var(--accent); border-color: var(--accent); color: var(--fg-on-accent); }
+  .chip.on { color: var(--fg-1); border-color: var(--rule-3); background: var(--bg-2); }
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border-radius: var(--radius-xs); border: 1px solid currentColor; }
+  .dot { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+  .b-clean { color: var(--energy-clean); background: rgba(111,207,142,0.10); }
+  .b-mid { color: var(--energy-mid); background: rgba(229,196,107,0.10); }
+  .b-dirty { color: var(--energy-dirty); background: rgba(226,107,74,0.10); }
+  .b-off { color: var(--fg-3); background: var(--bg-2); border-color: var(--rule-2); }
+</style>
+</head>
+<body>
+  <div class="row"><span class="label">Chips</span>
+    <span class="chip">All regions</span>
+    <span class="chip on">PJM-W</span>
+    <span class="chip on">ERCOT</span>
+    <span class="chip">CAISO</span>
+    <span class="chip solid">+ filter</span>
+  </div>
+  <div class="row"><span class="label">Energy state</span>
+    <span class="badge b-clean"><span class="dot"></span>Clean</span>
+    <span class="badge b-mid"><span class="dot"></span>Mid</span>
+    <span class="badge b-dirty"><span class="dot"></span>Dirty</span>
+    <span class="badge b-off"><span class="dot"></span>Offline</span>
+  </div>
+  <div class="row"><span class="label">Status</span>
+    <span class="chip" style="border-color: var(--energy-clean); color: var(--energy-clean);"><span class="dot" style="background: currentColor;"></span>Live Â· 14:02 UTC</span>
+    <span class="chip">Draft</span>
+    <span class="chip" style="color: var(--accent); border-color: var(--accent-line);">In review</span>
+  </div>
+</body>
+</html>

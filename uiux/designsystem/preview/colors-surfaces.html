@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Surfaces</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding: 24px; }
+  .swatch { aspect-ratio: 1.4 / 1; border-radius: var(--radius-md); border: 1px solid var(--rule-2); padding: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+  .swatch .name { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-2); }
+  .swatch .hex { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="swatch" style="background: var(--bg-0);"><div class="name">bg-0</div><div class="hex">#1f1e1d</div></div>
+  <div class="swatch" style="background: var(--bg-1);"><div class="name">bg-1</div><div class="hex">#262624</div></div>
+  <div class="swatch" style="background: var(--bg-2);"><div class="name">bg-2</div><div class="hex">#30302e</div></div>
+  <div class="swatch" style="background: var(--bg-3);"><div class="name">bg-3</div><div class="hex">#3a3a37</div></div>
+  <div class="swatch" style="background: var(--bg-inverse); color: var(--fg-on-accent);"><div class="name" style="color: #1f1e1d;">bg-inverse</div><div class="hex" style="color: #5e5c54;">#faf9f5</div></div>
+</div>
+</body>
+</html>

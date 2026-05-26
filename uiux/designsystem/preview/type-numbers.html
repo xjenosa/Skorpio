@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Numbers & telemetry</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); padding: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat { background: var(--bg-1); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 6px; min-height: 130px; }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 38px; font-weight: 500; color: var(--fg-1); letter-spacing: -0.01em; }
+  .num .unit { color: var(--fg-3); font-weight: 400; font-size: 16px; margin-left: 4px; }
+  .delta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; }
+  .delta.up { color: var(--energy-clean); }
+  .delta.down { color: var(--energy-dirty); }
+  .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-3); }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="stat"><span class="label">Capacity Â· PJM-W</span><span class="num">47.2<span class="unit">MW</span></span><span class="delta up">â†— +2.1 vs forecast</span></div>
+  <div class="stat"><span class="label">Carbon Â· 7d</span><span class="num">187<span class="unit">gCOâ‚‚</span></span><span class="delta down">â†˜ âˆ’12 wow</span></div>
+  <div class="stat"><span class="label">Spot Â· $/MWh</span><span class="num">48.40</span><span class="delta up">â†— +0.8</span></div>
+  <div class="stat"><span class="label">PUE Â· live</span><span class="num">1.18</span><span class="delta down">â†˜ âˆ’0.02</span></div>
+</div>
+</body>
+</html>

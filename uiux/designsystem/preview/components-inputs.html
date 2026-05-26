@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skorpio Â· Inputs</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html, body { margin:0; padding:0; background: var(--bg-0); color: var(--fg-1); font-family: var(--font-sans); padding: 24px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-3); }
+  .input {
+    background: var(--bg-1); border: 1px solid var(--rule-2);
+    border-radius: var(--radius-sm); padding: 10px 12px; color: var(--fg-1);
+    font-family: var(--font-sans); font-size: 14px; outline: none;
+  }
+  .input:focus, .input.focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .input.disabled { color: var(--fg-4); background: var(--bg-1); }
+  .placeholder { color: var(--fg-3); }
+  .pair { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; background: var(--bg-1); border: 1px solid var(--rule-2); border-radius: var(--radius-sm); padding: 4px 4px 4px 12px; }
+  .pair input { background: transparent; border: 0; outline: 0; color: var(--fg-1); font-family: var(--font-sans); font-size: 14px; padding: 6px 0; }
+  .pair button { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 10px; border-radius: var(--radius-xs); border: 0; background: var(--accent); color: var(--fg-on-accent); cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="field"><span class="label">Region</span><div class="input"><span class="placeholder">Select regionâ€¦</span></div></div>
+  <div class="field"><span class="label">Capacity (MW)</span><div class="input focus" contenteditable="true">38.4</div></div>
+  <div class="field"><span class="label">Workload tag</span><div class="pair"><input value="training-cluster-7"/><button>Run</button></div></div>
+  <div class="field"><span class="label">Note (disabled)</span><div class="input disabled">Locked by ops policy</div></div>
+</div>
+</body>
+</html>
