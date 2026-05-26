@@ -6,6 +6,8 @@ import { renderMarkdown } from './reportMarkdown'
 import { pipelineById, type PipelineId } from '../pipelines'
 import { api } from '../api/client'
 import type { JobStatus } from '../api/types'
+import { ProvenanceChips } from './ProvenanceChips'
+import { provenanceFor } from './provenance'
 import './FinalReport.css'
 
 // Shared shell for every Final report. Owns the page-head + title + Print
@@ -515,6 +517,25 @@ export function ReportShell({
             <div className="fr-md">{renderMarkdown(execSummary)}</div>
           </div>
         )}
+
+        {/* Data provenance chips — at-a-glance color-coded summary of which
+            stages of this pipeline ran on live data, frozen snapshots,
+            modeled heuristics, or LLM narrative. Derived from pipelineId +
+            the citations in `sources` so the chip set reflects what
+            actually fired this run (e.g. the ArcGIS GeoEnrichment chip
+            only lights up when its citation is present). See
+            REPORTS_COHESION.md §7b and `./provenance.ts` for the chip
+            definitions per pipeline. */}
+        {(() => {
+          const chips = provenanceFor(pipelineId, sources ?? [])
+          if (chips.length === 0) return null
+          return (
+            <div className="fr-exec fr-provenance">
+              <div className="t-eyebrow">Data provenance</div>
+              <ProvenanceChips chips={chips} />
+            </div>
+          )
+        })()}
 
         {/* Sources — citations to external data the agents pulled from. Block
             mirrors .fr-exec exactly so the report's "trust footer" reads as

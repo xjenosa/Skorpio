@@ -178,6 +178,87 @@
   line-height: 1.5;
 }
 
+/* ── Data provenance chips (above the Sources block) ──────────────── */
+/* Inherits .fr-exec for the dark panel + padding. The chip row reads as
+   a peer of the Sources citations below: same panel chrome, different
+   visual grammar (compact colored pills) so an operator can tell at a
+   glance which stages of the pipeline ran on live data, frozen
+   snapshots, modeled heuristics, or LLM narrative. Mirrors the
+   design-system badge pattern in
+   uiux/designsystem/preview/components-chips.html so the chips feel
+   native to the rest of the surface. */
+.pc-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pc-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+}
+.pc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+}
+.pc-chip .pc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  flex-shrink: 0;
+}
+/* Pill color + soft tint matching the existing Energy-state badges. The
+   alpha is intentionally low (8%) so the colored dot reads as the
+   primary signal and the pill itself sits quietly on the dark panel. */
+.pc-chip.pc-live    { color: var(--energy-clean); background: rgba(111, 207, 142, 0.08); }
+.pc-chip.pc-frozen  { color: var(--energy-mid);   background: rgba(229, 196, 107, 0.08); }
+.pc-chip.pc-modeled { color: var(--energy-dirty); background: rgba(226, 107, 74, 0.08); }
+/* LLM lavender comes from reportStyle.ts CATEGORICAL_COLORS[3] so the
+   color round-trips with the rest of the chart palette. Lavender sits
+   off the good/bad severity axis on purpose: LLM-generated narrative
+   isn't a quality verdict, it's a separate category that the operator
+   should be able to distinguish from heuristic modeling. */
+.pc-chip.pc-llm     { color: #c889e6;             background: rgba(200, 137, 230, 0.08); }
+
+/* Legend: muted uppercase mono, colored dot beside each status name.
+   Reads as caption text below the chips, not a second row of pills. */
+.pc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--fg-3);
+  text-transform: uppercase;
+}
+.pc-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.pc-legend-item .pc-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.pc-legend-item.pc-live    .pc-dot { background: var(--energy-clean); }
+.pc-legend-item.pc-frozen  .pc-dot { background: var(--energy-mid); }
+.pc-legend-item.pc-modeled .pc-dot { background: var(--energy-dirty); }
+.pc-legend-item.pc-llm     .pc-dot { background: #c889e6; }
+
 /* ── Sources block (citations under exec summary) ──────────────────── */
 /* Inherits .fr-exec styling; only the inner list is custom so each citation
    sits as its own line/card. The block sizes itself naturally to however

@@ -113,9 +113,14 @@ export function FinalReport({ plan, jobId, onPipelineChange }: FinalReportProps)
     },
   ]
 
-  // Sources for the Siting pipeline — static citations of the upstream
-  // data registries the agents drew from (no plan.sources field yet).
+  // Sources for the Siting pipeline. Static base list of registries the
+  // agents always draw from, extended with any dynamic citations the
+  // backend emits in plan.sources — currently the ArcGIS GeoEnrichment
+  // pull on the top candidate's city when Esri credentials are
+  // configured. Dynamic sources land first so the most-specific
+  // attribution is read first.
   const sources = [
+    ...(plan.sources ?? []),
     'EIA grid demand telemetry',
     'NREL renewable resource data',
     'ECCC Canadian weather and climate feeds',

@@ -143,6 +143,7 @@ export interface SitingPlan {
   generated_at: string
   pipeline_duration_seconds: number | null
   news_items: NewsItem[]
+  sources?: string[]
 }
 
 // ── API request / response shapes (from backend/main.py) ───────────────── //
@@ -620,6 +621,7 @@ export interface InvestmentPlan {
   methodology_notes: string
   safety_flags: string[]
   limitations: string[]
+  sources?: string[]
   chart_paths: Record<string, string>
 }
 

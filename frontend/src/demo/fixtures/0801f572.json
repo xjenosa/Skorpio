@@ -1,4 +1,4 @@
-﻿{
+{
   "prefix": "0801f572",
   "pipeline_id": "datacenter-expansion",
   "job_list_item": {
@@ -41,7 +41,7 @@
       },
       {
         "ts": "04:27:37",
-        "text": "Parsed: eStruxture Â· +30 MW Â· 1y Â· balanced",
+        "text": "Parsed: eStruxture · +30 MW · 1y · balanced",
         "level": "info"
       },
       {
@@ -66,7 +66,7 @@
       },
       {
         "ts": "04:28:21",
-        "text": "Loaded 3 site(s) Â· 115 MW operating Â· 0 zone(s) enriched live",
+        "text": "Loaded 3 site(s) · 115 MW operating · 0 zone(s) enriched live",
         "level": "info"
       },
       {
@@ -125,7 +125,7 @@
     "job_id": "0801f572-8f11-46f0-b7f0-4dc7c9731145",
     "spec": {
       "query": "Plan 30 MW of expansion at our Vaughan datacenter, 18-month horizon.",
-      "normalized_name": "eStruxture Â· +30 MW Â· 2027 balanced",
+      "normalized_name": "eStruxture · +30 MW · 2027 balanced",
       "operator": "eStruxture",
       "province": "QC",
       "target_additional_mw": 30.0,
@@ -146,7 +146,7 @@
           "site_id": "ESTR-MTL-1",
           "name": "eStruxture MTL-1 Saint-Bruno",
           "operator": "eStruxture",
-          "city": "MontrÃ©al",
+          "city": "Montréal",
           "province": "QC",
           "latitude": 45.527,
           "longitude": -73.378,
@@ -166,7 +166,7 @@
           "grid_zone": "CA-QC",
           "avg_carbon_g_kwh": 30.0,
           "pue": 1.22,
-          "notes": "Flagship Quebec campus, Hydro-QuÃ©bec 315 kV feed."
+          "notes": "Flagship Quebec campus, Hydro-Québec 315 kV feed."
         },
         {
           "site_id": "ESTR-MTL-2",
@@ -376,7 +376,7 @@
     "blended_carbon_g_kwh": 63.3,
     "coverage_pct": 100.0,
     "executive_summary": "# Executive Summary: 30 MW Expansion Plan. Vaughan / eStruxture TOR-1 & MTL-1, 2027\n\n**Target Fully Funded**\n\nGrounded at the Vaughan, Ontario market and anchored to eStruxture's TOR-1 facility, this expansion plan meets the operator's full 30 MW target by 2027 with no greenfield development required. Two brownfield hybrid options together deliver exactly 30 new MW against a year-1 projected demand of 120 MW (up from a baseline of 98 MW contracted today), at a total capital commitment of $0.33B (plan data). The blended grid carbon intensity across both options stands at 63 g/kWh (plan data), a figure that compares favorably to typical North American grid averages and reflects the low-carbon character of Quebec and Ontario's generation mix.\n\n**Two Options Carry the Plan**\n\nThe primary option, eStruxture TOR-1 Vaughan Phase 23, contributes 10 MW via a hybrid power configuration and directly serves the Vaughan demand node identified by the operator (plan data). The secondary option, eStruxture MTL-1 Saint-Bruno Phase 19, adds the remaining 20 MW under the same hybrid model, leveraging eStruxture's established Quebec footprint where hydroelectric generation typically underpins some of the lowest-carbon and lowest-cost grid conditions in North America (plan data; industry context). Together, these two phases achieve 100% coverage of the 30 MW target (plan data).\n\n**Shortfall and Demand Risk**\n\nNo capacity shortfall exists within the funded plan itself, as coverage reaches 100% of the stated target (plan data). However, the 22 MW gap between today's baseline of 98 MW and the year-1 projected demand of 120 MW (plan data) must be absorbed entirely by these two options on schedule, leaving no buffer if either phase experiences permitting delays or equipment procurement slippage. Risks that are elevated in the current transformer and switchgear supply environment. Any demand acceleration beyond the balanced workload mix assumed here would expose the operator to an uncovered position before additional phases could be brought online.\n\n**Analytical Caveats**\n\nThis analysis is grounded in the funded options catalog and plan-level data provided; latency benchmarks, per-site LCOE figures, and customer proximity metrics were not available in the source data and have been omitted rather than estimated. Operator routing was resolved from the user-named city of Vaughan directly to eStruxture ESTR-TOR-1, as eStruxture is the catalog operator with an established site serving that market. The workload mix is characterized as balanced (plan data), meaning neither compute-heavy GPU density nor storage-heavy cold-tier assumptions have been applied to refine per-MW cost or cooling load modeling.\n\n**Strategic Recommendation**\n\nFor the next budget cycle, leadership should prioritize securing long-lead electrical equipment. Particularly transformers. For both the TOR-1 and MTL-1 phases immediately, given that the 2027 in-service date leaves limited schedule contingency. Given the 63 g/kWh blended carbon intensity (plan data) and the operator's Quebec-Ontario corridor positioning, this portfolio is well-situated to support sustainability commitments, and leadership should evaluate whether an additional phase at either site could be optioned now to create headroom against demand upside without triggering a new greenfield entitlement process.",
-    "methodology_notes": "Brownfield capacity per site capped at min(transformer headroom, 5 MW/acre plot density). Capex per MW: $9.5M (air), $11M (hybrid), $13.5M (liquid), with +10% AI-training premium and +25% greenfield premium (anchored on JLL + Cushman 2024 Canadian DC build benchmarks). Demand growth assumed: traditional 12% / inference 25% / training 40% / balanced 22% CAGR. Live ElectricityMaps reading enriches per-site carbon when the API key is set. Greedy scoring weighted grid 25% Â· sustainability 20% Â· speed 20% Â· cost 20% Â· risk 15%.",
+    "methodology_notes": "Brownfield capacity per site capped at min(transformer headroom, 5 MW/acre plot density). Capex per MW: $9.5M (air), $11M (hybrid), $13.5M (liquid), with +10% AI-training premium and +25% greenfield premium (anchored on JLL + Cushman 2024 Canadian DC build benchmarks). Demand growth assumed: traditional 12% / inference 25% / training 40% / balanced 22% CAGR. Live ElectricityMaps reading enriches per-site carbon when the API key is set. Greedy scoring weighted grid 25% · sustainability 20% · speed 20% · cost 20% · risk 15%.",
     "safety_flags": [],
     "limitations": [
       "Permitting risk not explicitly modeled. Schedule assumes typical municipal timelines.",

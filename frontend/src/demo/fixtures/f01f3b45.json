@@ -1,4 +1,4 @@
-﻿{
+{
   "prefix": "f01f3b45",
   "pipeline_id": "grid-investment-optimizer",
   "job_list_item": {
@@ -41,7 +41,7 @@
       },
       {
         "ts": "03:52:03",
-        "text": "Parsed: Alectra Utilities Â· $50M Â· 26y horizon Â· 2050 target",
+        "text": "Parsed: Alectra Utilities · $50M · 26y horizon · 2050 target",
         "level": "info"
       },
       {
@@ -130,14 +130,14 @@
     "job_id": "f01f3b45-8e8f-402d-934c-8f71f63f6c6c",
     "spec": {
       "query": "How should Alectra spend $50M to maximize 2050 climate resilience in Mississauga?",
-      "normalized_name": "Alectra Utilities Â· $50M Â· 2050 Â· no specific hazards",
+      "normalized_name": "Alectra Utilities · $50M · 2050 · no specific hazards",
       "utility": "Alectra Utilities",
       "province": "ON",
       "budget_cad": 50000000.0,
       "horizon_years": 26,
       "target_year": 2050,
       "priority_hazards": [],
-      "context_summary": "This study charts a 26-year, $50 million capital investment roadmap for Alectra Utilities across its Greater Toronto and Hamilton Area distribution territory, running from today through 2050. The plan simultaneously optimizes grid resilience against the full spectrum of climate hazards. Ice storms, heat waves, wildfires, floods, and high-wind events. Recognizing that these risks will intensify and increasingly overlap as climate change accelerates across southern Ontario. The core objective is to harden Alectra's distribution infrastructure so that communities in Mississauga, Brampton, Hamilton, Vaughan, Markham, St. Catharines, and surrounding municipalities can maintain reliable power through more frequent and severe weather extremes, reducing outage duration and protecting public safety. Getting this sequencing and prioritization right matters enormously: capital deployed too late or in the wrong order leaves critical assets exposed during the window of greatest climate risk, while well-timed investments compound their protective value across decades of service life."
+      "context_summary": "This study charts a 26-year, $50 million investment roadmap for Alectra Utilities across its Greater Toronto and Hamilton Area distribution territory, running from today through 2050. The plan simultaneously addresses all five major climate hazards — ice storms, heat waves, wildfires, floods, and high winds — recognizing that a grid hardened against only one or two threats leaves communities exposed as extreme weather events grow more frequent and severe. The core optimization balances upfront capital deployment against long-term resilience gains, ensuring that every dollar spent on infrastructure upgrades, redundancy, and smart-grid controls delivers the greatest possible reduction in outage risk across Alectra's diverse urban and suburban service areas. Getting this right matters because the communities Alectra serves — from Mississauga and Brampton to Hamilton, Vaughan, and Markham — depend on reliable power not just for comfort, but for the hospitals, transit systems, and emergency services that climate change will put under increasing strain."
     },
     "assets": [
       {
@@ -216,40 +216,40 @@
             "annual_probability": 0.09,
             "expected_loss_cad": 6630000.0,
             "customer_hours_lost": 117000.0,
-            "rationale": "Ice Storm risk for substation in ON; age 42y, climate scaling 1.60Ã—."
+            "rationale": "Ice Storm risk for substation in ON; age 42y, climate scaling 1.60×."
           },
           {
             "hazard": "heat_wave",
             "annual_probability": 0.291,
             "expected_loss_cad": 3315000.0,
             "customer_hours_lost": 45500.0,
-            "rationale": "Heat Wave risk for substation in ON; age 42y, climate scaling 1.60Ã—."
+            "rationale": "Heat Wave risk for substation in ON; age 42y, climate scaling 1.60×."
           },
           {
             "hazard": "wildfire",
-            "annual_probability": 0.029,
+            "annual_probability": 0.0,
             "expected_loss_cad": 13260000.0,
             "customer_hours_lost": 91000.0,
-            "rationale": "Wildfire risk for substation in ON; age 42y, climate scaling 1.60Ã—."
+            "rationale": "Wildfire probability set from NRCan CWFIS National Fire Database (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "flood",
-            "annual_probability": 0.112,
+            "annual_probability": 0.04,
             "expected_loss_cad": 8840000.0,
             "customer_hours_lost": 78000.0,
-            "rationale": "Flood risk for substation in ON; age 42y, climate scaling 1.60Ã—."
+            "rationale": "Flood probability set from NRCan Historical Flood Events (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "wind",
             "annual_probability": 0.096,
             "expected_loss_cad": 4420000.0,
             "customer_hours_lost": 52000.0,
-            "rationale": "Wind risk for substation in ON; age 42y, climate scaling 1.60Ã—."
+            "rationale": "Wind risk for substation in ON; age 42y, climate scaling 1.60×."
           }
         ],
-        "aggregate_annual_loss_cad": 3355664.0,
+        "aggregate_annual_loss_cad": 2339285.0,
         "risk_tier": "high",
-        "rank": 1
+        "rank": 2
       },
       {
         "asset_id": "ALEC-FD-118",
@@ -260,39 +260,39 @@
             "annual_probability": 0.179,
             "expected_loss_cad": 1080000.0,
             "customer_hours_lost": 16000.0,
-            "rationale": "Ice Storm risk for feeder in ON; age 37y, climate scaling 1.60Ã—."
+            "rationale": "Ice Storm risk for feeder in ON; age 37y, climate scaling 1.60×."
           },
           {
             "hazard": "heat_wave",
             "annual_probability": 0.157,
             "expected_loss_cad": 540000.0,
             "customer_hours_lost": 4000.0,
-            "rationale": "Heat Wave risk for feeder in ON; age 37y, climate scaling 1.60Ã—."
+            "rationale": "Heat Wave risk for feeder in ON; age 37y, climate scaling 1.60×."
           },
           {
             "hazard": "wildfire",
-            "annual_probability": 0.035,
+            "annual_probability": 0.0,
             "expected_loss_cad": 2160000.0,
             "customer_hours_lost": 10000.0,
-            "rationale": "Wildfire risk for feeder in ON; age 37y, climate scaling 1.60Ã—."
+            "rationale": "Wildfire probability set from NRCan CWFIS National Fire Database (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "flood",
-            "annual_probability": 0.048,
+            "annual_probability": 0.02,
             "expected_loss_cad": 1440000.0,
             "customer_hours_lost": 5000.0,
-            "rationale": "Flood risk for feeder in ON; age 37y, climate scaling 1.60Ã—."
+            "rationale": "Flood probability set from NRCan Historical Flood Events (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "wind",
             "annual_probability": 0.25,
             "expected_loss_cad": 720000.0,
             "customer_hours_lost": 12000.0,
-            "rationale": "Wind risk for feeder in ON; age 37y, climate scaling 1.60Ã—."
+            "rationale": "Wind risk for feeder in ON; age 37y, climate scaling 1.60×."
           }
         ],
-        "aggregate_annual_loss_cad": 603072.0,
-        "risk_tier": "medium",
+        "aggregate_annual_loss_cad": 486900.0,
+        "risk_tier": "low",
         "rank": 4
       },
       {
@@ -304,38 +304,38 @@
             "annual_probability": 0.064,
             "expected_loss_cad": 390000.0,
             "customer_hours_lost": 3500.0,
-            "rationale": "Ice Storm risk for transformer in ON; age 24y, climate scaling 1.60Ã—."
+            "rationale": "Ice Storm risk for transformer in ON; age 24y, climate scaling 1.60×."
           },
           {
             "hazard": "heat_wave",
             "annual_probability": 0.336,
             "expected_loss_cad": 195000.0,
             "customer_hours_lost": 6000.0,
-            "rationale": "Heat Wave risk for transformer in ON; age 24y, climate scaling 1.60Ã—."
+            "rationale": "Heat Wave risk for transformer in ON; age 24y, climate scaling 1.60×."
           },
           {
             "hazard": "wildfire",
-            "annual_probability": 0.026,
+            "annual_probability": 0.0,
             "expected_loss_cad": 780000.0,
             "customer_hours_lost": 3000.0,
-            "rationale": "Wildfire risk for transformer in ON; age 24y, climate scaling 1.60Ã—."
+            "rationale": "Wildfire probability set from NRCan CWFIS National Fire Database (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "flood",
-            "annual_probability": 0.128,
+            "annual_probability": 0.04,
             "expected_loss_cad": 520000.0,
             "customer_hours_lost": 4500.0,
-            "rationale": "Flood risk for transformer in ON; age 24y, climate scaling 1.60Ã—."
+            "rationale": "Flood probability set from NRCan Historical Flood Events (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "wind",
             "annual_probability": 0.077,
             "expected_loss_cad": 260000.0,
             "customer_hours_lost": 2500.0,
-            "rationale": "Wind risk for transformer in ON; age 24y, climate scaling 1.60Ã—."
+            "rationale": "Wind risk for transformer in ON; age 24y, climate scaling 1.60×."
           }
         ],
-        "aggregate_annual_loss_cad": 196976.0,
+        "aggregate_annual_loss_cad": 131300.0,
         "risk_tier": "low",
         "rank": 5
       },
@@ -348,40 +348,40 @@
             "annual_probability": 0.09,
             "expected_loss_cad": 5520000.0,
             "customer_hours_lost": 90000.0,
-            "rationale": "Ice Storm risk for substation in ON; age 29y, climate scaling 1.60Ã—."
+            "rationale": "Ice Storm risk for substation in ON; age 29y, climate scaling 1.60×."
           },
           {
             "hazard": "heat_wave",
             "annual_probability": 0.291,
             "expected_loss_cad": 2760000.0,
             "customer_hours_lost": 35000.0,
-            "rationale": "Heat Wave risk for substation in ON; age 29y, climate scaling 1.60Ã—."
+            "rationale": "Heat Wave risk for substation in ON; age 29y, climate scaling 1.60×."
           },
           {
             "hazard": "wildfire",
-            "annual_probability": 0.029,
+            "annual_probability": 0.0,
             "expected_loss_cad": 11040000.0,
             "customer_hours_lost": 70000.0,
-            "rationale": "Wildfire risk for substation in ON; age 29y, climate scaling 1.60Ã—."
+            "rationale": "Wildfire probability set from NRCan CWFIS National Fire Database (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "flood",
-            "annual_probability": 0.112,
+            "annual_probability": 0.16,
             "expected_loss_cad": 7360000.0,
             "customer_hours_lost": 60000.0,
-            "rationale": "Flood risk for substation in ON; age 29y, climate scaling 1.60Ã—."
+            "rationale": "Flood probability set from NRCan Historical Flood Events (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "wind",
             "annual_probability": 0.096,
             "expected_loss_cad": 3680000.0,
             "customer_hours_lost": 40000.0,
-            "rationale": "Wind risk for substation in ON; age 29y, climate scaling 1.60Ã—."
+            "rationale": "Wind risk for substation in ON; age 29y, climate scaling 1.60×."
           }
         ],
-        "aggregate_annual_loss_cad": 2793856.0,
+        "aggregate_annual_loss_cad": 2830840.0,
         "risk_tier": "high",
-        "rank": 2
+        "rank": 1
       },
       {
         "asset_id": "ALEC-FD-076",
@@ -392,45 +392,45 @@
             "annual_probability": 0.179,
             "expected_loss_cad": 1092000.0,
             "customer_hours_lost": 20800.0,
-            "rationale": "Ice Storm risk for feeder in ON; age 51y, climate scaling 1.60Ã—."
+            "rationale": "Ice Storm risk for feeder in ON; age 51y, climate scaling 1.60×."
           },
           {
             "hazard": "heat_wave",
             "annual_probability": 0.157,
             "expected_loss_cad": 546000.0,
             "customer_hours_lost": 5200.0,
-            "rationale": "Heat Wave risk for feeder in ON; age 51y, climate scaling 1.60Ã—."
+            "rationale": "Heat Wave risk for feeder in ON; age 51y, climate scaling 1.60×."
           },
           {
             "hazard": "wildfire",
-            "annual_probability": 0.035,
+            "annual_probability": 0.0,
             "expected_loss_cad": 2184000.0,
             "customer_hours_lost": 13000.0,
-            "rationale": "Wildfire risk for feeder in ON; age 51y, climate scaling 1.60Ã—."
+            "rationale": "Wildfire probability set from NRCan CWFIS National Fire Database (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "flood",
-            "annual_probability": 0.048,
+            "annual_probability": 0.02,
             "expected_loss_cad": 1456000.0,
             "customer_hours_lost": 6500.0,
-            "rationale": "Flood risk for feeder in ON; age 51y, climate scaling 1.60Ã—."
+            "rationale": "Flood probability set from NRCan Historical Flood Events (via Esri Living Atlas). Empirical rate at asset location."
           },
           {
             "hazard": "wind",
             "annual_probability": 0.25,
             "expected_loss_cad": 728000.0,
             "customer_hours_lost": 15600.0,
-            "rationale": "Wind risk for feeder in ON; age 51y, climate scaling 1.60Ã—."
+            "rationale": "Wind risk for feeder in ON; age 51y, climate scaling 1.60×."
           }
         ],
-        "aggregate_annual_loss_cad": 609773.0,
-        "risk_tier": "medium",
+        "aggregate_annual_loss_cad": 492310.0,
+        "risk_tier": "low",
         "rank": 3
       }
     ],
     "candidate_projects": [
       {
-        "project_id": "PRJ-20e8eec5",
+        "project_id": "PRJ-545490d6",
         "title": "Cooling + waterproofing retrofit at Erin Mills MS",
         "category": "reconductoring",
         "target_assets": [
@@ -438,17 +438,34 @@
         ],
         "capex_cad": 6800000.0,
         "annual_opex_cad": 27200.0,
-        "risk_reduction_cad_per_year": 1510049.0,
+        "risk_reduction_cad_per_year": 1052678.0,
         "customers_protected": 64000,
         "deployment_months": 12,
         "hazards_addressed": [
           "flood",
           "heat_wave"
         ],
-        "rationale": "Upgrading transformer cooling and waterproofing foundations at the 42-year-old Erin Mills MS substation against ice storm hazards is projected to avoid $1.5M in expected annual losses (expected annual loss avoided field), making this retrofit a high-priority resilience investment for a facility that has exceeded typical industry rule-of-thumb design lifespans of 30â€“40 years."
+        "rationale": "Retrofitting transformer cooling and waterproofing foundations at the 42-year-old Erin Mills MS substation against ice storm hazards is projected to avoid $1.1M in expected annual losses, delivering resilience value that justifies the investment given the asset's age and dominant exposure to ice-loading events."
       },
       {
-        "project_id": "PRJ-1b07c362",
+        "project_id": "PRJ-f73cc2e4",
+        "title": "Replace aged power transformers at Erin Mills MS",
+        "category": "transformer_upgrade",
+        "target_assets": [
+          "ALEC-MS-031"
+        ],
+        "capex_cad": 21250000.0,
+        "annual_opex_cad": 42500.0,
+        "risk_reduction_cad_per_year": 1286607.0,
+        "customers_protected": 57600,
+        "deployment_months": 18,
+        "hazards_addressed": [
+          "heat_wave"
+        ],
+        "rationale": "Replacing the aged transformers at Erin Mills MS (42 years in service) is justified by an expected annual loss avoided of $1.3M (provided project data) against the dominant ice storm hazard, as modern units typically offer higher thermal ratings and improved mechanical resilience that reduce forced-outage risk during both winter ice loading and summer peak overload events."
+      },
+      {
+        "project_id": "PRJ-9d2ac016",
         "title": "Cycle-cut ROW management on Stoney Creek feeder bank",
         "category": "vegetation_mgmt",
         "target_assets": [
@@ -456,17 +473,17 @@
         ],
         "capex_cad": 1080000.0,
         "annual_opex_cad": 8640.0,
-        "risk_reduction_cad_per_year": 241229.0,
+        "risk_reduction_cad_per_year": 194760.0,
         "customers_protected": 22000,
         "deployment_months": 6,
         "hazards_addressed": [
           "ice_storm",
           "wind"
         ],
-        "rationale": "Implementing cycle-cut ROW management on the 37-year-old Stoney Creek feeder bank is projected to avoid $0.2M in expected annual losses (expected annual loss avoided field) from ice-storm vegetation contact, which typically represents the lowest cost-per-customer-hour-avoided intervention available in overhead distribution."
+        "rationale": "Implementing cycle-cut ROW management on the Stoney Creek feeder bank (age 37 years) is projected to avoid $0.2M in expected annual losses driven by ice storm hazard, making it a high-value vegetation management investment that — consistent with industry rule of thumb — typically delivers among the lowest cost-per-customer-hour-avoided of any overhead distribution hardening measure."
       },
       {
-        "project_id": "PRJ-ae11dc41",
+        "project_id": "PRJ-c2ccd128",
         "title": "Selective undergrounding of Stoney Creek feeder bank",
         "category": "undergrounding",
         "target_assets": [
@@ -474,34 +491,34 @@
         ],
         "capex_cad": 9900000.0,
         "annual_opex_cad": 9900.0,
-        "risk_reduction_cad_per_year": 512611.0,
+        "risk_reduction_cad_per_year": 413865.0,
         "customers_protected": 19800,
         "deployment_months": 30,
         "hazards_addressed": [
           "ice_storm",
           "wind"
         ],
-        "rationale": "Selectively undergrounding the Stoney Creek feeder bank,a 37-year-old overhead feeder (asset age: 37y) with dominant exposure to ice storms,is projected to avoid $0.5M in expected annual losses (expected annual loss avoided: $0.5M) by permanently eliminating overhead conductor vulnerability, which typically drives the majority of ice-storm-related outage costs in comparable regions."
+        "rationale": "Selectively undergrounding the Stoney Creek feeder bank—a 37-year-old overhead feeder with dominant exposure to ice storm hazard—is projected to avoid $0.4M in expected annual losses by permanently eliminating overhead vulnerability, delivering a risk-reduction profile that is typically strongest in high-density service areas (expected annual loss avoided: $0.4M; asset age: 37 years; hazard: ice storm)."
       },
       {
-        "project_id": "PRJ-f64121f4",
-        "title": "Elevate + waterproof padmount enclosures in Springdale pad-mount cluster",
-        "category": "switchgear",
+        "project_id": "PRJ-1597bf61",
+        "title": "Bulk replacement of past-life padmounts in Springdale pad-mount cluster",
+        "category": "transformer_upgrade",
         "target_assets": [
           "ALEC-TR-204"
         ],
-        "capex_cad": 1300000.0,
-        "annual_opex_cad": 1300.0,
-        "risk_reduction_cad_per_year": 88639.0,
-        "customers_protected": 12600,
-        "deployment_months": 9,
+        "capex_cad": 4225000.0,
+        "annual_opex_cad": 8450.0,
+        "risk_reduction_cad_per_year": 105040.0,
+        "customers_protected": 14000,
+        "deployment_months": 12,
         "hazards_addressed": [
-          "flood"
+          "heat_wave"
         ],
-        "rationale": "Elevating and waterproofing the Springdale pad-mount transformer cluster (age 24 years) against ice storm and flood ingress is projected to avoid $0.1M in expected annual losses by raising enclosures above the 100-year flood line and sealing against moisture ingress, extending the serviceable life of switchgear that is already at or beyond the industry rule-of-thumb 25-year replacement threshold."
+        "rationale": "Replacing the Springdale pad-mount cluster transformers — now 24 years old (asset age field) and past rated service life — is projected to avoid $0.1M in expected annual losses (expected annual loss avoided field) by eliminating ice-storm-driven failures on units whose age-related insulation degradation makes them disproportionately vulnerable to freeze-thaw mechanical stress, while bulk replacement consolidates truck-roll mobilizations that would otherwise recur individually across the cluster."
       },
       {
-        "project_id": "PRJ-8c063a4a",
+        "project_id": "PRJ-00a9b6b5",
         "title": "Cooling + waterproofing retrofit at Vaughan Centre MS",
         "category": "reconductoring",
         "target_assets": [
@@ -509,17 +526,17 @@
         ],
         "capex_cad": 7360000.0,
         "annual_opex_cad": 29440.0,
-        "risk_reduction_cad_per_year": 1257235.0,
+        "risk_reduction_cad_per_year": 1273878.0,
         "customers_protected": 58000,
         "deployment_months": 12,
         "hazards_addressed": [
           "flood",
           "heat_wave"
         ],
-        "rationale": "Retrofitting transformer cooling and waterproofing foundations at the 29-year-old Vaughan Centre MS substation against its dominant ice_storm hazard is projected to avoid $1.3M in expected annual losses, justifying the investment in long-term grid resilience."
+        "rationale": "Retrofitting transformer cooling systems and waterproofing foundations at the 29-year-old Vaughan Centre MS substation against its dominant ice_storm hazard is projected to avoid $1.3M in expected annual losses, making this hardening investment directly cost-justified by the asset's quantified risk exposure."
       },
       {
-        "project_id": "PRJ-0d56c91e",
+        "project_id": "PRJ-866d5c2f",
         "title": "Cycle-cut ROW management on St. Catharines downtown feeders",
         "category": "vegetation_mgmt",
         "target_assets": [
@@ -527,17 +544,17 @@
         ],
         "capex_cad": 840000.0,
         "annual_opex_cad": 6720.0,
-        "risk_reduction_cad_per_year": 243909.0,
+        "risk_reduction_cad_per_year": 196924.0,
         "customers_protected": 17000,
         "deployment_months": 6,
         "hazards_addressed": [
           "ice_storm",
           "wind"
         ],
-        "rationale": "Implementing cycle-cut ROW vegetation management on the St. Catharines downtown feeders. 51-year-old overhead distribution assets facing a dominant ice storm hazard. Is projected to avoid $0.2M in expected annual losses (expected annual loss avoided field), making it among the most cost-effective interventions available for overhead distribution, where cycle clearing is typically the lowest cost-per-customer-hour-avoided option in vegetation management programs."
+        "rationale": "Implementing cycle-cut right-of-way vegetation management on the 51-year-old St. Catharines downtown feeders is justified by an expected annual loss avoided of $0.2M (project data), as ice storm exposure on aging overhead distribution infrastructure typically makes systematic cycle clearing the lowest-cost intervention per customer-hour of outage avoided in comparable regions."
       },
       {
-        "project_id": "PRJ-386c8213",
+        "project_id": "PRJ-7dc9e9a8",
         "title": "Selective undergrounding of St. Catharines downtown feeders",
         "category": "undergrounding",
         "target_assets": [
@@ -545,20 +562,20 @@
         ],
         "capex_cad": 7700000.0,
         "annual_opex_cad": 7700.0,
-        "risk_reduction_cad_per_year": 518307.0,
+        "risk_reduction_cad_per_year": 418464.0,
         "customers_protected": 15300,
         "deployment_months": 30,
         "hazards_addressed": [
           "ice_storm",
           "wind"
         ],
-        "rationale": "Selectively undergrounding the 51-year-old St. Catharines downtown feeders eliminates overhead ice-storm exposure on aging infrastructure and is projected to avoid $0.5M in expected annual losses, delivering an ROI that is strongest in high-density urban corridors where, industry rule of thumb, underground cables typically experience failure rates an order of magnitude lower than comparable overhead lines."
+        "rationale": "Selectively undergrounding the St. Catharines downtown feeders—overhead assets now 51 years old and dominantly exposed to ice-storm hazard—is projected to avoid $0.4M in expected annual losses (expected annual loss avoided field), permanently eliminating overhead ice-loading risk at a customer density where, industry rule of thumb, undergrounding ROI is typically strongest."
       }
     ],
     "funded_projects": [
       {
         "project": {
-          "project_id": "PRJ-0d56c91e",
+          "project_id": "PRJ-866d5c2f",
           "title": "Cycle-cut ROW management on St. Catharines downtown feeders",
           "category": "vegetation_mgmt",
           "target_assets": [
@@ -566,22 +583,22 @@
           ],
           "capex_cad": 840000.0,
           "annual_opex_cad": 6720.0,
-          "risk_reduction_cad_per_year": 243909.0,
+          "risk_reduction_cad_per_year": 196924.0,
           "customers_protected": 17000,
           "deployment_months": 6,
           "hazards_addressed": [
             "ice_storm",
             "wind"
           ],
-          "rationale": "Implementing cycle-cut ROW vegetation management on the St. Catharines downtown feeders. 51-year-old overhead distribution assets facing a dominant ice storm hazard. Is projected to avoid $0.2M in expected annual losses (expected annual loss avoided field), making it among the most cost-effective interventions available for overhead distribution, where cycle clearing is typically the lowest cost-per-customer-hour-avoided option in vegetation management programs."
+          "rationale": "Implementing cycle-cut right-of-way vegetation management on the 51-year-old St. Catharines downtown feeders is justified by an expected annual loss avoided of $0.2M (project data), as ice storm exposure on aging overhead distribution infrastructure typically makes systematic cycle clearing the lowest-cost intervention per customer-hour of outage avoided in comparable regions."
         },
         "cumulative_capex_cad": 840000.0,
-        "roi_ratio": 7.55,
+        "roi_ratio": 6.1,
         "rank": 1
       },
       {
         "project": {
-          "project_id": "PRJ-1b07c362",
+          "project_id": "PRJ-9d2ac016",
           "title": "Cycle-cut ROW management on Stoney Creek feeder bank",
           "category": "vegetation_mgmt",
           "target_assets": [
@@ -589,45 +606,22 @@
           ],
           "capex_cad": 1080000.0,
           "annual_opex_cad": 8640.0,
-          "risk_reduction_cad_per_year": 241229.0,
+          "risk_reduction_cad_per_year": 194760.0,
           "customers_protected": 22000,
           "deployment_months": 6,
           "hazards_addressed": [
             "ice_storm",
             "wind"
           ],
-          "rationale": "Implementing cycle-cut ROW management on the 37-year-old Stoney Creek feeder bank is projected to avoid $0.2M in expected annual losses (expected annual loss avoided field) from ice-storm vegetation contact, which typically represents the lowest cost-per-customer-hour-avoided intervention available in overhead distribution."
+          "rationale": "Implementing cycle-cut ROW management on the Stoney Creek feeder bank (age 37 years) is projected to avoid $0.2M in expected annual losses driven by ice storm hazard, making it a high-value vegetation management investment that — consistent with industry rule of thumb — typically delivers among the lowest cost-per-customer-hour-avoided of any overhead distribution hardening measure."
         },
         "cumulative_capex_cad": 1920000.0,
-        "roi_ratio": 5.81,
+        "roi_ratio": 4.69,
         "rank": 2
       },
       {
         "project": {
-          "project_id": "PRJ-20e8eec5",
-          "title": "Cooling + waterproofing retrofit at Erin Mills MS",
-          "category": "reconductoring",
-          "target_assets": [
-            "ALEC-MS-031"
-          ],
-          "capex_cad": 6800000.0,
-          "annual_opex_cad": 27200.0,
-          "risk_reduction_cad_per_year": 1510049.0,
-          "customers_protected": 64000,
-          "deployment_months": 12,
-          "hazards_addressed": [
-            "flood",
-            "heat_wave"
-          ],
-          "rationale": "Upgrading transformer cooling and waterproofing foundations at the 42-year-old Erin Mills MS substation against ice storm hazards is projected to avoid $1.5M in expected annual losses (expected annual loss avoided field), making this retrofit a high-priority resilience investment for a facility that has exceeded typical industry rule-of-thumb design lifespans of 30â€“40 years."
-        },
-        "cumulative_capex_cad": 8720000.0,
-        "roi_ratio": 5.77,
-        "rank": 3
-      },
-      {
-        "project": {
-          "project_id": "PRJ-8c063a4a",
+          "project_id": "PRJ-00a9b6b5",
           "title": "Cooling + waterproofing retrofit at Vaughan Centre MS",
           "category": "reconductoring",
           "target_assets": [
@@ -635,44 +629,67 @@
           ],
           "capex_cad": 7360000.0,
           "annual_opex_cad": 29440.0,
-          "risk_reduction_cad_per_year": 1257235.0,
+          "risk_reduction_cad_per_year": 1273878.0,
           "customers_protected": 58000,
           "deployment_months": 12,
           "hazards_addressed": [
             "flood",
             "heat_wave"
           ],
-          "rationale": "Retrofitting transformer cooling and waterproofing foundations at the 29-year-old Vaughan Centre MS substation against its dominant ice_storm hazard is projected to avoid $1.3M in expected annual losses, justifying the investment in long-term grid resilience."
+          "rationale": "Retrofitting transformer cooling systems and waterproofing foundations at the 29-year-old Vaughan Centre MS substation against its dominant ice_storm hazard is projected to avoid $1.3M in expected annual losses, making this hardening investment directly cost-justified by the asset's quantified risk exposure."
+        },
+        "cumulative_capex_cad": 9280000.0,
+        "roi_ratio": 4.5,
+        "rank": 3
+      },
+      {
+        "project": {
+          "project_id": "PRJ-545490d6",
+          "title": "Cooling + waterproofing retrofit at Erin Mills MS",
+          "category": "reconductoring",
+          "target_assets": [
+            "ALEC-MS-031"
+          ],
+          "capex_cad": 6800000.0,
+          "annual_opex_cad": 27200.0,
+          "risk_reduction_cad_per_year": 1052678.0,
+          "customers_protected": 64000,
+          "deployment_months": 12,
+          "hazards_addressed": [
+            "flood",
+            "heat_wave"
+          ],
+          "rationale": "Retrofitting transformer cooling and waterproofing foundations at the 42-year-old Erin Mills MS substation against ice storm hazards is projected to avoid $1.1M in expected annual losses, delivering resilience value that justifies the investment given the asset's age and dominant exposure to ice-loading events."
         },
         "cumulative_capex_cad": 16080000.0,
-        "roi_ratio": 4.44,
+        "roi_ratio": 4.02,
         "rank": 4
       },
       {
         "project": {
-          "project_id": "PRJ-f64121f4",
-          "title": "Elevate + waterproof padmount enclosures in Springdale pad-mount cluster",
-          "category": "switchgear",
+          "project_id": "PRJ-f73cc2e4",
+          "title": "Replace aged power transformers at Erin Mills MS",
+          "category": "transformer_upgrade",
           "target_assets": [
-            "ALEC-TR-204"
+            "ALEC-MS-031"
           ],
-          "capex_cad": 1300000.0,
-          "annual_opex_cad": 1300.0,
-          "risk_reduction_cad_per_year": 88639.0,
-          "customers_protected": 12600,
-          "deployment_months": 9,
+          "capex_cad": 21250000.0,
+          "annual_opex_cad": 42500.0,
+          "risk_reduction_cad_per_year": 1286607.0,
+          "customers_protected": 57600,
+          "deployment_months": 18,
           "hazards_addressed": [
-            "flood"
+            "heat_wave"
           ],
-          "rationale": "Elevating and waterproofing the Springdale pad-mount transformer cluster (age 24 years) against ice storm and flood ingress is projected to avoid $0.1M in expected annual losses by raising enclosures above the 100-year flood line and sealing against moisture ingress, extending the serviceable life of switchgear that is already at or beyond the industry rule-of-thumb 25-year replacement threshold."
+          "rationale": "Replacing the aged transformers at Erin Mills MS (42 years in service) is justified by an expected annual loss avoided of $1.3M (provided project data) against the dominant ice storm hazard, as modern units typically offer higher thermal ratings and improved mechanical resilience that reduce forced-outage risk during both winter ice loading and summer peak overload events."
         },
-        "cumulative_capex_cad": 17380000.0,
-        "roi_ratio": 1.77,
+        "cumulative_capex_cad": 37330000.0,
+        "roi_ratio": 1.57,
         "rank": 5
       },
       {
         "project": {
-          "project_id": "PRJ-386c8213",
+          "project_id": "PRJ-7dc9e9a8",
           "title": "Selective undergrounding of St. Catharines downtown feeders",
           "category": "undergrounding",
           "target_assets": [
@@ -680,56 +697,79 @@
           ],
           "capex_cad": 7700000.0,
           "annual_opex_cad": 7700.0,
-          "risk_reduction_cad_per_year": 518307.0,
+          "risk_reduction_cad_per_year": 418464.0,
           "customers_protected": 15300,
           "deployment_months": 30,
           "hazards_addressed": [
             "ice_storm",
             "wind"
           ],
-          "rationale": "Selectively undergrounding the 51-year-old St. Catharines downtown feeders eliminates overhead ice-storm exposure on aging infrastructure and is projected to avoid $0.5M in expected annual losses, delivering an ROI that is strongest in high-density urban corridors where, industry rule of thumb, underground cables typically experience failure rates an order of magnitude lower than comparable overhead lines."
+          "rationale": "Selectively undergrounding the St. Catharines downtown feeders—overhead assets now 51 years old and dominantly exposed to ice-storm hazard—is projected to avoid $0.4M in expected annual losses (expected annual loss avoided field), permanently eliminating overhead ice-loading risk at a customer density where, industry rule of thumb, undergrounding ROI is typically strongest."
         },
-        "cumulative_capex_cad": 25080000.0,
-        "roi_ratio": 1.75,
+        "cumulative_capex_cad": 45030000.0,
+        "roi_ratio": 1.41,
         "rank": 6
       },
       {
         "project": {
-          "project_id": "PRJ-ae11dc41",
-          "title": "Selective undergrounding of Stoney Creek feeder bank",
-          "category": "undergrounding",
+          "project_id": "PRJ-1597bf61",
+          "title": "Bulk replacement of past-life padmounts in Springdale pad-mount cluster",
+          "category": "transformer_upgrade",
           "target_assets": [
-            "ALEC-FD-118"
+            "ALEC-TR-204"
           ],
-          "capex_cad": 9900000.0,
-          "annual_opex_cad": 9900.0,
-          "risk_reduction_cad_per_year": 512611.0,
-          "customers_protected": 19800,
-          "deployment_months": 30,
+          "capex_cad": 4225000.0,
+          "annual_opex_cad": 8450.0,
+          "risk_reduction_cad_per_year": 105040.0,
+          "customers_protected": 14000,
+          "deployment_months": 12,
           "hazards_addressed": [
-            "ice_storm",
-            "wind"
+            "heat_wave"
           ],
-          "rationale": "Selectively undergrounding the Stoney Creek feeder bank,a 37-year-old overhead feeder (asset age: 37y) with dominant exposure to ice storms,is projected to avoid $0.5M in expected annual losses (expected annual loss avoided: $0.5M) by permanently eliminating overhead conductor vulnerability, which typically drives the majority of ice-storm-related outage costs in comparable regions."
+          "rationale": "Replacing the Springdale pad-mount cluster transformers — now 24 years old (asset age field) and past rated service life — is projected to avoid $0.1M in expected annual losses (expected annual loss avoided field) by eliminating ice-storm-driven failures on units whose age-related insulation degradation makes them disproportionately vulnerable to freeze-thaw mechanical stress, while bulk replacement consolidates truck-roll mobilizations that would otherwise recur individually across the cluster."
         },
-        "cumulative_capex_cad": 34980000.0,
-        "roi_ratio": 1.35,
+        "cumulative_capex_cad": 49255000.0,
+        "roi_ratio": 0.65,
         "rank": 7
       }
     ],
-    "unfunded_projects": [],
-    "total_capex_committed_cad": 34980000.0,
-    "total_annual_loss_avoided_cad": 4371979.0,
-    "portfolio_roi_ratio": 3.25,
-    "customers_protected": 208700,
-    "executive_summary": "# Executive Summary: Climate-Adapted Capital Investment Plan for Alectra Utilities, 500000005â€“500000000\n\n**The Budget Holds**\n\nThe $50000000 million, 50000000-year capital plan is adequately funded against the identified critical risk portfolio, with $35 million in committed capex (committed capex field) covering all seven funded projects and leaving $15 million in reserve capacity within the envelope. The plan delivers a lifetime return of 3.25Ã— (lifetime ROI field) on invested capital, driven by $4.4 million in avoided annual losses (avoided annual loss field). A financially defensible position that the board can approve with confidence. At this return profile, the committed spend pays back its risk-adjusted cost well within the planning horizon.\n\n**Three Projects Carry the Plan**\n\nThe two cycle-cut right-of-way vegetation management programs. On the St. Catharines downtown feeders and the Stoney Creek feeder bank. Represent the highest-leverage interventions in the portfolio, directly reducing the ignition and outage risk that intensifying storm and drought cycles impose on overhead infrastructure in these corridors. Equally critical is the cooling and waterproofing retrofit at Erin Mills MS, which addresses the compounding threat of extreme heat and precipitation infiltration at a major substation asset; substation failures of this type typically cascade to thousands of customer-hours lost per event in comparable urban distribution systems. Together, these three projects anchor the plan's loss-avoidance arithmetic and should be treated as schedule-protected priorities.\n\n**Residual Exposure Remains**\n\nWith zero unfunded-but-recommended projects listed (unfunded projects field), the formal risk register does not identify outstanding gaps at this time; however, data not available for residual customer-hours-lost or specific unprotected asset designations beyond the funded scope. The board should treat this absence as a data limitation rather than confirmation of a fully protected network, and commission a supplementary asset-vulnerability scan before the next budget cycle to ensure no material hazards were scoped out of the current analysis.\n\n**Analytical Caveats**\n\nThe avoided-loss figure of $4.4 million per year (avoided annual loss field) and the 3.25Ã— ROI (lifetime ROI field) are modelled outputs whose accuracy depends on the climate hazard frequency assumptions embedded in the underlying analysis; if storm-return periods compress faster than modelled. A credible scenario under higher-emissions pathways. Both figures will understate true risk and the committed $35 million may prove insufficient. Carbon intensity, grid marginal costs, and LCOE inputs for any embedded energy-efficiency components are data not available in the provided fields, so co-benefits beyond direct loss avoidance have not been quantified here.\n\n**One Move for the Next Cycle**\n\nThe board's single most important near-term action is to fund the supplementary vulnerability assessment described above and establish a formal trigger mechanism. Tied to observed climate metrics. That automatically escalates the remaining $15 million reserve into active project delivery rather than leaving it as passive contingency. Locking in that escalation logic now, while the reserve is intact, is the difference between a reactive utility and one that leads its peers in climate resilience.",
-    "methodology_notes": "Per-asset climate risk uses provincial hazard base rates from ECCC CCCS scaled by IBC/CatIQ insurance loss share and asset-type susceptibility. Climate scaling: 1.0Ã— by 2025, 1.15Ã— by 2030, 1.30Ã— by 2035, 1.60Ã— by 2050. Asset age multiplier: 0.7Ã— (<20y) â†’ 1.6Ã— (>60y). Project menu generated from 11 hardening templates Ã— asset type Ã— dominant hazard. Selection is a greedy ROI-ordered knapsack with horizon = 26y.",
+    "unfunded_projects": [
+      {
+        "project_id": "PRJ-c2ccd128",
+        "title": "Selective undergrounding of Stoney Creek feeder bank",
+        "category": "undergrounding",
+        "target_assets": [
+          "ALEC-FD-118"
+        ],
+        "capex_cad": 9900000.0,
+        "annual_opex_cad": 9900.0,
+        "risk_reduction_cad_per_year": 413865.0,
+        "customers_protected": 19800,
+        "deployment_months": 30,
+        "hazards_addressed": [
+          "ice_storm",
+          "wind"
+        ],
+        "rationale": "Selectively undergrounding the Stoney Creek feeder bank—a 37-year-old overhead feeder with dominant exposure to ice storm hazard—is projected to avoid $0.4M in expected annual losses by permanently eliminating overhead vulnerability, delivering a risk-reduction profile that is typically strongest in high-density service areas (expected annual loss avoided: $0.4M; asset age: 37 years; hazard: ice storm)."
+      }
+    ],
+    "total_capex_committed_cad": 49255000.0,
+    "total_annual_loss_avoided_cad": 4528351.0,
+    "portfolio_roi_ratio": 2.39,
+    "customers_protected": 247900,
+    "executive_summary": "# Executive Summary: Climate-Adapted Capital Investment Plan for Alectra Utilities, 2025–2050\n\n**The Budget Holds**\n\nThe $50M capital envelope is sufficient to fund seven priority projects at a committed capex of $49M, leaving a nominal $1M in reserve while covering the utility's most acute climate-exposed assets through 2050. The plan delivers an avoided annual loss of $4.5M per year and a lifetime return on investment of 2.39 times committed capital, meaning every dollar deployed generates more than two dollars in avoided damage and operational cost over the plan horizon. At that return profile, this program is not a cost center but a value-generating risk transfer.\n\n**Three Projects Carry the Plan**\n\nThe two cycle-cut right-of-way management programs, covering the St. Catharines downtown feeders and the Stoney Creek feeder bank respectively, address vegetation-contact outage risk on circuits that are disproportionately exposed to the accelerating storm and ice-loading events projected for the western Lake Ontario corridor. The cooling and waterproofing retrofit at Vaughan Centre Municipal Substation directly protects a high-consequence node where thermal overload and moisture ingress represent compounding failure modes as summer peak temperatures rise. Together, these three projects anchor the portfolio's avoided-loss arithmetic and should be treated as non-deferrable regardless of future budget pressure.\n\n**One Gap Remains Open**\n\nOne project has been identified as recommended but remains unfunded within the current $50M envelope, leaving at least one material asset or hazard corridor without committed capital protection through 2050. The residual customer-hours-lost exposure attributable to that unfunded asset is data not available for this field, but the board should treat the gap as a known and quantified liability rather than an acceptable omission. Deferral does not eliminate the risk; it transfers it to ratepayers and to future capital cycles at likely higher unit costs.\n\n**Analytical Limitations**\n\nThe avoided-loss and ROI figures are modeled projections sensitive to climate scenario assumptions, load growth trajectories, and asset deterioration curves that will be updated as Ontario's regional climate projections are refined. Carbon intensity and grid-level externality values were not provided in the underlying dataset, so no carbon-cost co-benefit is embedded in the 2.39 times ROI figure; in comparable jurisdictions, including such co-benefits typically improves the return profile further. The board should treat all forward figures as order-of-magnitude planning anchors, not contractual commitments.\n\n**The Next Budget Move**\n\nIn the next budget cycle, the board should authorize a discrete funding envelope to bring the one unfunded recommended project into committed status, closing the residual exposure gap before it compounds. Industry rule of thumb suggests that deferred hardening costs escalate at rates exceeding general construction inflation once a climate hazard begins to manifest in asset failure data, making early commitment the lower-cost path. Approving that incremental allocation now preserves the integrity of the 2050 risk posture this plan was designed to achieve.",
+    "methodology_notes": "Per-asset climate risk uses provincial hazard base rates from ECCC CCCS scaled by IBC/CatIQ insurance loss share and asset-type susceptibility. Climate scaling: 1.0× by 2025, 1.15× by 2030, 1.30× by 2035, 1.60× by 2050. Asset age multiplier: 0.7× (<20y) → 1.6× (>60y). Project menu generated from 11 hardening templates × asset type × dominant hazard. Selection is a greedy ROI-ordered knapsack with horizon = 26y.",
     "safety_flags": [],
     "limitations": [
-      "Climate hazard frequencies use provincial base rates. Sub-provincial variation (urban heat island, micro-flooding) is not modeled.",
-      "Asset replacement costs are estimates; real bids will vary Â±25%.",
-      "Optimizer is greedy on ROI only. Does not enforce geographic balance or political constraints.",
+      "Climate hazard frequencies use provincial base rates; sub-provincial variation (urban heat island, micro-flooding) is not modeled.",
+      "Asset replacement costs are estimates; real bids will vary ±25%.",
+      "Optimizer is greedy on ROI only and does not enforce geographic balance or political constraints.",
       "Reliability metric is customer-hours-lost per event; does not weight medical or industrial criticality."
+    ],
+    "sources": [
+      "NRCan Historical Flood Events (Esri Living Atlas): empirical flood probability applied to 5 of 5 asset(s)",
+      "NRCan CWFIS National Fire Database (Esri Living Atlas): empirical wildfire probability applied to 5 of 5 asset(s)",
+      "ArcGIS GeoEnrichment (Esri Canada): Mississauga, ON (CY): 192,532 households, population 768,433"
     ],
     "chart_paths": {}
   }

@@ -66,6 +66,41 @@ In priority order:
 Legend: ✅ real ingested public data · ⚠️ hand-curated but cited ·
 ❌ synthetic / estimate (must be labeled in code + surfaced in `limitations[]`)
 
+### ArcGIS / Esri live overlays (sponsor integration)
+
+On top of the substrate above, four pipelines now apply **live ArcGIS REST overlays at run time** via the OAuth 2.0 `client_credentials` flow in
+[`backend/services/arcgis_enrichment.py`](../../../backend/services/arcgis_enrichment.py)
+and [`backend/services/arcgis_hazards.py`](../../../backend/services/arcgis_hazards.py).
+When the overlay fires, the underlying field flips from frozen-snapshot
+to live and `is_synthesized` is set to `False` on the affected model.
+Citations land in `plan.sources`; the §7b provenance chips render the
+same fact visually in the report footer.
+
+| Pipeline | Esri overlay | Endpoint | Effect when it fires |
+|---|---|---|---|
+| **Siting** | GeoEnrichment (CAN.CSD) | `enrich_city(spec.city)` | Appends real Census Subdivision households + population to `plan.sources` |
+| **Expansion** | GeoEnrichment (CAN.CSD) | `enrich_city(spec.city)` | Appends real CSD household count to `footprint.sources` |
+| **Electrification** | World Geocoding + GeoEnrichment (CAN.FSA) | `geocode_fsa()` + `enrich_fsa()` | Primary FSA-to-coords path (zippopotam fallback); overlays live households, median income, dwelling mix on top of the 2021 Census base and flips `NeighborhoodProfile.is_synthesized=False` |
+| **Investment** | GeoEnrichment (CAN.CSD) + Living Atlas | `enrich_city()` + `historical_flood_count()` + `historical_wildfire_count()` | Real Census household count for utility primary city; empirical 100-year flood probability (NRCan Historical Flood Events) and 55-year wildfire probability (CWFIS National Fire Database) replace the province-average heuristic per asset when lat/lon is known |
+
+**Winter Peak** is the lone holdout: utility feeder-level GIS is not
+publicly available in Canada, so there is no live Esri overlay that
+maps onto its substrate. Its provenance chips render as `modeled` for
+the topology + simulation stages by design, not as a gap to apologize
+for.
+
+**Cost protection:** per-process call cap (`MAX_LIVE_CALLS = 25` per
+backend restart) + disk caches (`arcgis_enrich` 30 d, `arcgis_geocode`
+1 yr, `arcgis_hazards` 1 h) keep a typical run under single-digit
+Esri credits. Repeat runs for the same geography cost zero.
+
+**Reviewer rule:** a new live external data source ingested in any
+pipeline must (a) append a short citation to the relevant model's
+`sources: list[str]` field, (b) flip the relevant `is_synthesized`
+flag to `False` when the overlay materially replaces a baked field,
+and (c) get a chip entry in
+[`provenance.ts`](./provenance.ts) so §7b reflects it.
+
 ### Practical implications
 
 - **Adding a new pipeline?** Identify a free public data source first.
@@ -339,6 +374,52 @@ hides the block when the array is empty.
 Sources signal trust: the operator can see which numbers came from real data
 vs. modeled defaults. The block is required even when the pipeline used only
 public/baked-in data — list those sources too.
+
+---
+
+## 7b. Data provenance chips — color-coded stage summary above Sources
+
+Directly above the Sources block, the shell renders a **Data provenance**
+row of chips (one per pipeline stage) plus a one-line legend decoding the
+four colors. This is the operator's at-a-glance answer to "is any of this
+real, or did the AI make it up?" — the textual citations in the Sources
+block below are the long-form receipts.
+
+```
+DATA PROVENANCE
+[● Geocoding] [● Demographics] [● Census base] [● Adoption] [● Summary]
+● Live API  ·  ● Frozen snapshot  ·  ● Modeled  ·  ● LLM narrative
+```
+
+**The four statuses (matching the §0 traffic-light vocabulary):**
+
+| Status | Color token | Meaning |
+|---|---|---|
+| **Live API** | `--energy-clean` | Live network call to upstream API on every run (ArcGIS, NRCan, IESO live carbon, arXiv) |
+| **Frozen snapshot** | `--energy-mid` | Real data baked into the repo at a point in time (Census 2021, OEB Yearbook, OSM substations, ECCC Climate Normals) |
+| **Modeled** | `--energy-dirty` | Calibrated heuristic, modeled topology, or hardcoded constants — no live source |
+| **LLM narrative** | lavender (CATEGORICAL_COLORS[3]) | Claude prose, fact-reconciled against computed numbers before render. Off the severity axis on purpose — LLM is a category, not a quality verdict |
+
+**Source of truth:** the per-pipeline chip set lives in
+[`provenance.ts::provenanceFor()`](./provenance.ts). Each pipeline has a fixed
+list of always-present chips (its 5 stages) plus optional chips that toggle
+based on whether the corresponding citation appears in `plan.sources` —
+e.g. the `City demographics: live` chip in Expansion only lights up when
+"ArcGIS GeoEnrichment" actually answered this run. When the live overlay
+doesn't fire, the chip either falls back to a frozen-snapshot chip
+(Electrification's Demographics) or is omitted entirely (Expansion / Siting
+city demographics).
+
+**Where it renders:** inside the report panel, immediately above the Sources
+block. Owned by `<ReportShell>`. Never anywhere else — not in the live
+stage panel, not in the sidebar, not on the homepage. The chips are a
+property of the *completed* report, not of an in-flight pipeline run.
+
+**Reviewer rule:** chip-set drift across pipelines is a cohesion bug — fix
+in `provenance.ts`, not in individual report wrappers. Adding a new chip
+type (color) requires a token entry in `FinalReport.css` and a legend label
+in `ProvenanceChips.tsx`; the four current statuses are the agreed
+vocabulary and shouldn't be casually extended.
 
 ---
 

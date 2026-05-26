@@ -386,6 +386,30 @@
     color: #000 !important;
   }
 
+  /* Data provenance chips + legend (Sources block precursor). The chip
+     pills themselves keep their status colors in print — that's the
+     whole point of the chips, so the operator can decode at a glance
+     which stages ran on live data vs. modeled. The legend strip below
+     the chips (LIVE API · FROZEN SNAPSHOT · MODELED · LLM NARRATIVE)
+     uses var(--fg-3) on screen, which reads as near-invisible on
+     white paper. Force black for the legend text; the colored dot
+     beside each item still carries the encoding. */
+  .pc-legend,
+  .pc-legend-item {
+    color: #000 !important;
+  }
+
+  /* Make sure the colored chip backgrounds and dots actually paint to
+     PDF. Browsers strip CSS backgrounds from print by default unless
+     `-webkit-print-color-adjust: exact` opts them back in. Without
+     this, every chip pill renders as a colorless outline on white. */
+  .pc-chip,
+  .pc-chip .pc-dot,
+  .pc-legend-item .pc-dot {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   /* Ensure backgrounds actually print (most browsers strip them by default).
      Scope this to elements that actually have meaningful background fills —
      a universal `*` selector here makes Chrome's print pipeline crawl on

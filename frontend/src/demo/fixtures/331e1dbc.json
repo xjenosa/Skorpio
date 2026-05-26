@@ -1,4 +1,4 @@
-﻿{
+{
   "prefix": "331e1dbc",
   "pipeline_id": "electrification-readiness",
   "job_list_item": {
@@ -41,7 +41,7 @@
       },
       {
         "ts": "03:54:39",
-        "text": "Parsed: Mississauga Â· 1 FSA(s) Â· 3 scenario(s)",
+        "text": "Parsed: Mississauga · 1 FSA(s) · 3 scenario(s)",
         "level": "info"
       },
       {
@@ -66,17 +66,17 @@
       },
       {
         "ts": "03:54:46",
-        "text": "Modeled L5B Â· Today (5% HP, 7% EV) â†’ +19.1 MW peak",
+        "text": "Modeled L5B · Today (5% HP, 7% EV) â†’ +19.1 MW peak",
         "level": "info"
       },
       {
         "ts": "03:54:46",
-        "text": "Modeled L5B Â· 2030 Plans (25% HP, 30% EV) â†’ +103.8 MW peak",
+        "text": "Modeled L5B · 2030 Plans (25% HP, 30% EV) â†’ +103.8 MW peak",
         "level": "info"
       },
       {
         "ts": "03:54:46",
-        "text": "Modeled L5B Â· 2035 Net-Zero (50% HP, 60% EV) â†’ +214.0 MW peak",
+        "text": "Modeled L5B · 2035 Net-Zero (50% HP, 60% EV) â†’ +214.0 MW peak",
         "level": "info"
       },
       {
@@ -110,7 +110,7 @@
     "job_id": "331e1dbc-7907-4ce0-b453-47f81745f241",
     "spec": {
       "query": "Score Mississauga (L5B) for EV and heat pump growth through 2030.",
-      "normalized_name": "Mississauga L5B Â· 2030 All Scenarios",
+      "normalized_name": "Mississauga L5B · 2030 All Scenarios",
       "city": "Mississauga",
       "province": "ON",
       "fsas": [
@@ -149,7 +149,7 @@
     "neighborhoods": [
       {
         "fsa": "L5B",
-        "label": "Greater Toronto Area Â· L5B",
+        "label": "Greater Toronto Area · L5B",
         "city": "Greater Toronto Area",
         "province": "ON",
         "latitude": 43.5665,
@@ -179,7 +179,7 @@
         "heating_degree_days_18c": 3872.8,
         "sources": [
           "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
-          "ECCC Climate Normals 1981â€“2010",
+          "ECCC Climate Normals 1981–2010",
           "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
         ],
         "is_synthesized": false
@@ -189,7 +189,7 @@
       {
         "profile": {
           "fsa": "L5B",
-          "label": "Greater Toronto Area Â· L5B",
+          "label": "Greater Toronto Area · L5B",
           "city": "Greater Toronto Area",
           "province": "ON",
           "latitude": 43.5665,
@@ -219,7 +219,7 @@
           "heating_degree_days_18c": 3872.8,
           "sources": [
             "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
-            "ECCC Climate Normals 1981â€“2010",
+            "ECCC Climate Normals 1981–2010",
             "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
           ],
           "is_synthesized": false
@@ -430,7 +430,7 @@
       {
         "profile": {
           "fsa": "L5B",
-          "label": "Greater Toronto Area Â· L5B",
+          "label": "Greater Toronto Area · L5B",
           "city": "Greater Toronto Area",
           "province": "ON",
           "latitude": 43.5665,
@@ -460,7 +460,7 @@
           "heating_degree_days_18c": 3872.8,
           "sources": [
             "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
-            "ECCC Climate Normals 1981â€“2010",
+            "ECCC Climate Normals 1981–2010",
             "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
           ],
           "is_synthesized": false
@@ -671,7 +671,7 @@
       {
         "profile": {
           "fsa": "L5B",
-          "label": "Greater Toronto Area Â· L5B",
+          "label": "Greater Toronto Area · L5B",
           "city": "Greater Toronto Area",
           "province": "ON",
           "latitude": 43.5665,
@@ -701,7 +701,7 @@
           "heating_degree_days_18c": 3872.8,
           "sources": [
             "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
-            "ECCC Climate Normals 1981â€“2010",
+            "ECCC Climate Normals 1981–2010",
             "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
           ],
           "is_synthesized": false
@@ -952,7 +952,7 @@
       }
     ],
     "executive_summary": "# Executive Summary: Electrification Readiness Assessment for Mississauga FSA L5B\n\n**Verdict: Constrained**\n\nThe electrification readiness assessment for Mississauga's L5B forward sortation area returns an overall verdict of CONSTRAINED. All three technology-scenario pairings evaluated. Today (7% heat pump penetration, 5% EV adoption), 50 Plans (5% heat pump, 5% EV), and 55 Net-Zero (5% heat pump, 5% EV). Were found to be constrained, with zero pairings rated Ready and zero rated Blocked outright. This finding means the distribution system can support incremental electrification but will require targeted capital investment before the 2030 and 2035 policy milestones can be met safely and reliably.\n\n**The Binding Constraint**\n\nThe primary binding constraint identified across all three scenarios is local distribution transformer capacity within the L5B study area, where the modeling flags 682 transformers as requiring upgrade to accommodate projected coincident load growth. Data not available for specific headroom MW figures or individual transformer ratings from the source data provided; however, the sheer count of flagged assets. 682 units concentrated within a single FSA. Signals that the constraint is systemic rather than isolated to one or two feeder segments. L5B is the sole FSA studied in this engagement, so it both drives and defines the headline conclusion for this report.\n\n**Scenario Sensitivity**\n\nThe Today scenario (5% heat pump, 5% EV) already registers as constrained, indicating that even the current baseline trajectory is sufficient to stress local distribution assets without intervention. Conditions worsen materially under the 50 Plans scenario (5% heat pump, 5% EV) and reach their most demanding expression under the 55 Net-Zero scenario (5% heat pump, 5% EV), where coincident evening loads from simultaneous charging and heating cycles are typically the critical design hour in comparable regions. The absence of any Ready pairings confirms that no tested combination of penetration rates clears the grid threshold without remediation.\n\n**Modeling Caveats**\n\nThis assessment is based on scenario-level penetration assumptions and transformer inventory data; granular load-flow modeling at the individual feeder or service-entrance level was outside the scope of this engagement, and data not available for specific customer counts, panel capacity distributions, or real-time grid latency metrics within L5B. Results should be treated as a planning-grade screen rather than an engineering design study, and Hydro One distribution planning staff should validate transformer upgrade priorities against their own asset condition records before procurement. Affordability impacts on low-to-moderate income households were not quantified in this phase and warrant a dedicated equity analysis prior to bylaw implementation.\n\n**First Investment Priority**\n\nThe single highest-leverage action available to council is funding the accelerated upgrade of the 682 flagged local distribution transformers, as this intervention directly addresses the binding constraint across all three scenarios and is a prerequisite for any other electrification measure to deliver its intended benefit. Pairing transformer upgrades with an immediate default-on managed EV charging tariff can defer a portion of that capital cost by flattening coincident overnight demand peaks. An approach that industry experience in comparable regions suggests can reduce required transformer oversizing by a meaningful margin, though site-specific deferral potential should be quantified in the follow-on engineering study. Mandatory heat pump and EV rough-in requirements embedded in the zoning bylaw should be advanced concurrently so that new construction does not add unmanaged load to a system still mid-upgrade.",
-    "methodology_notes": "Per-FSA load impact built from a 24-hour winter peak day temperature curve scaled by ECCC HDD18 normals. Heat pump draws use NRCan ccASHP COP curves with backup engagement below -10 Â°C. EV charging follows IESO ResLoad evening L2 shape with cold-weather multipliers. Transformer overload heuristic: 75 kVA serving ~40 households, 0.95 PF. Panel upgrade trigger: continuous peak > 18 kW per home.",
+    "methodology_notes": "Per-FSA load impact built from a 24-hour winter peak day temperature curve scaled by ECCC HDD18 normals. Heat pump draws use NRCan ccASHP COP curves with backup engagement below -10 °C. EV charging follows IESO ResLoad evening L2 shape with cold-weather multipliers. Transformer overload heuristic: 75 kVA serving ~40 households, 0.95 PF. Panel upgrade trigger: continuous peak > 18 kW per home.",
     "safety_flags": [],
     "limitations": [
       "FSA topology is approximated from province-average transformer-to-household ratios.",

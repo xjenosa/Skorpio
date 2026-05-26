@@ -163,9 +163,14 @@ export function InvestmentReport({ jobId, hasResults, onPipelineChange }: Invest
     },
   ]
 
-  // Static citations for the Investment pipeline — utility asset filings +
-  // climate hazard scenarios + insurance loss data.
+  // Citations for the Investment pipeline. Static base list of upstream
+  // registries the agents always draw from, extended with any dynamic
+  // citations the backend emits in plan.sources — currently the ArcGIS
+  // GeoEnrichment pull for the utility's representative service-area
+  // city when Esri credentials are configured. Dynamic sources land
+  // first so the most specific attribution is read first.
   const sources = [
+    ...(plan.sources ?? []),
     'Utility asset filings (Hydro One, Toronto Hydro, EPCOR, Hydro-Québec)',
     'CCCS (Canadian Centre for Climate Services) hazard scenarios',
     'Insurance Bureau of Canada loss data',
