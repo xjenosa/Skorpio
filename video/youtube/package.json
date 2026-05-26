@@ -1,0 +1,40 @@
+{
+  "name": "skorpio-video",
+  "version": "1.0.0",
+  "description": "My Remotion video",
+  "repository": {},
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@remotion/cli": "4.0.464",
+    "@remotion/media": "4.0.464",
+    "@remotion/tailwind-v4": "4.0.464",
+    "mediabunny": "1.45.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.464",
+    "tailwindcss": "4.0.0"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config-flat": "4.0.464",
+    "@types/react": "19.2.7",
+    "@types/web": "0.0.166",
+    "dotenv": "^16.4.5",
+    "eslint": "^9.39.4",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion bundle",
+    "upgrade": "remotion upgrade",
+    "lint": "eslint src && tsc",
+    "narrate": "node scripts/narrate.mjs",
+    "quota": "node scripts/quota.mjs",
+    "render": "remotion render SkorpioVideo out/skorpio-final.mp4 --scale 2 --hardware-acceleration if-possible",
+    "thumbnail": "remotion still SkorpioVideo out/intro-thumbnail.png --frame=75 --scale=2 --image-format=png"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}

@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+  /* Surfaces (Claude dark) */
+  --bg-0:        #1f1e1d;
+  --bg-1:        #262624;
+  --bg-2:        #30302e;
+  --bg-3:        #3a3a37;
+  --bg-inverse:  #faf9f5;
+
+  /* Foreground */
+  --fg-1:        #faf9f5;
+  --fg-2:        #c2c0b6;
+  --fg-3:        #8c897e;
+  --fg-4:        #5e5c54;
+  --fg-on-accent:#1f1e1d;
+
+  /* Borders */
+  --rule-1:      rgba(250, 249, 245, 0.08);
+  --rule-2:      rgba(250, 249, 245, 0.14);
+  --rule-3:      rgba(250, 249, 245, 0.22);
+
+  /* Brand / accent */
+  --accent:      #F38764;
+  --accent-2:    #f5a385;
+  --accent-3:    #d96a45;
+  --accent-soft: rgba(243, 135, 100, 0.14);
+  --accent-line: rgba(243, 135, 100, 0.32);
+
+  /* Status */
+  --ok:          #6FCF8E;
+  --warn:        #E5C46B;
+  --err:         #E26B4A;
+  --info:        #88B8D9;
+
+  /* Type families */
+  --font-sans:   "Geist", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono:   "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif:  "Instrument Serif", "Source Serif Pro", Georgia, serif;
+}

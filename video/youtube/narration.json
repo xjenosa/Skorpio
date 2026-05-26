@@ -1,0 +1,74 @@
+{
+  "defaultVoice": "eric",
+  "model": "eleven_multilingual_v2",
+  "lines": [
+    {
+      "id": "01a-intro",
+      "text": "Skorpio is a tool we built to help the people who plan Canada's electricity grid make smarter decisions, faster, using agentic AI."
+    },
+    {
+      "id": "01b-scenario",
+      "text": "Imagine a planner at a Mississauga utility asking: will our grid still hold up during a minus twenty-five degree Celsius polar vortex, once thirty percent of homes have switched to electric heat pumps?"
+    },
+    {
+      "id": "02-question",
+      "text": "They open Skorpio and just type their question — no forms, no settings, no jargon."
+    },
+    {
+      "id": "03-routing",
+      "text": "An AI assistant reads the question, picks up that it's about cold weather and heat pumps, and routes it to our Winter Peak Stress Tester pipeline."
+    },
+    {
+      "id": "04-dashboard",
+      "text": "From here, the dashboard shows the AI's thinking live as it works through five stages."
+    },
+    {
+      "id": "05-workload-intel",
+      "text": "First, the AI figures out what's actually being asked — the city, the weather event, how many heat pumps, and the time frame — and turns that into a clear plan for the test."
+    },
+    {
+      "id": "06-grid-intel",
+      "text": "Second, it loads Mississauga's real power grid — the local wires, stations, and how much electricity people use on a normal winter day — using live data from the system operator and the local utility. So the simulation starts from the real grid, not a textbook one."
+    },
+    {
+      "id": "07-cold-sim",
+      "text": "Third, the AI simulates what minus twenty-five degrees actually does to electricity demand. Heat pumps work less efficiently and fall back on energy-hungry backup heaters. Baseboard-heated homes spike. And EVs draw more power to warm their cabins and batteries. All of that adds up into an hour-by-hour picture across a five-day cold snap."
+    },
+    {
+      "id": "08-risk-scoring",
+      "text": "Fourth, the AI ranks every part of the local grid by how likely it is to fail. It flags which wires and stations will overload first, and explains why. Usually, it's the older residential lines feeding neighborhoods packed with heat pumps."
+    },
+    {
+      "id": "09-plan-synthesis",
+      "text": "Fifth, the whole analysis comes together as a clean report — the peak demand number, the at-risk areas on a map, the options for fixing them, like asking customers to shift their usage or upgrading specific equipment, and a short summary the planner can hand to their team."
+    },
+    {
+      "id": "10-chat-followup",
+      "text": "Once the report is ready, you can ask plain English follow-up questions, like 'what if heat pump adoption hits fifty percent?' or 'which upgrade gives us the most resilience for the money?' Every answer is grounded in the simulation, citing the real numbers."
+    },
+    {
+      "id": "11a-tools-intro",
+      "text": "And the Winter Peak Stress Tester is just one of five tools."
+    },
+    {
+      "id": "11b-siting",
+      "text": "The Datacenter Siting tool finds the best place in Canada to build a new AI data center, balancing carbon intensity, latency, and cost."
+    },
+    {
+      "id": "11c-expansion",
+      "text": "The Expansion Planner figures out how to grow an existing data center site."
+    },
+    {
+      "id": "11d-electrification",
+      "text": "The Electrification Readiness scorer tells you which neighborhoods are ready for more electric vehicles and heat pumps, and which need help first."
+    },
+    {
+      "id": "11e-investment",
+      "text": "And the Grid Investment Optimizer takes a fixed upgrade budget and finds the smartest way to spend it for the most protection against future climate disasters."
+    },
+    {
+      "id": "12-outro",
+      "text": "Everything we just saw — five tools, live grid data, and the ability to watch the AI think — is built on Claude AI with custom energy tools, all designed for Canadian utilities. That's Skorpio — demo, reports, and source code linked below."
+    }
+  ]
+}
