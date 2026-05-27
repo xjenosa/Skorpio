@@ -2112,10 +2112,20 @@ body:has(.help-button) .toast {
   100% { background-position: 250% 0; }
 }
 
+/* ── Hamburger + mobile drawer chrome (always present in DOM; hidden
+       on desktop via display:none). Defined OUTSIDE the @media block so
+       the open/close className toggle works regardless of viewport — the
+       drawer states are inert on desktop because the grid columns hide
+       the slide. */
+.topbar-mobile-menu-btn { display: none; }
+.sidebar-mobile-close-btn { display: none; }
+.mobile-sidebar-backdrop { display: none; }
+
 /* ── Mobile (<=600px) — judge-readable demo ─────────────────────────────
    Scope: viewable Vercel demo on a 390px iPhone viewport. The sidebar is
-   operator-only and hidden entirely; topbar telemetry is dropped; the
-   composer pills collapse to natural width. CSS-only — no JS. */
+   operator-only and rendered as an off-canvas drawer (full-viewport,
+   slides in from the left); topbar telemetry is dropped; composer pills
+   collapse to natural width. */
 @media (max-width: 600px) {
   body { overflow: auto; }
 
@@ -2126,14 +2136,78 @@ body:has(.help-button) .toast {
     min-height: 100vh;
   }
 
-  aside.sidebar { display: none; }
+  /* Off-canvas drawer. Hidden by default (translateX(-100%)); flipped
+     into view when the parent .app has .mobile-sidebar-open. Full
+     viewport like ChatGPT's mobile app.
+     Height uses 100dvh (dynamic viewport height) so the bottom Log in
+     row isn't covered by Safari's collapsing URL bar — 100vh on iOS
+     means the *expanded* viewport, which is taller than what's
+     actually visible when the URL bar is showing. The `100vh`
+     fallback below it is for browsers that don't support `dvh`. */
+  aside.sidebar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    padding: 18px 18px calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+  .app.mobile-sidebar-open aside.sidebar {
+    transform: translateX(0);
+  }
+  /* On mobile the "collapse to rail" affordance is meaningless — the
+     drawer is either fully open or hidden. Hide that button so only
+     the X close button shows in the sidebar head on phones. */
+  .sidebar-collapse-btn { display: none; }
+  .sidebar-mobile-close-btn { display: inline-flex; }
 
+  /* Tap-to-close backdrop (sits under .sidebar in stacking order but
+     above the workspace). The transition keeps the dim from popping. */
+  .mobile-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgba(0, 0, 0, 0.45);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    animation: mobile-sidebar-fade 180ms ease-out;
+  }
+  @keyframes mobile-sidebar-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Hamburger button — visible only on phones. Sized to match the
+     spacer column on the right so the breadcrumb text reads centered. */
+  .topbar-mobile-menu-btn {
+    display: inline-flex;
+    justify-self: start;
+  }
+
+  /* 3-column grid: hamburger | centered crumbs | empty spacer matching
+     the hamburger's column width. The spacer keeps the crumbs visually
+     centered without abandoning the natural flex layout on desktop. */
   .topbar {
     height: auto;
     min-height: 56px;
     padding: 10px 12px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
     gap: 8px;
+  }
+  .topbar .crumbs {
+    justify-self: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   .topbar .telemetry,
   .topbar .topbar-telemetry,
@@ -2184,4 +2258,21 @@ body:has(.help-button) .toast {
   .suggestions-grid { gap: 10px; }
 
   .recent-row { flex-wrap: wrap; gap: 8px; }
+
+  /* Dashboard KPI grid — desktop default is 4 columns which overflows
+     the phone viewport; collapse to 2 so each tile gets ~165px and the
+     uppercase labels still fit on one line. */
+  .metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tile { padding: 12px; }
+
+  /* Page-head dropdown menus open from the LEFT edge of the trigger on
+     mobile. Desktop default is `right: 0` (menu right-aligned), which
+     puts the menu off-screen on mobile because the trigger is near the
+     left edge of the viewport. Capping max-width keeps a long menu
+     readable on a 390px screen. */
+  .sort-menu {
+    right: auto;
+    left: 0;
+    max-width: calc(100vw - 24px);
+  }
 }

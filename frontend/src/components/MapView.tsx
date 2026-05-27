@@ -394,17 +394,36 @@ export function MapView({
   // the !TOKEN check inside) so this conditional return is rule-safe.
   if (!TOKEN) {
     return (
-      <div className="skorpio-map-fallback" style={{ minHeight: 80 }}>
-        <strong>Map unavailable.</strong> Set <code>VITE_MAPBOX_TOKEN</code> in <code>.env</code>{' '}
-        and restart the frontend container to render the map.
+      <div className="skorpio-map-fallback">
+        <div className="skorpio-map-fallback-head">
+          <svg
+            className="skorpio-map-fallback-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M9 20l-5.447 -2.724a1 1 0 0 1 -.553 -.894v-13.382a1 1 0 0 1 1.447 -.894l5.553 2.894 6 -3 5.447 2.724a1 1 0 0 1 .553 .894v13.382a1 1 0 0 1 -1.447 .894l-5.553 -2.894z" />
+            <path d="M9 4v16" />
+            <path d="M15 7v13" />
+          </svg>
+          <strong>Map preview unavailable</strong>
+        </div>
+        <p className="skorpio-map-fallback-body">
+          The interactive map needs a configured Mapbox token. Marker coordinates
+          are listed below so the data is still inspectable.
+        </p>
         {markers.length > 0 && (
           <ul>
-            {markers.slice(0, 8).map((m) => (
+            {markers.slice(0, 6).map((m) => (
               <li key={m.id}>
                 {m.popup?.title ?? m.id} · {m.lat.toFixed(3)}, {m.lon.toFixed(3)}
               </li>
             ))}
-            {markers.length > 8 && <li>… and {markers.length - 8} more</li>}
+            {markers.length > 6 && <li>… and {markers.length - 6} more</li>}
           </ul>
         )}
       </div>

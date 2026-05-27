@@ -11,6 +11,11 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    // Dev-only: allow trycloudflare.com tunnels for mobile-device testing
+    // (the campus Wi-Fi blocks LAN device-to-device, so iPhone testing
+    // goes over a Cloudflare quick-tunnel). Scoped to the trycloudflare
+    // suffix so this isn't a blanket allow-all.
+    allowedHosts: ['.trycloudflare.com'],
     proxy: {
       '/api': {
         target: 'http://localhost:8000',

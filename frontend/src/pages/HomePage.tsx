@@ -155,6 +155,17 @@ export function HomePage() {
     if (typeof window === 'undefined') return false
     return window.localStorage.getItem('skorpio.sidebar.collapsed') === '1'
   })
+  // Mobile slide-in drawer state. Separate from `sidebarCollapsed` (which
+  // controls the desktop 248px ↔ 64px rail). On phones the sidebar is
+  // hidden by CSS and only renders when this flag flips true via the
+  // topbar hamburger button.
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  // Close the drawer whenever the user changes route. Without this the
+  // sidebar overlay stays painted on top of the destination view after
+  // a nav-item tap, which reads as broken.
+  useEffect(() => {
+    setMobileSidebarOpen(false)
+  }, [route])
   const prevStages = useRef<Map<string, string>>(new Map())
   const [demoMode] = useDemoMode()
   // When the user explicitly flips non-demo → demo, the Agent Pipeline
@@ -299,15 +310,28 @@ export function HomePage() {
   }
 
   return (
-    <div className={`app${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+    <div className={`app${sidebarCollapsed ? ' sidebar-collapsed' : ''}${mobileSidebarOpen ? ' mobile-sidebar-open' : ''}`}>
       <Sidebar
         route={route}
         pendingCompletions={pendingCompletions}
         collapsed={sidebarCollapsed}
         onToggleCollapsed={() => setSidebarCollapsed((c) => !c)}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
       />
+      {mobileSidebarOpen && (
+        <button
+          type="button"
+          className="mobile-sidebar-backdrop"
+          aria-label="Close menu"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
       <main className="workspace">
-        <TopBar here={ROUTE_LABELS[route]} />
+        <TopBar
+          here={ROUTE_LABELS[route]}
+          onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
+        />
         <SmoothStage
           style={{ justifyContent: route === 'new-session' ? 'center' : 'flex-start' }}
           resetKey={`${route}|${selectedJobId ?? ''}`}
@@ -349,11 +373,15 @@ function Sidebar({
   pendingCompletions,
   collapsed,
   onToggleCollapsed,
+  mobileOpen,
+  onMobileClose,
 }: {
   route: Route
   pendingCompletions: number
   collapsed: boolean
   onToggleCollapsed: () => void
+  mobileOpen: boolean
+  onMobileClose: () => void
 }) {
   // Demo-aware sidebar: when demo mode is on, the bottom-left profile slot
   // swaps from the real AccountPopup (which would impersonate a fake user
@@ -409,14 +437,18 @@ function Sidebar({
   ]
 
   return (
-    <aside className="sidebar" aria-label="Primary">
+    <aside
+      className={`sidebar${mobileOpen ? ' sidebar--mobile-open' : ''}`}
+      aria-label="Primary"
+      aria-hidden={!mobileOpen ? undefined : false}
+    >
       <div className="sidebar-head">
         <Link className="brand" to="/" aria-label="Skorpio">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1f1e1d"/><g transform="translate(6.25, 3) scale(0.8125)"><path d="M12 0 C 12 8, 22 14, 22 22 A 10 10 0 1 1 2 22 C 2 14, 12 8, 12 0 Z" fill="#F38764"/></g></svg>
           <span className="wordmark">SKORPIO</span>
         </Link>
         <button
-          className="icon-btn"
+          className="icon-btn sidebar-collapse-btn"
           type="button"
           onClick={onToggleCollapsed}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -425,6 +457,20 @@ function Sidebar({
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="4" width="18" height="16" rx="2" />
             <path d="M9 4v16" />
+          </svg>
+        </button>
+        {/* Mobile-only close button — visible only when the drawer is
+            open on a small viewport. Uses an X icon (not the desktop
+            collapse-rail icon, since on mobile we hide the drawer
+            entirely instead of shrinking it to a rail). */}
+        <button
+          className="icon-btn sidebar-mobile-close-btn"
+          type="button"
+          onClick={onMobileClose}
+          aria-label="Close menu"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
           </svg>
         </button>
       </div>
@@ -685,7 +731,13 @@ function UpgradePlanModal({ onClose }: { onClose: () => void }) {
 //                   paid/non-commercial-only API — out of scope for the
 //                   demo; the /api/grid-carbon endpoint stays in case it
 //                   gets wired in later.
-function TopBar({ here }: { here: string }) {
+function TopBar({
+  here,
+  onOpenMobileSidebar,
+}: {
+  here: string
+  onOpenMobileSidebar: () => void
+}) {
   const [weather, setWeather] = useState<{ temp_c: number; condition: string } | null>(null)
   const [activeRuns, setActiveRuns] = useState<number | null>(null)
 
@@ -712,6 +764,20 @@ function TopBar({ here }: { here: string }) {
 
   return (
     <header className="topbar">
+      {/* Mobile-only hamburger. Lucide `menu` icon — same stroke-based
+          style as the existing sidebar icons. Hidden on desktop via CSS. */}
+      <button
+        type="button"
+        className="topbar-mobile-menu-btn icon-btn"
+        onClick={onOpenMobileSidebar}
+        aria-label="Open menu"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+      </button>
       <div className="crumbs">
         <span className="live">
           <span className="dot" /> Grid · Live
