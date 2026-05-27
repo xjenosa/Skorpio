@@ -820,6 +820,11 @@ export function GuidedTour({ open, onClose }: GuidedTourProps) {
     }
     markTourSeen()
     setCard4OpenFlag(false)
+    // Land the user on New Session after the tour wraps. The last step's
+    // anchor is on the Reports tab, so without this the user is dropped
+    // there and has to navigate back to start a run. "/" is the New
+    // Session default route (see ALL_ROUTES in HomePage.tsx).
+    navigate('/')
     onClose()
   }
 

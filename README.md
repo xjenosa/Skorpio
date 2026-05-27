@@ -1,7 +1,7 @@
 # ⚡ Skorpio
 ### *An Agentic AI Operator Console for Grid Planning and Datacenter Siting*
 
-**[Live Demo](https://skorpio-xjenosa-s-projects.vercel.app)** · **[Sample Reports (Drive)](https://tinyurl.com/skorpio-reports)** · **[Demo Video (YouTube)](https://youtu.be/Gw9yvq4lHWE)**
+**[Live Demo](https://skorpio-xjenosa-s-projects.vercel.app)** · **[Sample Reports (Drive)](https://tinyurl.com/skorpio-reports)** · **[Demo Video (YouTube)](https://youtu.be/C5fMAG2eVEs)**
 
 ---
 
