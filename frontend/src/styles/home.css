@@ -2111,3 +2111,77 @@ body:has(.help-button) .toast {
   0%   { background-position: -150% 0; }
   100% { background-position: 250% 0; }
 }
+
+/* ── Mobile (<=600px) — judge-readable demo ─────────────────────────────
+   Scope: viewable Vercel demo on a 390px iPhone viewport. The sidebar is
+   operator-only and hidden entirely; topbar telemetry is dropped; the
+   composer pills collapse to natural width. CSS-only — no JS. */
+@media (max-width: 600px) {
+  body { overflow: auto; }
+
+  .app,
+  .app.sidebar-collapsed {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  aside.sidebar { display: none; }
+
+  .topbar {
+    height: auto;
+    min-height: 56px;
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .topbar .telemetry,
+  .topbar .topbar-telemetry,
+  .topbar .topbar-pills { display: none; }
+
+  .stage { padding: 16px 12px 96px; }
+
+  .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .page-head .title,
+  .page-head h1 { font-size: 28px; line-height: 1.15; }
+
+  .greeting h1,
+  .greeting .title {
+    font-size: 28px;
+    line-height: 1.15;
+    white-space: normal;
+  }
+  .greeting .sub { font-size: 14px; }
+
+  .composer { width: 100%; }
+  .composer-toolbar { flex-wrap: wrap; gap: 8px; }
+
+  .model-pill,
+  .pill {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .model-menu,
+  .pipeline-menu {
+    min-width: 0;
+    max-width: calc(100vw - 24px);
+  }
+
+  .panel-pipeline { padding: 16px; border-radius: 12px; }
+
+  .fr-head-stats { gap: 12px; flex-wrap: wrap; }
+  .fr-head-stat-value { font-size: 18px; }
+
+  .pipeline-routed { margin-top: 8px; }
+  .pipeline-routed-chip { font-size: 11px; }
+
+  .sample-prompts-grid,
+  .suggestions-grid { gap: 10px; }
+
+  .recent-row { flex-wrap: wrap; gap: 8px; }
+}

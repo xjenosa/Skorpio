@@ -478,3 +478,17 @@
 .view#view-agent-pipeline {
   padding-bottom: 200px;
 }
+
+/* ── Mobile (<=600px) — sidebar is hidden on phones, so the chatbar
+   shouldn't be offset by it. The chatbar is also non-functional in the
+   Vercel demo build (no backend), so we hide it entirely to free the
+   bottom 80px of viewport for the report content. */
+@media (max-width: 600px) {
+  .app .report-chatbar-shell,
+  .app.sidebar-collapsed .report-chatbar-shell {
+    left: 0;
+    padding: 10px 12px 14px;
+  }
+  .view#view-agent-pipeline { padding-bottom: 32px; }
+  .report-chatbar-shell { display: none; }
+}

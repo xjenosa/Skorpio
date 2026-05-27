@@ -61,3 +61,6 @@ CLAUDE.md
 memory/
 
 .vercel
+
+# ── Local mobile-audit scratch dir (Playwright screenshots) ────────────── #
+mobile-audit/

@@ -518,4 +518,56 @@
 @media (max-width: 900px) {
   .fr-head-stats { gap: 18px; }
   .fr-winners { grid-template-columns: 1fr; }
+  .fr-insights { grid-template-columns: 1fr; }
+  .fr-meta ul { grid-template-columns: 1fr; }
+}
+
+/* ── Mobile (<=600px) — judge-readable report sections.
+   Single-column everything, smaller paddings, lighter chip widths. */
+@media (max-width: 600px) {
+  .fr-section { padding: 14px 12px; }
+  .fr-section h2 { font-size: 18px; }
+  .fr-section h3 { font-size: 15px; }
+
+  .fr-head { padding: 14px 12px; gap: 10px; }
+  .fr-head-title { font-size: 20px; line-height: 1.2; }
+  /* Stack the head children vertically — stats grid first, runtime
+     meta below — so "AGENT RUNTIME" doesn't get squeezed into a
+     narrow right column with a wrapping label. */
+  .fr-panel .pp-head.fr-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fr-panel .pp-head.fr-head .meta {
+    align-items: flex-start;
+  }
+  /* 2x2 grid for the stats so 3-4 stats lay out evenly instead of
+     wrapping lopsided. */
+  .fr-head-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+  }
+  .fr-head-stat-value { font-size: 18px; }
+  .fr-head-stat-label { font-size: 10px; white-space: nowrap; }
+
+  .fr-winner { padding: 12px; }
+  .fr-winner-title { font-size: 15px; }
+
+  .fr-insight { padding: 12px; }
+  .fr-insight dl { grid-template-columns: 1fr; gap: 6px; }
+
+  .fr-sources-list { gap: 8px; }
+  .fr-sources-list .pc-badge {
+    min-width: 0;
+    padding: 2px 5px;
+    font-size: 9px;
+  }
+  .fr-source-text { font-size: 12px; }
+
+  .fr-md h3 { font-size: 15px; }
+  .fr-md p, .fr-md li { font-size: 13.5px; }
+
+  .fr-feedback-row { justify-content: flex-start; flex-wrap: wrap; gap: 6px; }
+  .fr-meta { padding: 12px; }
 }

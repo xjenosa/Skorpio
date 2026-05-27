@@ -140,6 +140,18 @@ export function MapView({
     map.scrollZoom.enable()
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right')
 
+    // On touch devices the map's pan/pinch gestures swallow vertical page
+    // scrolls — a judge swiping through a report gets stuck inside any map
+    // they touch. Disable interactive gestures on coarse pointers so the
+    // map becomes a static-with-markers thumbnail and the page scrolls
+    // straight past it. Desktop behavior is unchanged.
+    if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
+      map.dragPan.disable()
+      map.scrollZoom.disable()
+      map.touchZoomRotate.disable()
+      map.doubleClickZoom.disable()
+    }
+
     // Block page scroll while the cursor is over the map container.
     // ``capture: true`` runs this BEFORE any descendant handler (incl.
     // Mapbox's own canvas wheel handler), and ``passive: false`` is what
