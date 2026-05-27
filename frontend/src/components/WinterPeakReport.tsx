@@ -277,7 +277,7 @@ function Section01LoadCurves({ plan, worst }: { plan: ResiliencePlan; worst: Sce
             <XAxis dataKey="hour" stroke={CHART_AXIS.stroke} tick={CHART_AXIS.tick} />
             <YAxis stroke={CHART_AXIS.stroke} tick={CHART_AXIS.tick} unit=" MW" />
             <Tooltip contentStyle={CHART_TOOLTIP_STYLE} itemStyle={CHART_TOOLTIP_ITEM_STYLE_LEGEND} labelStyle={CHART_TOOLTIP_LABEL_STYLE} />
-            <Legend wrapperStyle={CHART_LEGEND_STYLE} payload={customLegendPayload} />
+            <Legend wrapperStyle={CHART_LEGEND_STYLE} {...({ payload: customLegendPayload } as object)} />
             <Area type="monotone" dataKey="other" stackId="1" stroke="#6f6c63" fill="#3a3835" name="Other" />
             <Area type="monotone" dataKey="base" stackId="1" stroke={CATEGORICAL_COLORS[1]} fill={CATEGORICAL_COLORS[1]} fillOpacity={0.4} name="Base residential" />
             <Area type="monotone" dataKey="heat_pump" stackId="1" stroke={CATEGORICAL_COLORS[2]} fill={CATEGORICAL_COLORS[2]} fillOpacity={0.6} name="Heat pump" />
