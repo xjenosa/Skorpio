@@ -7,7 +7,7 @@ import { pipelineById, type PipelineId } from '../pipelines'
 import { api } from '../api/client'
 import type { JobStatus } from '../api/types'
 import { ProvenanceChips } from './ProvenanceChips'
-import { provenanceFor } from './provenance'
+import { provenanceFor, statusForSource } from './provenance'
 import './FinalReport.css'
 
 // Shared shell for every Final report. Owns the page-head + title + Print
@@ -537,14 +537,31 @@ export function ReportShell({
           )
         })()}
 
-        {/* Sources — citations to external data the agents pulled from. Block
-            mirrors .fr-exec exactly so the report's "trust footer" reads as
-            a sibling of the exec summary above. Hidden when empty. */}
+        {/* Sources — citations to external data the agents pulled from. Each
+            line gets a small inline status badge (LIVE / FROZEN / MODELED / LLM)
+            so the reader can tell at a glance which provenance category the
+            citation belongs to. The badge palette mirrors the chip row above
+            via `statusForSource()` substring matching. */}
         {sources && sources.length > 0 && (
           <div className="fr-exec fr-sources">
             <div className="t-eyebrow">Sources</div>
             <ul className="fr-sources-list">
-              {sources.map((s, i) => <li key={i}>{s}</li>)}
+              {sources.map((s, i) => {
+                const status = statusForSource(s)
+                const label =
+                  status === 'live' ? 'LIVE' :
+                  status === 'frozen' ? 'FROZEN' :
+                  status === 'modeled' ? 'MODELED' : 'LLM'
+                return (
+                  <li key={i}>
+                    <span className={`pc-badge pc-${status}`}>
+                      <span className="pc-dot" aria-hidden />
+                      {label}
+                    </span>
+                    <span className="fr-source-text">{s}</span>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )}

@@ -11,7 +11,10 @@ from backend.agents.base_agent import BaseAgent
 from backend.agents.grounding import GROUNDING_RULES
 from backend.grid.feeder_topology import build_distribution_network, get_city_profile
 from backend.models.winter_peak import DistributionNetwork, WinterPeakSpec
-from backend.services.canada_grid import get_provincial_snapshot
+from backend.services.canada_grid import (
+    fetch_ieso_hoep_cad_per_mwh,
+    get_provincial_snapshot,
+)
 
 
 SYSTEM_WINTER_GRID = """You are a distribution-grid analyst describing a
@@ -69,6 +72,116 @@ class WinterGridAgent(BaseAgent):
                 )
         except Exception as e:
             self.logger.debug(f"Provincial snapshot enrichment skipped: {e}")
+
+        # Live HOEP enrichment — only relevant for Ontario scenarios. Adds a
+        # citation with the most recent cleared wholesale price so the
+        # synthesis agent and chat tools can pair the simulated peak with
+        # a real wholesale clearing price. Non-fatal on any failure.
+        if spec.province == "ON":
+            try:
+                hoep = await fetch_ieso_hoep_cad_per_mwh()
+                if hoep and hoep.get("hoep_cad_per_mwh") is not None:
+                    network.sources.append(
+                        "IESO HOEP (Hourly Ontario Energy Price, live): "
+                        f"${hoep['hoep_cad_per_mwh']:.2f}/MWh at "
+                        f"{hoep.get('trading_date', '?')} hour "
+                        f"{hoep.get('trading_hour', '?')}"
+                    )
+            except Exception as e:
+                self.logger.debug(f"IESO HOEP enrichment skipped: {e}")
+
+        # Live ECCC alert feed — flags any active cold-weather / winter
+        # storm warnings overlapping the city's bounding box. Lights up
+        # the "Active alerts" chip whether or not anything is active.
+        try:
+            from backend.services.eccc_alerts import fetch_active_alerts
+            alert_payload = await fetch_active_alerts(spec.city)
+            if alert_payload is not None:
+                count = alert_payload.get("count", 0)
+                if count > 0:
+                    events = sorted({a.get("event", "Alert") for a in alert_payload["alerts"]})
+                    network.sources.append(
+                        f"ECCC active alerts (live): {count} alert(s) "
+                        f"intersecting {spec.city}: {', '.join(events)}"
+                    )
+                else:
+                    network.sources.append(
+                        f"ECCC active alerts (live): no active alerts for {spec.city}"
+                    )
+        except Exception as e:
+            self.logger.debug(f"ECCC alert enrichment skipped: {e}")
+
+        # Live ArcGIS Living Atlas — RTMA current surface conditions. Pairs
+        # the simulated cold-event envelope with what the city's temperature
+        # is doing right now. Chip lights up only when the layer returns a
+        # usable feature; misconfigured URL or empty response leaves the
+        # chip dark rather than throwing.
+        try:
+            from backend.services.arcgis_rtma import fetch_current_conditions
+            rtma = await fetch_current_conditions(spec.city)
+            if rtma and rtma.get("temp_c") is not None:
+                wind_bit = (
+                    f", {rtma['wind_kmh']:.1f} km/h wind"
+                    if rtma.get("wind_kmh") is not None else ""
+                )
+                network.sources.append(
+                    f"ArcGIS Living Atlas RTMA (live): {spec.city} "
+                    f"{rtma['temp_c']:.1f}°C{wind_bit}"
+                )
+        except Exception as e:
+            self.logger.debug(f"ArcGIS RTMA enrichment skipped: {e}")
+
+        # Live ArcGIS Living Atlas — NWS Watches & Warnings. Cross-border
+        # complement to ECCC alerts; useful when severe-weather polygons
+        # span the US-Canada line during winter storms.
+        try:
+            from backend.services.arcgis_nws_alerts import fetch_active_nws_alerts
+            nws = await fetch_active_nws_alerts(spec.city)
+            if nws is not None:
+                count = nws.get("count", 0)
+                if count > 0:
+                    events = sorted({a.get("event", "Alert") for a in nws["alerts"] if a.get("event")})
+                    network.sources.append(
+                        f"ArcGIS Living Atlas NWS Watches & Warnings (live): "
+                        f"{count} alert(s) intersecting {spec.city}: {', '.join(events)}"
+                    )
+                else:
+                    network.sources.append(
+                        f"ArcGIS Living Atlas NWS Watches & Warnings (live): "
+                        f"no active alerts for {spec.city}"
+                    )
+        except Exception as e:
+            self.logger.debug(f"ArcGIS NWS alert enrichment skipped: {e}")
+
+        # Live ArcGIS Living Atlas — NOAA HRRR forecast. Pairs the simulated
+        # cold-event peak with the actual short-range forecast: "tonight's
+        # low is -7°C, stress test models -25°C."
+        try:
+            from backend.services.arcgis_hrrr import fetch_18h_forecast
+            hrrr = await fetch_18h_forecast(spec.city)
+            if hrrr and hrrr.get("forecast_low_c") is not None:
+                network.sources.append(
+                    f"ArcGIS Living Atlas HRRR forecast (live): {spec.city} "
+                    f"next {hrrr.get('forecast_horizon_hours', 18)}h low "
+                    f"{hrrr['forecast_low_c']:.1f}°C, high "
+                    f"{hrrr.get('forecast_high_c', hrrr['forecast_low_c']):.1f}°C"
+                )
+        except Exception as e:
+            self.logger.debug(f"ArcGIS HRRR enrichment skipped: {e}")
+
+        # Live ArcGIS Living Atlas — MODIS snow cover. Context, not a
+        # simulator input: shows whether the city is already in winter
+        # conditions before the stress event hits.
+        try:
+            from backend.services.arcgis_snow_cover import fetch_snow_cover
+            snow = await fetch_snow_cover(spec.city)
+            if snow and snow.get("snow_cover_pct") is not None:
+                network.sources.append(
+                    f"ArcGIS Living Atlas MODIS snow cover (live): {spec.city} "
+                    f"{snow['snow_cover_pct']:.1f}% snow cover"
+                )
+        except Exception as e:
+            self.logger.debug(f"ArcGIS snow-cover enrichment skipped: {e}")
 
         # ArcGIS city enrichment — anchor the synthesized per-feeder customer
         # counts to a real Census Subdivision household total. The feeder

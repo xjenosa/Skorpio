@@ -278,7 +278,45 @@
   line-height: 1.55;
   padding: 6px 10px;
   border-left: 2px solid var(--rule-2);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
+.fr-sources-list .fr-source-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Inline status badge prefix on each source citation. Mirrors the .pc-chip
+   palette so the badge color round-trips with the chip row above —
+   readers can connect "this LIVE badge" to "that green chip" at a glance.
+   Smaller than the chip pill so each row stays compact. */
+.pc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  flex-shrink: 0;
+  min-width: 64px;
+  justify-content: center;
+}
+.pc-badge .pc-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.pc-badge.pc-live    { color: var(--energy-clean); background: rgba(111, 207, 142, 0.08); }
+.pc-badge.pc-frozen  { color: var(--energy-mid);   background: rgba(229, 196, 107, 0.08); }
+.pc-badge.pc-modeled { color: var(--energy-dirty); background: rgba(226, 107, 74, 0.08); }
+.pc-badge.pc-llm     { color: #c889e6;             background: rgba(200, 137, 230, 0.08); }
 
 /* ── Executive summary (markdown) ──────────────────────────────────── */
 .fr-exec {

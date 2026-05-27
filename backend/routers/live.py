@@ -82,6 +82,119 @@ _CITY_COORDS: dict[str, tuple[float, float, str]] = {
 }
 
 
+@router.get("/api/arcgis/nws-alerts")
+async def arcgis_nws_alerts_live(city: str = "mississauga"):
+    """Active NWS watches & warnings near a city via the ArcGIS Living
+    Atlas. Cross-border companion to /api/eccc/alerts.
+    """
+    if not re.match(r"^[A-Za-z\-À-ſ ]+$", city):
+        raise HTTPException(status_code=400, detail="Invalid city name")
+    from backend.services.arcgis_nws_alerts import fetch_active_nws_alerts
+    payload = await fetch_active_nws_alerts(city)
+    if payload is None:
+        return JSONResponse(
+            {"data_missing": True, "reason": f"ArcGIS NWS alerts unavailable for {city}"},
+            status_code=503,
+        )
+    return payload
+
+
+@router.get("/api/arcgis/hrrr")
+async def arcgis_hrrr_live(city: str = "mississauga"):
+    """18-hour HRRR forecast at a city centroid via the ArcGIS Living
+    Atlas. Pairs the demo's simulated cold event with what's actually
+    forecasted for the next overnight cycle.
+    """
+    if not re.match(r"^[A-Za-z\-À-ſ ]+$", city):
+        raise HTTPException(status_code=400, detail="Invalid city name")
+    from backend.services.arcgis_hrrr import fetch_18h_forecast
+    payload = await fetch_18h_forecast(city)
+    if payload is None:
+        return JSONResponse(
+            {"data_missing": True, "reason": f"ArcGIS HRRR unavailable for {city}"},
+            status_code=503,
+        )
+    return payload
+
+
+@router.get("/api/arcgis/snow-cover")
+async def arcgis_snow_cover_live(city: str = "mississauga"):
+    """Fractional MODIS snow cover at a city centroid via the ArcGIS
+    Living Atlas. Adds context for "winter conditions already in
+    progress" framing on the Winter Peak report.
+    """
+    if not re.match(r"^[A-Za-z\-À-ſ ]+$", city):
+        raise HTTPException(status_code=400, detail="Invalid city name")
+    from backend.services.arcgis_snow_cover import fetch_snow_cover
+    payload = await fetch_snow_cover(city)
+    if payload is None:
+        return JSONResponse(
+            {"data_missing": True, "reason": f"ArcGIS snow cover unavailable for {city}"},
+            status_code=503,
+        )
+    return payload
+
+
+@router.get("/api/arcgis/rtma")
+async def arcgis_rtma_live(city: str = "mississauga"):
+    """Live surface conditions for a city via the ArcGIS Living Atlas
+    NOAA RTMA layer.
+
+    Returns the latest temperature + wind at the city centroid, or 503 if
+    the layer doesn't answer (wrong URL, network error, no matching
+    feature for the point).
+    """
+    if not re.match(r"^[A-Za-z\-À-ſ ]+$", city):
+        raise HTTPException(status_code=400, detail="Invalid city name")
+    from backend.services.arcgis_rtma import fetch_current_conditions
+    payload = await fetch_current_conditions(city)
+    if payload is None:
+        return JSONResponse(
+            {"data_missing": True, "reason": f"ArcGIS RTMA unavailable for {city}"},
+            status_code=503,
+        )
+    return payload
+
+
+@router.get("/api/eccc/alerts")
+async def eccc_alerts_live(city: str = "mississauga"):
+    """Active ECCC weather alerts intersecting a city's bounding box.
+
+    Public ECCC GeoMet feed (no auth). Returns active alerts with
+    severity / headline / expiry, or a 503 if the feed is unreachable.
+    A successful response with `count: 0` is a valid "all clear" — that
+    still means the live feed answered.
+    """
+    if not re.match(r"^[A-Za-z\-À-ſ ]+$", city):
+        raise HTTPException(status_code=400, detail="Invalid city name")
+    from backend.services.eccc_alerts import fetch_active_alerts
+    payload = await fetch_active_alerts(city)
+    if payload is None:
+        return JSONResponse(
+            {"data_missing": True, "reason": f"ECCC alert feed unavailable for {city}"},
+            status_code=503,
+        )
+    return payload
+
+
+@router.get("/api/ieso/hoep")
+async def ieso_hoep_live():
+    """Most recent Hourly Ontario Energy Price (HOEP) — live IESO public feed.
+
+    No auth required. Returns the latest cleared price plus the trading
+    date/hour, or 503 if the IESO feed is unreachable / unparseable. Used
+    as a live chip on Ontario winter-peak reports.
+    """
+    from backend.services.canada_grid import fetch_ieso_hoep_cad_per_mwh
+    payload = await fetch_ieso_hoep_cad_per_mwh()
+    if not payload:
+        return JSONResponse(
+            {"data_missing": True, "reason": "IESO HOEP feed unavailable"},
+            status_code=503,
+        )
+    return payload
+
+
 @router.get("/api/grid-carbon/{zone}")
 async def grid_carbon_live(zone: str):
     """Carbon intensity (gCO2eq/kWh) for a Canadian provincial zone,

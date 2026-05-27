@@ -256,6 +256,53 @@ async def fetch_ieso_realtime_demand_mw() -> Optional[float]:
         return None
 
 
+async def fetch_ieso_hoep_cad_per_mwh() -> Optional[dict]:
+    """Pull the most recent IESO Hourly Ontario Energy Price.
+
+    Endpoint is open (no auth). Returns a dict with the price and the
+    hour it was cleared, or None on any error. Used as a live chip to
+    pair simulated peak load with a real-world wholesale clearing price.
+    """
+    try:
+        async with httpx.AsyncClient(timeout=15) as client:
+            resp = await client.get(settings.ieso_hoep_url)
+        if resp.status_code != 200:
+            logger.warning(f"IESO HOEP fetch returned {resp.status_code}")
+            return None
+        # IESO HOEP CSV: ~3-5 metadata rows, then header
+        # "Date,Hour,HOEP" followed by hourly rows. The most recent
+        # populated row is the latest cleared hour.
+        rows = list(csv.reader(io.StringIO(resp.text)))
+        header_idx = next(
+            (i for i, r in enumerate(rows) if "HOEP" in r),
+            None,
+        )
+        if header_idx is None or header_idx + 1 >= len(rows):
+            return None
+        header = rows[header_idx]
+        hoep_col = header.index("HOEP")
+        date_col = header.index("Date") if "Date" in header else 0
+        hour_col = header.index("Hour") if "Hour" in header else 1
+        # Last populated row with a numeric HOEP is "most recent."
+        latest = None
+        for r in reversed(rows[header_idx + 1:]):
+            if len(r) > hoep_col and r[hoep_col].strip():
+                try:
+                    price = float(r[hoep_col])
+                except ValueError:
+                    continue
+                latest = {
+                    "hoep_cad_per_mwh": price,
+                    "trading_date": r[date_col] if len(r) > date_col else None,
+                    "trading_hour": r[hour_col] if len(r) > hour_col else None,
+                }
+                break
+        return latest
+    except Exception as e:
+        logger.warning(f"IESO HOEP fetch failed: {e}")
+        return None
+
+
 async def fetch_aeso_demand_mw() -> Optional[float]:
     """Pull Alberta system demand from the AESO Current Supply Demand report.
 

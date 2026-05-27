@@ -167,7 +167,7 @@ export function ExpansionReport({ jobId, hasResults, onPipelineChange }: Expansi
   // carbon-intensity feed.
   const sources = [
     ...(plan.footprint.sources ?? []),
-    'ElectricityMaps zone-level carbon intensity (live)',
+    'Provincial carbon intensity (live): IESO / AESO / Hydro-Québec fuel mix + IPCC AR5 lifecycle factors',
   ]
 
   return (

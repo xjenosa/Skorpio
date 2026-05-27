@@ -15,7 +15,7 @@ the frontend demo intercept layer can drop the file in without any
 reshape work:
 
     {
-      "prefix": "f01f3b45",
+      "prefix": "49d354bd",
       "pipeline_id": "datacenter-siting",
       "job_list_item": { ... shape of frontend/JobListItem ... },
       "job_status":    { ... shape of frontend/JobStatus    ... },
@@ -51,11 +51,11 @@ from backend.db.session import AsyncSessionLocal
 # Mirrors frontend/src/demo/jobs.ts::DEMO_JOB_PREFIXES. Keep in sync when
 # the operator re-runs a demo prompt and rotates a prefix.
 DEMO_PREFIXES: list[tuple[str, str]] = [
-    ("f01f3b45", "datacenter-siting"),
-    ("0801f572", "datacenter-expansion"),
-    ("476a2f1a", "winter-peak-stress"),
-    ("331e1dbc", "electrification-readiness"),
-    ("a06b5cda", "grid-investment-optimizer"),
+    ("49d354bd", "datacenter-siting"),
+    ("ce0585bf", "datacenter-expansion"),
+    ("e5d77262", "winter-peak-stress"),
+    ("f4b26d6a", "electrification-readiness"),
+    ("2621702d", "grid-investment-optimizer"),
 ]
 
 

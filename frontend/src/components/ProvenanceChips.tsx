@@ -22,10 +22,19 @@ export function ProvenanceChips({ chips }: { chips: ProvenanceChip[] }) {
   const statusesUsed = new Set(chips.map((c) => c.status))
   const legend = LEGEND_ORDER.filter((s) => statusesUsed.has(s))
 
+  // Sort chips by status (live → frozen → modeled → llm) so the row reads
+  // as colored blocks rather than speckled colors. Stable sort preserves
+  // the original pipeline-stage order within each status bucket — JS
+  // Array.sort has been spec-stable since ES2019.
+  const statusRank: Record<ProvenanceStatus, number> = {
+    live: 0, frozen: 1, modeled: 2, llm: 3,
+  }
+  const sortedChips = [...chips].sort((a, b) => statusRank[a.status] - statusRank[b.status])
+
   return (
     <div className="pc-block">
       <div className="pc-row" role="list">
-        {chips.map((c, i) => (
+        {sortedChips.map((c, i) => (
           <span
             key={i}
             role="listitem"

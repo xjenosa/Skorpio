@@ -113,9 +113,15 @@ def _recompute_winter_peak(args: dict, result: dict) -> dict:
         _f(s.get("nameplate_mva"), 0.0) or 0.0
         for s in (network.get("substations") or [])
     )
-    # Approximate: MVA ≈ MW at unity power factor for residential winter peak.
-    headroom_mw = nameplate_mva - projected if nameplate_mva > 0 else None
-    headroom_pct = (headroom_mw / nameplate_mva * 100.0) if (nameplate_mva and headroom_mw is not None) else None
+    # Apply the same 0.95 power-factor derate as the simulator
+    # (winter_simulator.py:209). The original code took a "unity PF" shortcut
+    # that overstated usable capacity by ~5%, making chat counterfactual
+    # headroom numbers diverge from the report's headline. Real Canadian
+    # winter residential PF runs ~0.93-0.97 (compressors + resistance loads),
+    # so 0.95 is the standard planning value matching IESO's docs.
+    nameplate_mw = nameplate_mva * 0.95
+    headroom_mw = nameplate_mw - projected if nameplate_mw > 0 else None
+    headroom_pct = (headroom_mw / nameplate_mw * 100.0) if (nameplate_mw and headroom_mw is not None) else None
 
     # Pre-formatted narration string. The chat model is instructed to copy
     # this verbatim as sentence 1 of its reply — that sidesteps the failure
@@ -143,6 +149,10 @@ def _recompute_winter_peak(args: dict, result: dict) -> dict:
         "growth_vs_baseline_mw": round(projected - baseline_peak, 1) if baseline_peak else None,
         "growth_vs_baseline_pct": round((projected - baseline_peak) / baseline_peak * 100.0, 1) if baseline_peak else None,
         "network_nameplate_mva": round(nameplate_mva, 1) if nameplate_mva else None,
+        # Derated usable capacity (nameplate_mva * 0.95 PF). The simulator's
+        # headroom math is anchored to this number, so `network_capacity_mw`
+        # is what projected_peak_mw + headroom_mw will actually equal.
+        "network_capacity_mw": round(nameplate_mw, 1) if nameplate_mw else None,
         "headroom_mw": round(headroom_mw, 1) if headroom_mw is not None else None,
         "headroom_pct": round(headroom_pct, 1) if headroom_pct is not None else None,
         "peak_hour_offset": peak_hour,

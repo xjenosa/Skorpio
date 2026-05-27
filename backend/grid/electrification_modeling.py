@@ -22,9 +22,8 @@ from backend.models.electrification import (
     NeighborhoodProfile,
 )
 from backend.services.heat_pump_cop import (
-    backup_engagement_fraction,
-    cop_at_temp,
     ev_cold_load_factor,
+    hp_electrical_split,
 )
 from backend.services.ev_data import ev_share_pct as _real_ev_share_pct
 
@@ -199,13 +198,14 @@ def model_load_impact(
         base_kw = _BASE_LOAD_KW_HOUR[h]
 
         # NEW heat pump electric draw, weighted by share of homes converting.
+        # The split between compressor and aux resistance is delegated to
+        # hp_electrical_split so the same physics model is used here and in
+        # the winter-peak grid simulator.
         if new_hp_share > 0:
-            backup_frac = backup_engagement_fraction(temp, hp_type)
-            cop = max(1.0, cop_at_temp(temp, hp_type))
             delta_t = max(0.0, 21.0 - temp)
             thermal_kw = design_heat_kw * (delta_t / 46.0)
-            hp_kw = thermal_kw * (1.0 - backup_frac) / cop + thermal_kw * backup_frac
-            new_hp_kw = hp_kw * new_hp_share
+            hp_electric, aux_electric = hp_electrical_split(temp, thermal_kw, hp_type)
+            new_hp_kw = (hp_electric + aux_electric) * new_hp_share
         else:
             new_hp_kw = 0.0
 

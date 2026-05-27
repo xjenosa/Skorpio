@@ -42,7 +42,9 @@ import { startTheater, subscribeAnyTheater, getTheaterState, stopTheater } from 
 // Sample-run fixture used as the Agent Pipeline tab's empty-state landing
 // view (no past runs yet, in any mode). Picked because winter-peak has the
 // richest stage data and most visualizations of the 5 fixtures.
-import sampleRunFixture from '../demo/fixtures/476a2f1a.json'
+// Keep this path in sync with the winter-peak entry in
+// `frontend/src/demo/jobs.ts::DEMO_JOB_PREFIXES`.
+import sampleRunFixture from '../demo/fixtures/e5d77262.json'
 
 const USER_EMAIL_KEY = 'skorpio.user.email'
 
@@ -104,10 +106,16 @@ const TERMINAL_STAGES = new Set(['completed', 'failed'])
 // suggestion chip, we use the chip's pipeline directly.
 function inferPipelineFromPrompt(prompt: string): PipelineId {
   const p = prompt.toLowerCase()
-  if (/(polar vortex|cold snap|winter peak|stress[- ]?test|cold weather|-\s?\d{2}\s?°?c)/.test(p)) {
+  // Mirror of backend/agents/router.py::_regex_fallback. Keep these in sync —
+  // this regex is used as the local fallback when /api/route fails. The
+  // winter pipeline natively handles electrification scenarios, so the
+  // word "electrification" by itself shouldn't route to electrification-
+  // readiness; that requires an FSA-shaped token or explicit readiness/
+  // score framing.
+  if (/(polar vortex|cold snap|winter peak|stress[- ]?test|cold weather|winter outlook|winter forecast|winter projection|winter grid|grid hold|deep freeze|bomb cyclone|-\s?\d{2}\s?°?c)/.test(p)) {
     return 'winter-peak-stress'
   }
-  if (/(neighborhood|electrification|fsa|postal|heat pump|ev (adoption|growth)|score (the|a) [a-z])/.test(p)) {
+  if (/(\b[a-z]\d[a-z]\b|fsa|postal|neighborhood\s+readiness|readiness\s+score|score (the|a) [a-z]|rate (the|a) [a-z])/.test(p)) {
     return 'electrification-readiness'
   }
   if (/(invest|budget|allocate|spend|\$\d|grid upgrade)/.test(p)) {
@@ -1317,15 +1325,39 @@ function AgentPipelineView({
   // the featured job changes (different run = different paused state).
   const [isPaused, setIsPaused] = useState(false)
   const [pauseError, setPauseError] = useState<string | null>(null)
+  // Transition states: bridge the gap between "user clicked" and "next 4s
+  // poll surfaces the new pipeline state". Without these the buttons just
+  // sit there for 4-10s and the user thinks nothing happened.
+  //
+  //   isPausing  — pause/resume API call in flight, OR orchestrator hasn't
+  //                reached its next stage boundary yet (where pause/resume
+  //                actually takes effect). Auto-clears via a short timeout
+  //                after the API resolves.
+  //   isStopping — cancel API call sent. Auto-clears when the polled stage
+  //                transitions to a terminal state (the wrapper has stamped
+  //                "Cancelled by user").
+  const [isPausing, setIsPausing] = useState(false)
+  const [isStopping, setIsStopping] = useState(false)
   useEffect(() => {
     setIsPaused(false)
     setPauseError(null)
+    setIsPausing(false)
+    setIsStopping(false)
   }, [featured?.job_id])
+  // Once the polled job hits a terminal state, the cancel has landed. Drop
+  // the spinner so the UI returns to a quiet "stopped" state.
+  useEffect(() => {
+    if (featured && TERMINAL_STAGES.has(featured.stage)) {
+      setIsStopping(false)
+      setIsPausing(false)
+    }
+  }, [featured?.stage])
 
   const togglePause = async () => {
     if (!featured) return
     const next = !isPaused
     setIsPaused(next)
+    setIsPausing(true)
     setPauseError(null)
     try {
       if (next) {
@@ -1333,21 +1365,30 @@ function AgentPipelineView({
       } else {
         await api.resumeJob(featured.job_id)
       }
+      // Pause/resume takes effect at the next stage boundary (~5-30s).
+      // Keep the spinner up for ~1.2s so the click visibly registers, then
+      // settle into the new state — the poll will surface the actual
+      // "Paused" / "Resumed" progress row.
+      window.setTimeout(() => setIsPausing(false), 1200)
     } catch (err) {
       setIsPaused(!next)  // revert on failure
+      setIsPausing(false)
       setPauseError(err instanceof Error ? err.message : String(err))
     }
   }
 
   const stopJob = async () => {
     if (!featured) return
+    setIsStopping(true)
     setPauseError(null)
     try {
       await api.cancelJob(featured.job_id)
-      // Cancellation lands at the next stage boundary; the 4s job poll will
-      // surface the "failed / Cancelled by user" state once the orchestrator
-      // crosses it. No optimistic UI update — the poll is fast enough.
+      // Leave isStopping=true so the spinner persists until the polled
+      // stage flips to "failed" (caught by the useEffect above). That's
+      // typically within ~1-5s — task.cancel() raises CancelledError at
+      // the next await inside the orchestrator's Claude call.
     } catch (err) {
+      setIsStopping(false)
       setPauseError(err instanceof Error ? err.message : String(err))
     }
   }
@@ -1396,23 +1437,78 @@ function AgentPipelineView({
           </h1>
           <div className="sub">
             {featured
-              ? `${isSample ? 'Sample run' : isLive ? (isPaused ? 'Paused' : 'Live') : 'Run'} · ${featured.job_id.slice(0, 8)} · ${featured.workload_spec}`
+              ? (() => {
+                  // Sub-text reflects the most specific live state. Stop is
+                  // strictest (overrides pause); then pause transition; then
+                  // settled pause; then "Live" / "Run" / "Sample".
+                  const stateLabel = isSample
+                    ? 'Sample run'
+                    : isStopping
+                      ? 'Stopping…'
+                      : isLive
+                        ? (isPausing
+                            ? (isPaused ? 'Pausing…' : 'Resuming…')
+                            : (isPaused ? 'Paused' : 'Live'))
+                        : 'Run'
+                  return `${stateLabel} · ${featured.job_id.slice(0, 8)} · ${featured.workload_spec}`
+                })()
               : jobs === null
                 ? 'Loading…'
                 : 'No runs yet. Submit a prompt from New session.'}
           </div>
+          {/* Routed-pipeline chip — surfaces the router's pick so the user
+              doesn't have to navigate to Reports just to see which pipeline
+              their prompt landed in. Sits below the run sub-text so the
+              eye reads: title → "Run · jobId · prompt" → "Routed to X".
+              Skipped for the sample/empty-state fixture. */}
+          {featured && !isSample && (() => {
+            const meta = pipelineById(pipelineForJob(featured))
+            if (!meta) return null
+            return (
+              <div className="pipeline-routed">
+                <span
+                  className="pipeline-routed-chip"
+                  style={{ color: meta.accent, borderColor: meta.accent }}
+                  title={`Auto-routed to ${meta.label}`}
+                >
+                  <span
+                    className="pipeline-routed-dot"
+                    style={{ background: meta.accent }}
+                    aria-hidden
+                  />
+                  Routed to {meta.label}
+                </span>
+              </div>
+            )
+          })()}
         </div>
         <div className="actions">
           {isLive && (
             <>
               <button
                 type="button"
-                className="run-control"
+                className={`run-control${isPausing ? ' run-control--busy' : ''}`}
                 onClick={togglePause}
-                aria-label={isPaused ? 'Resume the agent' : 'Pause the agent'}
-                title={pauseError ?? (isPaused ? 'Resume the agent' : 'Pause the agent')}
+                disabled={isPausing || isStopping}
+                aria-label={
+                  isPausing
+                    ? (isPaused ? 'Pausing the agent' : 'Resuming the agent')
+                    : (isPaused ? 'Resume the agent' : 'Pause the agent')
+                }
+                title={
+                  pauseError ??
+                  (isPausing
+                    ? (isPaused
+                        ? 'Pausing — halts at the next stage boundary (~5-30s)'
+                        : 'Resuming — pipeline will continue from where it left off')
+                    : (isPaused ? 'Resume the agent' : 'Pause the agent'))
+                }
               >
-                {isPaused ? (
+                {isPausing ? (
+                  <svg className="ico ico-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                    <path d="M12 3a9 9 0 1 0 9 9" />
+                  </svg>
+                ) : isPaused ? (
                   <svg className="ico" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden>
                     <path d="M7 4.5v15l13-7.5z" />
                   </svg>
@@ -1425,14 +1521,26 @@ function AgentPipelineView({
               </button>
               <button
                 type="button"
-                className="run-control run-control--stop"
+                className={`run-control run-control--stop${isStopping ? ' run-control--busy' : ''}`}
                 onClick={stopJob}
-                aria-label="Stop the agent"
-                title="Stop the agent"
+                disabled={isStopping}
+                aria-label={isStopping ? 'Stopping the agent' : 'Stop the agent'}
+                title={
+                  pauseError ??
+                  (isStopping
+                    ? 'Stopping — cancelling the current Claude call (typically <5s)'
+                    : 'Stop the agent')
+                }
               >
-                <svg className="ico" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden>
-                  <rect x="6" y="6" width="12" height="12" rx="1" />
-                </svg>
+                {isStopping ? (
+                  <svg className="ico ico-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                    <path d="M12 3a9 9 0 1 0 9 9" />
+                  </svg>
+                ) : (
+                  <svg className="ico" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden>
+                    <rect x="6" y="6" width="12" height="12" rx="1" />
+                  </svg>
+                )}
               </button>
             </>
           )}

@@ -142,8 +142,44 @@ class Settings(BaseSettings):
         "https://reports-public.ieso.ca/public/RealtimeMktTotals/"
         "PUB_RealtimeMktTotals.csv"
     )
+    # Hourly Ontario Energy Price (HOEP) — public, no auth. The CSV has a
+    # 5-row header section then date/hour/$ MWh columns.
+    ieso_hoep_url: str = (
+        "https://reports-public.ieso.ca/public/DispUnconsHOEP/"
+        "PUB_DispUnconsHOEP.csv"
+    )
     aeso_csd_url: str = "https://www.aeso.ca/assets/Current-Supply-Demand-Report.csv"
     hydroquebec_demand_url: str = "https://www.hydroquebec.com/data/donnees-ouvertes/json/demande.json"
+    # ECCC public alert feed (CAP/XML). Filterable by region; we hit the
+    # province-level endpoint and post-filter to the city's CSD if possible.
+    eccc_alerts_url: str = "https://dd.weather.gc.ca/alerts/cap/"
+    # ArcGIS Living Atlas — NOAA RTMA hourly surface conditions (Esri-hosted
+    # REST service). Public, no auth required for the underlying feature
+    # layer. The query path appended at call time selects the nearest grid
+    # cell to the requested lat/lon.
+    arcgis_rtma_layer_url: str = (
+        "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/"
+        "NDFD_Temperature/FeatureServer/0/query"
+    )
+    # ArcGIS Living Atlas — NWS active watches & warnings (continental US,
+    # with cross-border coverage that includes Canadian border regions for
+    # severe weather). Public Esri-hosted feature service.
+    arcgis_nws_alerts_layer_url: str = (
+        "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/"
+        "NWS_Watches_Warnings_v1/FeatureServer/0/query"
+    )
+    # ArcGIS Living Atlas — NOAA HRRR short-range forecast (18-24h).
+    # Provides forecasted air temperature for the next ~18h at high spatial
+    # resolution across North America.
+    arcgis_hrrr_layer_url: str = (
+        "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/"
+        "HRRR_Hourly_Forecast/FeatureServer/0/query"
+    )
+    # ArcGIS Living Atlas — MODIS daily snow cover fraction (continental).
+    arcgis_snow_cover_layer_url: str = (
+        "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/"
+        "MODIS_Snow_Cover/FeatureServer/0/query"
+    )
 
     # Default Canadian provinces considered when no specific region is given.
     # ISO 3166-2 codes prefixed with "CA-" so they round-trip to the

@@ -41,11 +41,12 @@ class WinterSynthesisAgent(BaseAgent):
         if progress_callback:
             await progress_callback("Generating executive resilience report...", 88)
 
-        # Determine each scenario's verdict from headroom %
+        # Determine each scenario's verdict from worst-of (per-feeder risk,
+        # per-substation risk, system headroom). Aggregate headroom alone
+        # masks single-feeder overloads — a grid fails when any feeder
+        # cooks, not when the network mean is fine.
         for outcome in scenario_outcomes:
-            outcome.summary_verdict = self._verdict_from_headroom(
-                outcome.load_profile.headroom_pct_at_peak
-            )
+            outcome.summary_verdict = self._verdict_for_outcome(outcome)
             outcome.headline = self._headline(outcome)
             outcome.notable_failures = self._notable_failures(outcome)
 
@@ -98,22 +99,64 @@ class WinterSynthesisAgent(BaseAgent):
 
     # ── Verdict + headline helpers ────────────────────────────────────── #
 
-    def _verdict_from_headroom(self, headroom_pct: float) -> str:
-        if headroom_pct >= 20:
-            return "PASS"
-        if headroom_pct >= 5:
+    def _verdict_for_outcome(self, outcome: ScenarioOutcome) -> str:
+        """
+        Verdict = worst of three signals:
+          (a) any feeder past its thermal limit          → FAIL
+          (b) any substation aggregate-stressed          → FAIL
+          (c) system-level headroom collapsed            → FAIL
+
+        System thresholds are tighter than the old 20% PASS floor: the
+        synthesized substations are already sized at 1.35× today's peak
+        ([feeder_topology._build_substations]), so demanding *another*
+        20% on top of that double-counts safety and lets every scenario
+        coast to PASS. IESO operates with ~13-16% reserve margin; 15%
+        as the PASS floor and 5% as the FAIL floor matches that.
+
+        overload_risk on a feeder ramps 0→1 linearly between 80% and
+        120% capacity utilization ([feeder_risk._score_feeder]), so:
+          ≥0.8 ≈ ≥116% util  →  thermal failure expected   → FAIL
+          ≥0.4 ≈ ≥96% util   →  at the limit              → MARGINAL
+        """
+        headroom_pct = outcome.load_profile.headroom_pct_at_peak
+        worst_feeder = max(
+            (fr.overload_risk for fr in outcome.feeder_risks), default=0.0
+        )
+        worst_sub = max(
+            (s.aggregate_risk for s in outcome.substation_risks), default=0.0
+        )
+
+        if worst_feeder >= 0.8 or worst_sub >= 0.8 or headroom_pct < 5:
+            return "FAIL"
+        if worst_feeder >= 0.4 or worst_sub >= 0.4 or headroom_pct < 15:
             return "MARGINAL"
-        return "FAIL"
+        return "PASS"
 
     def _headline(self, outcome: ScenarioOutcome) -> str:
         v = outcome.summary_verdict
         h = outcome.load_profile.headroom_pct_at_peak
         peak = outcome.load_profile.peak_load_mw
-        return {
-            "PASS": f"Network holds. Peaks at {peak:.0f} MW with {h:.0f}% headroom.",
-            "MARGINAL": f"Network strained. Peaks at {peak:.0f} MW with only {h:.0f}% headroom.",
-            "FAIL": f"Network fails. Peaks at {peak:.0f} MW, {abs(h):.0f}% over capacity.",
-        }.get(v, f"Peak {peak:.0f} MW.")
+        n_overloaded = sum(1 for fr in outcome.feeder_risks if fr.overload_risk >= 0.8)
+        n_stressed = sum(1 for fr in outcome.feeder_risks if 0.4 <= fr.overload_risk < 0.8)
+
+        if v == "FAIL":
+            if n_overloaded:
+                return (
+                    f"Network fails. {n_overloaded} feeder(s) past thermal limit; "
+                    f"system peaks at {peak:.0f} MW ({h:.0f}% headroom)."
+                )
+            # System-aggregate-driven FAIL (no feeder triggered) — h is < 5%.
+            if h < 0:
+                return f"Network fails. Peaks at {peak:.0f} MW, {abs(h):.0f}% over capacity."
+            return f"Network fails. Peaks at {peak:.0f} MW with only {h:.0f}% headroom."
+        if v == "MARGINAL":
+            if n_stressed or n_overloaded:
+                return (
+                    f"Network strained. {n_stressed + n_overloaded} feeder(s) at or "
+                    f"past capacity; peak {peak:.0f} MW ({h:.0f}% system headroom)."
+                )
+            return f"Network strained. Peaks at {peak:.0f} MW with only {h:.0f}% headroom."
+        return f"Network holds. Peaks at {peak:.0f} MW with {h:.0f}% headroom; no feeders overloaded."
 
     def _notable_failures(self, outcome: ScenarioOutcome) -> list[str]:
         items = []

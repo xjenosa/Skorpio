@@ -23,9 +23,9 @@ from backend.models.winter_peak import (
     Substation,
 )
 from backend.services.heat_pump_cop import (
-    backup_engagement_fraction,
     cop_at_temp,
     ev_cold_load_factor,
+    hp_electrical_split,
 )
 from backend.utils.logger import get_logger
 
@@ -112,11 +112,15 @@ def _feeder_hour_load(
     delta_t = max(0.0, 21.0 - temp_c)
     thermal_kw_per_home = DESIGN_HEATING_LOAD_KW * (delta_t / 46.0)
 
-    # Heat pump electric draw (per HP-equipped home)
-    backup_frac = backup_engagement_fraction(temp_c, HEAT_PUMP_COP_TYPE)
-    cop = cop_at_temp(temp_c, HEAT_PUMP_COP_TYPE)
-    hp_electric_per_home = (thermal_kw_per_home * (1 - backup_frac)) / max(1.0, cop)
-    backup_electric_per_home = thermal_kw_per_home * backup_frac
+    # Heat pump electric draw (per HP-equipped home). The compressor pulls
+    # its rated electrical input while running and delivers thermal output
+    # = input × COP. When the temperature-derated capacity can't cover the
+    # full thermal demand, auxiliary resistance fills the gap on top of the
+    # compressor load (not in place of it). See hp_electrical_split() for
+    # the lockout behavior at extreme cold.
+    hp_electric_per_home, backup_electric_per_home = hp_electrical_split(
+        temp_c, thermal_kw_per_home, HEAT_PUMP_COP_TYPE,
+    )
 
     # Aggregate by share
     n_hp = cust * target_hp_share
@@ -221,19 +225,48 @@ def per_feeder_peak_load(
     network: DistributionNetwork,
     cold_event: ColdEvent,
     scenario: ScenarioPreset,
+    other_load_baseline_mw: float | None = None,
 ) -> dict[str, float]:
     """
     Find each feeder's peak hour load (MVA) under the given scenario.
     Used by the risk-scoring agent to compute capacity utilization.
+
+    The simulator's system aggregate adds an "other" overlay representing
+    commercial / industrial / large-customer load (~35% of historical
+    winter peak). The synthesized topology only has residential feeders,
+    so we distribute that overlay across feeders proportional to their
+    rated capacity — bigger feeders carry more, matching how downtown
+    feeders carry more commercial load than suburban residential ones.
+
+    Without this distribution, per-feeder utilization was understated by
+    ~30%, which caused the FeederRisk scorer to keep all feeders below
+    its 0.5 at-risk threshold even when the system aggregate was failing.
     """
+    if other_load_baseline_mw is None:
+        other_load_baseline_mw = network.baseline_winter_peak_mw * 0.35
+
+    # Weight share by rated capacity so larger feeders absorb proportionally
+    # more of the commercial overlay. Falls back to equal split if all
+    # ratings are zero (defensive).
+    total_rated = sum(f.rated_capacity_mva for f in network.feeders)
+    if total_rated <= 0:
+        share_per_feeder = {f.feeder_id: 1.0 / max(1, len(network.feeders))
+                            for f in network.feeders}
+    else:
+        share_per_feeder = {f.feeder_id: f.rated_capacity_mva / total_rated
+                            for f in network.feeders}
+
     results: dict[str, float] = {}
     for f in network.feeders:
         peak_mw = 0.0
         for hourly_temp in cold_event.hourly_curve:
             row = _feeder_hour_load(f, hourly_temp.temp_c, hourly_temp.hour_offset % 24, scenario)
+            hod = hourly_temp.hour_offset % 24
+            other_hourly = other_load_baseline_mw * (0.85 + 0.20 * _diurnal_factor(hod))
+            other_per_feeder = other_hourly * share_per_feeder[f.feeder_id]
             mw = (row["base_load_mw"] + row["heat_pump_load_mw"] +
                   row["backup_resistance_mw"] + row["baseboard_load_mw"] +
-                  row["ev_load_mw"])
+                  row["ev_load_mw"] + other_per_feeder)
             peak_mw = max(peak_mw, mw)
         # Convert MW → MVA assuming 0.95 power factor
         results[f.feeder_id] = round(peak_mw / 0.95, 2)

@@ -154,6 +154,134 @@ def elliott_2022() -> ColdEvent:
     )
 
 
+def polar_vortex_2019() -> ColdEvent:
+    """
+    January 2019 Polar Vortex (Jan 28-31, 2019).
+
+    A short, sharp Arctic outbreak. Chicago hit -30°C and parts of the US
+    Midwest dropped below -40°C. Toronto Pearson recorded lows near -22°C
+    on Jan 30-31. Shorter than the 2014 event (~3 days vs 5) but with a
+    faster onset — a useful test of grid response to deep-but-brief cold
+    after the heat-pump fleet has grown post-2014.
+    """
+    return ColdEvent(
+        event_id="polar_vortex_2019",
+        name="January 2019 Polar Vortex",
+        region="Eastern Canada / US Midwest",
+        start_date="2019-01-28",
+        duration_hours=72,                        # 3 days
+        min_temp_c=-22.0,
+        avg_temp_c=-16.0,
+        hourly_curve=_smooth_curve(
+            start_temp=-5.0,
+            min_temp=-22.0,
+            end_temp=-6.0,
+            duration_hours=72,
+            drop_hours=18,
+            sustain_hours=36,
+            peak_window_hours=18,
+        ),
+        description=(
+            "A high-amplitude polar vortex disruption that collapsed Arctic air "
+            "deep into the US Midwest, with Chicago reaching -30°C. Ontario "
+            "experienced sustained sub-zero conditions for ~3 days with Toronto "
+            "Pearson lows near -22°C on Jan 30-31. Tests grid response to a "
+            "deep-but-brief cold event after several years of heat-pump growth."
+        ),
+        sources=[
+            "ECCC Toronto Pearson station 6158733 (Jan 28-31, 2019 dailies)",
+            "NWS Storm Summary, Polar Vortex January 2019",
+            "IESO 18-Month Outlook, March 2019",
+        ],
+    )
+
+
+def deep_freeze_feb_2015() -> ColdEvent:
+    """
+    February 2015 — coldest February in Toronto since 1875.
+
+    Not a single event but a sustained month of deep cold; we model the
+    peak week (Feb 13-20) as a long, moderately-cold stretch rather than
+    a single peak. Toronto Pearson recorded a low near -23°C on Feb 16,
+    2015, but the operationally interesting story is the *duration* of
+    sub-zero conditions, not the absolute floor.
+    """
+    return ColdEvent(
+        event_id="deep_freeze_feb_2015",
+        name="February 2015 Deep Freeze",
+        region="Eastern Canada / Northeast US",
+        start_date="2015-02-13",
+        duration_hours=168,                       # 7 days
+        min_temp_c=-23.0,
+        avg_temp_c=-15.0,
+        hourly_curve=_smooth_curve(
+            start_temp=-8.0,
+            min_temp=-23.0,
+            end_temp=-10.0,
+            duration_hours=168,
+            drop_hours=24,
+            sustain_hours=120,
+            peak_window_hours=48,
+        ),
+        description=(
+            "A week-long stretch of sustained deep cold during what became the "
+            "coldest February in Toronto since 1875. Less extreme than the 2014 "
+            "polar vortex at peak but with longer duration — tests grid stress "
+            "under prolonged elevated heating load rather than a single peak hour. "
+            "Particularly relevant for heat-pump-heavy scenarios where multi-day "
+            "auxiliary resistance engagement compounds feeder loading."
+        ),
+        sources=[
+            "ECCC Toronto Pearson station 6158733 (Feb 2015 dailies)",
+            "ECCC Top 10 Weather Stories 2015",
+            "IESO 18-Month Outlook, March 2015",
+        ],
+    )
+
+
+def winter_storm_uri_2021() -> ColdEvent:
+    """
+    February 2021 Winter Storm Uri (Feb 13-17, 2021).
+
+    The cross-jurisdictional benchmark event: caused the Texas grid collapse
+    that left 4.5M customers without power and 246+ dead. Ontario experienced
+    the same Arctic air mass with Toronto Pearson lows near -22°C, but the
+    Ontario grid held. Included as a real test of jurisdictional grid
+    hardening — same weather, different outcomes.
+    """
+    return ColdEvent(
+        event_id="winter_storm_uri_2021",
+        name="February 2021 Winter Storm Uri",
+        region="North America (Texas to Eastern Canada)",
+        start_date="2021-02-13",
+        duration_hours=96,                        # 4 days
+        min_temp_c=-22.0,
+        avg_temp_c=-15.0,
+        hourly_curve=_smooth_curve(
+            start_temp=-3.0,
+            min_temp=-22.0,
+            end_temp=-7.0,
+            duration_hours=96,
+            drop_hours=24,
+            sustain_hours=48,
+            peak_window_hours=24,
+        ),
+        description=(
+            "A continent-spanning Arctic outbreak that caused the catastrophic "
+            "Texas grid collapse (ERCOT load-shed of ~20 GW, 4.5M customers "
+            "affected). Ontario felt the same air mass with Toronto Pearson lows "
+            "near -22°C and held without significant outages. Included as a "
+            "cross-jurisdictional benchmark — useful for comparing Ontario "
+            "outcomes against the FERC/NERC findings on ERCOT failure modes."
+        ),
+        sources=[
+            "FERC/NERC Joint Inquiry into the February 2021 Cold Weather Outages (Nov 2021)",
+            "ECCC Toronto Pearson station 6158733 (Feb 13-17, 2021 dailies)",
+            "IESO 18-Month Outlook, March 2021",
+        ],
+    )
+
+
 def custom_event(
     min_temp_c: float,
     duration_hours: int,
@@ -202,6 +330,9 @@ def custom_event(
 _REGISTRY = {
     "polar_vortex_2014": polar_vortex_2014,
     "elliott_2022": elliott_2022,
+    "polar_vortex_2019": polar_vortex_2019,
+    "deep_freeze_feb_2015": deep_freeze_feb_2015,
+    "winter_storm_uri_2021": winter_storm_uri_2021,
 }
 
 
@@ -214,6 +345,15 @@ def list_reference_events() -> list[dict]:
         {"event_id": "elliott_2022", "name": "December 2022 Winter Storm Elliott",
          "min_temp_c": -22.0, "duration_hours": 72,
          "blurb": "Rapid 'bomb cyclone' drop; tested grid response time."},
+        {"event_id": "polar_vortex_2019", "name": "January 2019 Polar Vortex",
+         "min_temp_c": -22.0, "duration_hours": 72,
+         "blurb": "Short, sharp Arctic outbreak; Chicago hit -30°C."},
+        {"event_id": "deep_freeze_feb_2015", "name": "February 2015 Deep Freeze",
+         "min_temp_c": -23.0, "duration_hours": 168,
+         "blurb": "Week-long sustained cold; coldest Toronto Feb since 1875."},
+        {"event_id": "winter_storm_uri_2021", "name": "February 2021 Winter Storm Uri",
+         "min_temp_c": -22.0, "duration_hours": 96,
+         "blurb": "Caused Texas grid collapse; Ontario held — cross-jurisdictional benchmark."},
         {"event_id": "custom", "name": "Custom event",
          "min_temp_c": None, "duration_hours": None,
          "blurb": "Specify your own minimum temperature and duration."},

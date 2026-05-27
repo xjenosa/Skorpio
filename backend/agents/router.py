@@ -55,23 +55,43 @@ PIPELINE_CATALOG: list[dict] = [
         "id": "winter-peak-stress",
         "label": "Winter Peak Stress Tester",
         "scope": (
-            "Simulate extreme cold on a regional grid: heat pump COP loss, "
-            "EV cold-weather draw, baseboard spikes. Use when the user "
-            "names a cold event (polar vortex, Elliott, -25°C), or asks "
-            "about winter peak / stress test."
+            "Simulate extreme cold on a regional GRID at city scale: heat "
+            "pump COP loss, EV cold-weather draw, baseboard spikes, feeder "
+            "overload. The simulator natively understands scenario tracks "
+            "('conservative' / 'moderate' / 'aggressive' electrification) "
+            "and a horizon year ('by 2030', 'by 2050'). Use this pipeline "
+            "for any prompt about a CITY's winter grid under future "
+            "electrification, regardless of whether the user named a "
+            "specific cold event — defaults to the 2014 polar vortex when "
+            "no event is named. Also use it for explicit cold-event names "
+            "(polar vortex, Elliott, -25°C) or 'stress test' framing."
         ),
-        "signals": ["polar vortex", "cold snap", "winter peak", "stress test", "-25°C"],
+        "signals": [
+            "polar vortex", "cold snap", "winter peak", "stress test",
+            "winter outlook", "winter forecast", "winter projection",
+            "winter grid", "grid hold", "feeders hold", "cold weather",
+            "-25°C", "-22°C", "-30°C", "deep freeze", "bomb cyclone",
+            "by 2030", "by 2040", "by 2050",
+        ],
     },
     {
         "id": "electrification-readiness",
         "label": "Neighborhood Electrification Readiness",
         "scope": (
-            "Score how READY a Canadian neighborhood (named by FSA like M5V "
-            "or by city name + zone) is for full electrification (heat "
-            "pumps and EVs). Use when the user names FSAs / postal codes / "
-            "neighborhoods and asks about readiness or scoring, not stress."
+            "Score how READY a specific Canadian neighborhood — identified "
+            "by FSA (M5V, L5B) or postal-code area — is for full "
+            "electrification (heat pumps and EVs). Operates on residential "
+            "secondary-distribution / transformer-pole level, not feeders. "
+            "Use ONLY when the user names FSAs / postal codes / "
+            "neighborhoods AND uses 'readiness' / 'score' / 'rate' "
+            "language. Do NOT use when the user just names a CITY without "
+            "FSAs — that's a city-scale winter-peak-stress prompt."
         ),
-        "signals": ["neighborhood", "FSA", "postal code", "readiness", "score the", "EV + heat pump"],
+        "signals": [
+            "FSA", "postal code", "M5V", "M4Y", "L5B", "K1A",
+            "readiness", "score the", "rate the", "ready for",
+            "neighborhood readiness", "EV + heat pump readiness",
+        ],
     },
     {
         "id": "grid-investment-optimizer",
@@ -106,7 +126,14 @@ def _build_system_prompt() -> str:
         "  • If the user names a datacenter OPERATOR + wants to add capacity → datacenter-expansion.\n"
         "  • If the user mentions a UTILITY + a DOLLAR BUDGET → grid-investment-optimizer.\n"
         "  • If the user mentions COLD WEATHER + heat pumps / EV draw → winter-peak-stress.\n"
-        "  • If the user names FSAs / postal codes / neighborhoods + 'readiness' → electrification-readiness.\n"
+        "  • If the prompt names a CITY (not an FSA) and asks about its WINTER outlook / "
+        "forecast / projection / stress under future electrification (conservative / moderate / "
+        "aggressive, or % HP/EV adoption, or 'by 20XX'), it is winter-peak-stress. The winter "
+        "pipeline natively handles electrification SCENARIOS — that word alone is NOT enough "
+        "to route to electrification-readiness.\n"
+        "  • Pick electrification-readiness ONLY when the user (a) explicitly names FSAs / "
+        "postal codes / neighborhoods, AND (b) uses 'readiness' / 'score' / 'rate' framing. "
+        "Without both, prefer winter-peak-stress for grid-stress questions.\n"
         "  • If the user wants a NEW site from scratch → datacenter-siting.\n"
         "  • When ambiguous, prefer the more specific pipeline. Datacenter-siting is the catch-all."
         "\n\n"
@@ -135,9 +162,26 @@ SYSTEM_ROUTER = _build_system_prompt()
 # the caller can surface that this was a degraded path.
 def _regex_fallback(prompt: str) -> str:
     p = prompt.lower()
-    if re.search(r"(polar vortex|cold snap|winter peak|stress[- ]?test|cold weather|-\s?\d{2}\s?°?c)", p):
+    # Winter cues are matched first because the winter pipeline natively
+    # handles electrification scenarios. A prompt like "winter outlook with
+    # electrification" used to fall to electrification-readiness because
+    # the word "electrification" matched that pipeline's regex even when
+    # the dominant signal was the winter framing.
+    if re.search(
+        r"(polar vortex|cold snap|winter peak|stress[- ]?test|cold weather|"
+        r"winter outlook|winter forecast|winter projection|winter grid|"
+        r"grid hold|deep freeze|bomb cyclone|-\s?\d{2}\s?°?c)",
+        p,
+    ):
         return "winter-peak-stress"
-    if re.search(r"(neighborhood|electrification|fsa|postal|heat pump|ev (adoption|growth)|score (the|a) [a-z])", p):
+    # Electrification-readiness now requires an FSA-shaped token or
+    # explicit "readiness"/"score" framing — the bare word "electrification"
+    # no longer carries the regex on its own.
+    if re.search(
+        r"(\b[a-z]\d[a-z]\b|fsa|postal|neighborhood\s+readiness|readiness\s+score|"
+        r"score (the|a) [a-z]|rate (the|a) [a-z])",
+        p,
+    ):
         return "electrification-readiness"
     if re.search(r"(invest|budget|allocate|spend|\$\d|grid upgrade|hardening)", p):
         return "grid-investment-optimizer"

@@ -6,6 +6,7 @@ import {
   BarChart,
   CartesianGrid,
   Legend,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -199,6 +200,45 @@ function Section01LoadCurves({ plan, worst }: { plan: ResiliencePlan; worst: Sce
     ev: h.ev_load_mw,
     other: h.other_load_mw,
   }))
+
+  // Capacity reference lines. Mirrors the headroom math in winter_simulator.py:
+  //   nameplate_mw = sum(s.nameplate_mva * 0.95 for s in substations)  // PF derate
+  //   headroom_pct_at_peak = (nameplate_mw - peak_load) / nameplate_mw * 100
+  // Verdict thresholds in winter_synthesis.py:
+  //   PASS  = headroom ≥ 15%  (load ≤ nameplate * 0.85)
+  //   MARG  = headroom 5-15%  (load ≤ nameplate * 0.95)
+  //   FAIL  = headroom < 5%   (load > nameplate * 0.95) OR over nameplate
+  const nameplateMw = plan.network.substations.reduce(
+    (acc, s) => acc + s.nameplate_mva * 0.95, 0,
+  )
+  const passFloorMw = nameplateMw * 0.85        // crossing this drops PASS → MARGINAL
+  const failFloorMw = nameplateMw * 0.95        // crossing this drops MARGINAL → FAIL
+  // Colors mirror the verdict palette so the lines round-trip with the
+  // PASS/MARGINAL/FAIL chips elsewhere in the report.
+  const PASS_LINE_COLOR = VERDICT_COLOR.good
+  const MARG_LINE_COLOR = VERDICT_COLOR.warning
+  const FAIL_LINE_COLOR = VERDICT_COLOR.critical
+
+  // Recharts Legend doesn't pick up ReferenceLine entries automatically.
+  // We inject a custom legend payload so the three threshold lines appear
+  // in the legend strip below the chart alongside the stacked-area series.
+  const customLegendPayload = [
+    { value: 'Base residential', type: 'square' as const, color: CATEGORICAL_COLORS[1], id: 'base' },
+    { value: 'Heat pump',        type: 'square' as const, color: CATEGORICAL_COLORS[2], id: 'heat_pump' },
+    { value: 'Backup resistance',type: 'square' as const, color: CATEGORICAL_COLORS[4], id: 'backup' },
+    { value: 'Baseboard',        type: 'square' as const, color: CATEGORICAL_COLORS[3], id: 'baseboard' },
+    { value: 'EV charging',      type: 'square' as const, color: CATEGORICAL_COLORS[0], id: 'ev' },
+    { value: 'Other (C&I)',      type: 'square' as const, color: '#3a3835',             id: 'other' },
+    { value: `PASS limit · 15% headroom · ${passFloorMw.toFixed(0)} MW`,
+      type: 'plainline' as const, color: PASS_LINE_COLOR, id: 'pass-floor',
+      payload: { strokeDasharray: '6 4' } },
+    { value: `MARGINAL limit · 5% headroom · ${failFloorMw.toFixed(0)} MW`,
+      type: 'plainline' as const, color: MARG_LINE_COLOR, id: 'fail-floor',
+      payload: { strokeDasharray: '6 4' } },
+    { value: `FAIL · nameplate · ${nameplateMw.toFixed(0)} MW`,
+      type: 'plainline' as const, color: FAIL_LINE_COLOR, id: 'nameplate',
+      payload: { strokeDasharray: '4 4' } },
+  ]
   return (
     <VizPanel
       caption={
@@ -237,13 +277,40 @@ function Section01LoadCurves({ plan, worst }: { plan: ResiliencePlan; worst: Sce
             <XAxis dataKey="hour" stroke={CHART_AXIS.stroke} tick={CHART_AXIS.tick} />
             <YAxis stroke={CHART_AXIS.stroke} tick={CHART_AXIS.tick} unit=" MW" />
             <Tooltip contentStyle={CHART_TOOLTIP_STYLE} itemStyle={CHART_TOOLTIP_ITEM_STYLE_LEGEND} labelStyle={CHART_TOOLTIP_LABEL_STYLE} />
-            <Legend wrapperStyle={CHART_LEGEND_STYLE} />
+            <Legend wrapperStyle={CHART_LEGEND_STYLE} payload={customLegendPayload} />
             <Area type="monotone" dataKey="other" stackId="1" stroke="#6f6c63" fill="#3a3835" name="Other" />
             <Area type="monotone" dataKey="base" stackId="1" stroke={CATEGORICAL_COLORS[1]} fill={CATEGORICAL_COLORS[1]} fillOpacity={0.4} name="Base residential" />
             <Area type="monotone" dataKey="heat_pump" stackId="1" stroke={CATEGORICAL_COLORS[2]} fill={CATEGORICAL_COLORS[2]} fillOpacity={0.6} name="Heat pump" />
             <Area type="monotone" dataKey="backup" stackId="1" stroke={CATEGORICAL_COLORS[4]} fill={CATEGORICAL_COLORS[4]} fillOpacity={0.7} name="Backup resistance" />
             <Area type="monotone" dataKey="baseboard" stackId="1" stroke={CATEGORICAL_COLORS[3]} fill={CATEGORICAL_COLORS[3]} fillOpacity={0.5} name="Baseboard" />
             <Area type="monotone" dataKey="ev" stackId="1" stroke={CATEGORICAL_COLORS[0]} fill={CATEGORICAL_COLORS[0]} fillOpacity={0.7} name="EV charging" />
+            {/* Capacity thresholds — solid lines show the operator's safe
+                operating zones. Crossing the PASS floor = MARGINAL; crossing
+                the FAIL floor = FAIL; touching nameplate = hard overload. */}
+            <ReferenceLine
+              y={passFloorMw}
+              stroke={PASS_LINE_COLOR}
+              strokeDasharray="6 4"
+              strokeWidth={1.5}
+              ifOverflow="extendDomain"
+              label={{ value: `PASS limit · ${passFloorMw.toFixed(0)} MW`, position: 'insideTopRight', fill: PASS_LINE_COLOR, fontSize: 10 }}
+            />
+            <ReferenceLine
+              y={failFloorMw}
+              stroke={MARG_LINE_COLOR}
+              strokeDasharray="6 4"
+              strokeWidth={1.5}
+              ifOverflow="extendDomain"
+              label={{ value: `MARGINAL limit · ${failFloorMw.toFixed(0)} MW`, position: 'insideTopRight', fill: MARG_LINE_COLOR, fontSize: 10 }}
+            />
+            <ReferenceLine
+              y={nameplateMw}
+              stroke={FAIL_LINE_COLOR}
+              strokeDasharray="4 4"
+              strokeWidth={2}
+              ifOverflow="extendDomain"
+              label={{ value: `FAIL · nameplate · ${nameplateMw.toFixed(0)} MW`, position: 'insideTopRight', fill: FAIL_LINE_COLOR, fontSize: 10 }}
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>

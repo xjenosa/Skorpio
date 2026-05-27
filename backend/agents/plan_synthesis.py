@@ -569,7 +569,7 @@ Write in a professional, technical tone suitable for a senior infrastructure aud
     def _methodology_notes(self) -> str:
         return (
             "Regions identified via OpenEI region-utility associations and ISO topology snapshots. "
-            "Grid telemetry retrieved from EIA Open Data v2 and Electricity Maps. "
+            "Grid telemetry retrieved from EIA Open Data v2 plus IESO / AESO / Hydro-Québec public fuel-mix feeds, with carbon intensity computed from IPCC AR5 Annex III lifecycle factors. "
             "Sites generated through FERC queue lookups, POI expansion and Claude-guided proposals. "
             "Feasibility filtering via capacity / latency / policy heuristics. "
             "Placement scoring performed with the LP scenario engine (or mock fallback). "

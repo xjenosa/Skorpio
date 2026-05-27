@@ -29,6 +29,82 @@ function hasSource(sources: string[], needle: string): boolean {
   return sources.some((s) => s.toLowerCase().includes(n))
 }
 
+// Substring-needle lookup for mapping a single source citation back to its
+// provenance category. Order matters: a "live" needle wins over a frozen one
+// (e.g. "ArcGIS Living Atlas RTMA (live): …" should count as live, not
+// frozen, even though the words "Atlas" / "ArcGIS" could appear in frozen
+// citations too). Falls through to 'frozen' for any external citation that
+// doesn't match a live/modeled/llm marker — most non-live datasets are
+// static published references.
+const _LIVE_NEEDLES = [
+  '(live)',
+  'realtime',
+  'real-time',
+  'real time',
+  'arcgis living atlas',
+  'arcgis geoenrichment',
+  'arcgis world geocoding',
+  'esri canada',
+  'provincial snapshot',
+  'ieso hoep',
+  'eccc active alerts',
+  'arxiv',
+  'live grid telemetry',
+  'live carbon',
+  'live conditions',
+  'live network',
+  'live ieso',
+  'live aeso',
+  'live hydro-québec',
+  'live hydro-quebec',
+  'nrcan historical flood',
+  'cwfis wildfire',
+  'living atlas',
+]
+const _MODELED_NEEDLES = [
+  'synthesized',
+  'synthesised',
+  'modeled connections',
+  'deterministic',
+  'lp scenario engine',
+  'knapsack',
+  'parametric',
+  'heuristic',
+]
+const _LLM_NEEDLES = [
+  'anthropic claude',
+  'claude api',
+  'claude-guided',
+  'claude generates',
+  'claude prose',
+  'llm narrative',
+]
+
+/**
+ * Map a single source-citation string to its provenance category. Mirrors
+ * the chip toggling logic above so the inline status badge rendered next
+ * to each source in the report matches the chip row's color vocabulary.
+ *
+ * The match is intentionally broad — sources are free-form citation
+ * strings emitted by agents, not enum codes, so we substring-match on a
+ * curated list of keywords. Falls back to 'frozen' for unmatched lines
+ * because most citations in the codebase refer to static published
+ * datasets (OEB Yearbook, IPCC AR5, OSM tags, ECCC Climate Normals…).
+ */
+export function statusForSource(source: string): ProvenanceStatus {
+  const s = source.toLowerCase()
+  for (const n of _LIVE_NEEDLES) {
+    if (s.includes(n)) return 'live'
+  }
+  for (const n of _LLM_NEEDLES) {
+    if (s.includes(n)) return 'llm'
+  }
+  for (const n of _MODELED_NEEDLES) {
+    if (s.includes(n)) return 'modeled'
+  }
+  return 'frozen'
+}
+
 const SUMMARY_HINT = 'Claude prose, reconciled to computed numbers'
 
 export function provenanceFor(
@@ -148,6 +224,59 @@ export function provenanceFor(
           stage: 'Provincial grid baseline',
           status: 'live',
           hint: 'IESO / AESO / Hydro-Quebec realtime totals + IPCC AR5 factors',
+        })
+      }
+      // Live HOEP from IESO. Ontario-only; fires when fetch_ieso_hoep_cad_per_mwh
+      // returned a value during winter_grid.load_network().
+      if (hasSource(src, 'ieso hoep')) {
+        chips.push({
+          stage: 'Wholesale price',
+          status: 'live',
+          hint: 'IESO Hourly Ontario Energy Price (HOEP) — live public feed',
+        })
+      }
+      // Live ECCC weather-alert feed. Fires whenever the GeoMet alerts
+      // endpoint answered — including "0 active alerts" (an answered
+      // feed is still live data).
+      if (hasSource(src, 'eccc active alerts')) {
+        chips.push({
+          stage: 'Active alerts',
+          status: 'live',
+          hint: 'ECCC GeoMet alerts-realtime feed (winter storm / extreme cold warnings)',
+        })
+      }
+      // Live ArcGIS Living Atlas RTMA — surface conditions at the city
+      // centroid. Lights up when the layer answered with a usable feature.
+      if (hasSource(src, 'arcgis living atlas rtma')) {
+        chips.push({
+          stage: 'Live conditions',
+          status: 'live',
+          hint: 'ArcGIS Living Atlas — NOAA RTMA surface temperature + wind',
+        })
+      }
+      // Live ArcGIS Living Atlas NWS Watches & Warnings. Cross-border
+      // complement to the ECCC alert chip.
+      if (hasSource(src, 'arcgis living atlas nws watches & warnings')) {
+        chips.push({
+          stage: 'NWS alerts',
+          status: 'live',
+          hint: 'ArcGIS Living Atlas — NWS active watches & warnings (cross-border)',
+        })
+      }
+      // Live ArcGIS Living Atlas HRRR short-range forecast.
+      if (hasSource(src, 'arcgis living atlas hrrr forecast')) {
+        chips.push({
+          stage: 'Forecast outlook',
+          status: 'live',
+          hint: 'ArcGIS Living Atlas — NOAA HRRR 18h forecasted low / high',
+        })
+      }
+      // Live ArcGIS Living Atlas MODIS snow cover.
+      if (hasSource(src, 'arcgis living atlas modis snow cover')) {
+        chips.push({
+          stage: 'Snow cover',
+          status: 'live',
+          hint: 'ArcGIS Living Atlas — MODIS daily snow cover fraction',
         })
       }
       chips.push(

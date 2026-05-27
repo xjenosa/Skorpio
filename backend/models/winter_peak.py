@@ -37,7 +37,7 @@ class WinterPeakSpec(BaseModel):
     utility: Optional[str] = None                # "Alectra", "Toronto Hydro", inferred from city
     province: str                                # "ON", "AB", "QC"
     iso_zone: Optional[str] = None               # "IESO-Toronto", "AESO-South", "HQ-Montreal"
-    cold_event_id: str                           # "polar_vortex_2014" | "elliott_2022" | "custom"
+    cold_event_id: str                           # see services.cold_events._REGISTRY for the full set
     custom_min_temp_c: Optional[float] = None    # set when cold_event_id == "custom"
     custom_duration_hours: Optional[int] = None  # set when cold_event_id == "custom"
     scenarios: list[ScenarioPreset] = []         # which scenarios to run (default: all 3 presets)

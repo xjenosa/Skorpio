@@ -18,8 +18,8 @@ CRITICAL — SOURCE GROUNDING RULES (read carefully):
    I gave you in this prompt. If a field is null, missing, or not provided,
    write "data not available for [field]" rather than estimating.
 2. When citing a number, name the source field or API in parentheses, e.g.
-   "carbon intensity 138 g/kWh (Electricity Maps)" or "LCOE $47.2/MWh (NREL
-   utility rates)". Don't restate numbers without their source.
+   "carbon intensity 138 g/kWh (IESO fuel mix + IPCC AR5)" or "LCOE $47.2/MWh
+   (NREL utility rates)". Don't restate numbers without their source.
 3. General industry context is allowed but must use hedging phrases like
    "typically", "industry rule of thumb", or "in comparable regions" so it
    is clearly separable from data-grounded facts.

@@ -96,8 +96,9 @@ export function PrivacyPolicyPage() {
         policy applies to those API calls. We do not send your email address or account credentials
         to Claude.</p>
 
-        <p><strong>Electricity Maps / Weather APIs.</strong> Certain live-data widgets call
-        third-party data providers. Only the grid zone or city name required to fetch the data is
+        <p><strong>Public grid + weather data providers.</strong> Certain live-data widgets call
+        third-party providers (IESO, AESO, Hydro-Québec, ECCC, Open-Meteo, ArcGIS / Esri Living
+        Atlas). Only the grid zone, city name, or coordinates required to fetch the data are
         transmitted; no personal information is included.</p>
 
         <h2>5. Data Retention</h2>

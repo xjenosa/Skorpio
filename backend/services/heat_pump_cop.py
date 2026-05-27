@@ -60,6 +60,11 @@ def backup_engagement_fraction(temp_c: float, hp_type: HeatPumpType = "standard_
     """
     Fraction of total heating load served by auxiliary resistance heat
     at a given outdoor temperature. 0.0 = HP only, 1.0 = pure resistance.
+
+    Retained for narrative use (chat tools, report copy) — for actual
+    electrical draw attribution use `hp_electrical_split()`, which models
+    the compressor as running continuously at its rated input rather than
+    handing all load to aux once `backup_engagement_fraction` reaches 1.0.
     """
     if hp_type == "cold_climate_ashp":
         if temp_c >= -10.0:
@@ -73,6 +78,74 @@ def backup_engagement_fraction(temp_c: float, hp_type: HeatPumpType = "standard_
         if temp_c >= -20.0:
             return min(1.0, (-8.0 - temp_c) / 12.0)   # 0 at -8°C → 1.0 at -20°C
         return 1.0
+
+
+# ── Compressor electrical input + lockout ─────────────────────────────── #
+# A residential heat pump's compressor pulls a roughly constant electrical
+# input while running — typically 3.0-3.5 kW for a 3-ton standard ASHP and
+# 3.5-4.0 kW for the larger compressors on cold-climate units. Below the
+# manufacturer-set lockout temperature, the compressor is disabled by safety
+# controls and all load shifts to auxiliary resistance.
+#
+# Sources:
+#   - NEEP ccASHP database (median rated electrical input by tonnage)
+#   - AHRI Standard 210/240 nameplate values for residential ASHPs
+#   - ASHRAE Handbook (HVAC Systems and Equipment 2020), Ch. 49
+
+_HP_RATED_ELECTRICAL_KW: dict[HeatPumpType, float] = {
+    "standard_ashp": 3.5,
+    "cold_climate_ashp": 3.8,
+}
+
+_HP_LOCKOUT_TEMP_C: dict[HeatPumpType, float] = {
+    "standard_ashp": -25.0,
+    "cold_climate_ashp": -30.0,
+}
+
+
+def hp_rated_electrical_kw(hp_type: HeatPumpType = "standard_ashp") -> float:
+    """Per-home rated electrical input of the compressor."""
+    return _HP_RATED_ELECTRICAL_KW.get(hp_type, 3.5)
+
+
+def hp_lockout_temp_c(hp_type: HeatPumpType = "standard_ashp") -> float:
+    """Outdoor temperature below which the compressor shuts off."""
+    return _HP_LOCKOUT_TEMP_C.get(hp_type, -25.0)
+
+
+def hp_electrical_split(
+    temp_c: float,
+    thermal_kw_per_home: float,
+    hp_type: HeatPumpType = "standard_ashp",
+) -> tuple[float, float]:
+    """
+    Split a household's thermal demand into (heat-pump kW, aux-resistance kW)
+    of electrical draw.
+
+    Model: the compressor draws the minimum of (demand / COP) and its rated
+    electrical input. Auxiliary resistance covers any remaining thermal gap
+    at COP = 1.0. Below the compressor lockout temperature the heat pump
+    shuts off and all load shifts to auxiliary.
+
+    This replaces the older `backup_engagement_fraction`-driven attribution,
+    which drove the heat-pump component to zero in the deep cold — physically
+    wrong for all-electric systems, where the compressor stays running at
+    full rated input while aux fills the thermal gap *on top of* it.
+    """
+    if thermal_kw_per_home <= 0.0:
+        return (0.0, 0.0)
+
+    if temp_c <= hp_lockout_temp_c(hp_type):
+        return (0.0, thermal_kw_per_home)
+
+    cop = max(1.0, cop_at_temp(temp_c, hp_type))
+    rated_kw = hp_rated_electrical_kw(hp_type)
+
+    implied_electric = thermal_kw_per_home / cop
+    hp_electric = min(implied_electric, rated_kw)
+    hp_thermal_delivered = hp_electric * cop
+    aux_electric = max(0.0, thermal_kw_per_home - hp_thermal_delivered)
+    return (hp_electric, aux_electric)
 
 
 # ── EV cold-weather draw ──────────────────────────────────────────────── #
@@ -135,16 +208,12 @@ def household_heating_kw(
         }
 
     if primary_heating == "heat_pump":
-        backup_frac = backup_engagement_fraction(temp_c, hp_type)
-        hp_thermal = thermal_load_kw * (1.0 - backup_frac)
-        backup_thermal = thermal_load_kw * backup_frac
-        cop = cop_at_temp(temp_c, hp_type)
-        hp_electric = hp_thermal / max(1.0, cop)
+        hp_electric, backup_electric = hp_electrical_split(temp_c, thermal_load_kw, hp_type)
         return {
             "heat_pump_kw": round(hp_electric, 2),
-            "backup_kw": round(backup_thermal, 2),       # resistance: COP=1
+            "backup_kw": round(backup_electric, 2),
             "baseboard_kw": 0.0,
-            "total_electric_kw": round(hp_electric + backup_thermal, 2),
+            "total_electric_kw": round(hp_electric + backup_electric, 2),
         }
 
     # gas / oil / district — no electric heating draw (ignition fans negligible)

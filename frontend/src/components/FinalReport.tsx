@@ -124,7 +124,7 @@ export function FinalReport({ plan, jobId, onPipelineChange }: FinalReportProps)
     'EIA grid demand telemetry',
     'NREL renewable resource data',
     'ECCC Canadian weather and climate feeds',
-    'ElectricityMaps zone-level carbon intensity',
+    'Provincial carbon intensity: IESO / AESO / Hydro-Québec fuel mix + IPCC AR5 lifecycle factors',
     'Skorpio site registry (Cushman & Wakefield, operator filings)',
   ]
 

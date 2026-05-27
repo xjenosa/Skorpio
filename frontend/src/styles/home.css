@@ -385,6 +385,59 @@ main.workspace {
   color: #f38764;
   border-color: rgba(243, 135, 100, 0.5);
 }
+
+/* Routed-pipeline chip — sits between the H1 and the sub-text on the
+   Agent pipeline page so the user can see which pipeline the router
+   landed on without leaving the live run view. Color comes from the
+   pipeline's accent in PIPELINES (frontend/src/pipelines.ts). */
+.pipeline-routed {
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+.pipeline-routed-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.pipeline-routed-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+/* Transition states: clicked but the orchestrator hasn't reached its next
+   stage boundary yet (pause/resume) or the cancel hasn't propagated up
+   from the in-flight Claude call (stop). Spinner replaces the icon and
+   the button is briefly disabled so the click visibly registers. */
+.page-head .actions button.run-control:disabled {
+  opacity: 0.85;
+  cursor: progress;
+}
+.page-head .actions button.run-control--busy {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.page-head .actions button.run-control--stop.run-control--busy {
+  background: rgba(243, 135, 100, 0.10);
+  color: #f38764;
+  border-color: rgba(243, 135, 100, 0.45);
+}
+.page-head .actions button.run-control .ico-spin {
+  animation: run-control-spin 0.9s linear infinite;
+  transform-origin: center;
+}
+@keyframes run-control-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
 .page-head .actions button.primary,
 .page-head .actions a.primary {
   background: var(--accent); color: var(--fg-on-accent); border-color: var(--accent);

@@ -127,13 +127,14 @@ export function PipelinePage() {
 }
 
 // Local copy of HomePage's inference so we don't have to refactor that out
-// just for one usage. Keep in sync with HomePage.tsx.
+// just for one usage. Keep in sync with HomePage.tsx and
+// backend/agents/router.py::_regex_fallback.
 function inferPipelineFromPrompt(prompt: string): string {
   const p = prompt.toLowerCase()
-  if (/(polar vortex|cold snap|winter peak|stress[- ]?test|cold weather|-\s?\d{2}\s?°?c)/.test(p)) {
+  if (/(polar vortex|cold snap|winter peak|stress[- ]?test|cold weather|winter outlook|winter forecast|winter projection|winter grid|grid hold|deep freeze|bomb cyclone|-\s?\d{2}\s?°?c)/.test(p)) {
     return 'winter-peak-stress'
   }
-  if (/(neighborhood|electrification|fsa|postal|heat pump|ev (adoption|growth)|score (the|a) [a-z])/.test(p)) {
+  if (/(\b[a-z]\d[a-z]\b|fsa|postal|neighborhood\s+readiness|readiness\s+score|score (the|a) [a-z]|rate (the|a) [a-z])/.test(p)) {
     return 'electrification-readiness'
   }
   if (/(invest|budget|allocate|spend|\$\d|grid upgrade)/.test(p)) {

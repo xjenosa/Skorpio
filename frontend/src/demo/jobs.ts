@@ -18,11 +18,11 @@ export interface DemoJobConfig {
 }
 
 export const DEMO_JOB_PREFIXES: DemoJobConfig[] = [
-  { pipelineId: 'datacenter-siting', prefix: 'a06b5cda' },
-  { pipelineId: 'datacenter-expansion', prefix: '0801f572' },
-  { pipelineId: 'winter-peak-stress', prefix: '476a2f1a' },
-  { pipelineId: 'electrification-readiness', prefix: '331e1dbc' },
-  { pipelineId: 'grid-investment-optimizer', prefix: 'f01f3b45' },
+  { pipelineId: 'datacenter-siting', prefix: '49d354bd' },
+  { pipelineId: 'datacenter-expansion', prefix: 'ce0585bf' },
+  { pipelineId: 'winter-peak-stress', prefix: 'e5d77262' },
+  { pipelineId: 'electrification-readiness', prefix: 'f4b26d6a' },
+  { pipelineId: 'grid-investment-optimizer', prefix: '2621702d' },
 ]
 
 const CACHE_KEY = 'skorpio.demo.jobIds'

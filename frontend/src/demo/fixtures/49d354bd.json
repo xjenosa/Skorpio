@@ -1,0 +1,593 @@
+{
+  "prefix": "49d354bd",
+  "pipeline_id": "datacenter-siting",
+  "job_list_item": {
+    "job_id": "49d354bd-1424-42d2-bb0a-5f6beee5c7d8",
+    "workload_spec": "Find the best site for a 75 MW AI training cluster in Alectra’s service territory, lowest carbon",
+    "stage": "completed",
+    "progress": 100.0,
+    "created_at": "2026-05-27T02:42:16.581061",
+    "pipeline_id": "datacenter-siting",
+    "imported": false,
+    "imported_from_email": null
+  },
+  "job_status": {
+    "job_id": "49d354bd-1424-42d2-bb0a-5f6beee5c7d8",
+    "workload_spec": "Find the best site for a 75 MW AI training cluster in Alectra’s service territory, lowest carbon",
+    "stage": "completed",
+    "progress": 100.0,
+    "message": "Siting plan ready",
+    "started_at": "2026-05-27T02:42:16.592314",
+    "updated_at": "2026-05-27T02:44:31.155239",
+    "error": null,
+    "has_results": true,
+    "pipeline_id": "datacenter-siting",
+    "paused": false,
+    "progress_log": [
+      {
+        "ts": "02:42:16",
+        "text": "Queued",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:16",
+        "text": "Ingesting grid telemetry...",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:16",
+        "text": "Parsing workload spec with AI...",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:21",
+        "text": "Identifying suitable regions from 0 region-utility associations...",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:27",
+        "text": "Fetching grid telemetry and carbon snapshots...",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:55",
+        "text": "Identified 1 regions: CA-ON",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:55",
+        "text": "Generating sites for 1 regions in parallel...",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:57",
+        "text": "Gathered 10 candidate parcels (5 seeds + 5 POI/perturbed).",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:57",
+        "text": "Narrowed to 4 candidates inside Alectra's territory (from 10).",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:57",
+        "text": "Filtered to 3 feasible candidate site(s) after diversity selection.",
+        "level": "info"
+      },
+      {
+        "ts": "02:42:57",
+        "text": "Requesting AI-designed sites...",
+        "level": "info"
+      },
+      {
+        "ts": "02:43:32",
+        "text": "Generated 3 candidate sites for CA-ON.",
+        "level": "info"
+      },
+      {
+        "ts": "02:43:32",
+        "text": "Scoring 1 region libraries in parallel...",
+        "level": "info"
+      },
+      {
+        "ts": "02:43:44",
+        "text": "CA-ON: best LCOE $67.0/MWh.",
+        "level": "info"
+      },
+      {
+        "ts": "02:43:44",
+        "text": "Composing siting plan...",
+        "level": "info"
+      },
+      {
+        "ts": "02:43:44",
+        "text": "Analysing region-specific insights...",
+        "level": "info"
+      },
+      {
+        "ts": "02:44:02",
+        "text": "Running multi-objective Pareto optimisation...",
+        "level": "info"
+      },
+      {
+        "ts": "02:44:05",
+        "text": "Generating executive summary...",
+        "level": "info"
+      },
+      {
+        "ts": "02:44:31",
+        "text": "Siting plan ready",
+        "level": "ok"
+      }
+    ]
+  },
+  "result": {
+    "job_id": "49d354bd-1424-42d2-bb0a-5f6beee5c7d8",
+    "workload_spec": "Find the best site for a 75 MW AI training cluster in Alectra’s service territory, lowest carbon",
+    "workload_name": "AI Training Cluster · Alectra Territory",
+    "workload_description": "A 75 MW AI training cluster to be sited within Alectra Utilities' service territory, which covers municipalities in the Greater Toronto Area and surrounding regions of Ontario (IESO balancing authority). The workload prioritizes lowest possible carbon intensity, favouring Ontario's nuclear and hydro-dominant generation mix. No latency constraint is specified, consistent with batch training workloads. Utility mentioned in prompt: Alectra.",
+    "target_capacity_mw": 75.0,
+    "target_latency_ms": null,
+    "candidate_iso_codes": [
+      "CA-ON"
+    ],
+    "executive_summary": "# Executive Summary: AI Training Cluster Siting, Alectra Territory (75 MW, CA-ON)\n\n**Workload Significance and Constraints**\n\nThis siting run evaluates optimal placement for a 75 MW AI training cluster within Alectra Utilities' service territory, spanning municipalities across the Greater Toronto Area and surrounding regions of Ontario under the IESO balancing authority. The workload's defining constraint is carbon intensity minimization, a priority well-served by Ontario's generation mix, which delivers approximately 30 gCO2/kWh (IESO fuel mix data combined with IPCC AR5 lifecycle factors), one of the lowest grid carbon intensities available to large industrial loads in North America. Because AI training is a batch workload with no specified latency requirement, site selection is free to optimize purely on power economics, grid reliability, and emissions performance without geographic penalty for distance from end users. At 75 MW, this load is material relative to typical distribution substation headroom in urban Ontario, making substation capacity and transmission access the binding siting variables.\n\n**Analytical Approach**\n\nThe analysis generated four candidate sites within the defined territory, of which three advanced to full scoring. Each candidate was evaluated against a consistent framework encompassing grid carbon intensity, levelized cost of energy, predicted uptime, interconnect feasibility, and regulatory context within the IESO market structure. Carbon intensity was assessed using IESO real-time and historical fuel mix data cross-referenced with IPCC AR5 lifecycle emissions factors. Uptime estimates reflect IESO grid reliability statistics and local distribution performance data from Alectra's service territory. LCOE figures incorporate Ontario's applicable industrial electricity rate structures. The pipeline scoring methodology ranked candidates on a weighted composite of these factors, with carbon performance and cost carrying the highest weights consistent with the workload's stated priorities.\n\n**Regional Grid Advantages**\n\nOntario's IESO-managed grid presents a structurally compelling case for carbon-sensitive compute infrastructure. The approximately 30 gCO2/kWh carbon intensity (IESO fuel mix data combined with IPCC AR5 lifecycle factors) reflects a generation portfolio dominated by nuclear baseload and hydroelectric dispatch, both of which provide low-variance, around-the-clock clean energy without the intermittency penalties associated with wind or solar-heavy grids. For an AI training cluster running continuous, high-utilization workloads, this grid profile translates directly into low Scope 2 emissions without requiring power purchase agreements or renewable energy certificates to achieve credible carbon accounting. Alectra's territory further benefits from proximity to major transmission infrastructure serving the GTA load center, which typically supports faster interconnect timelines relative to greenfield rural sites, though specific substation headroom figures are subject to IESO and Alectra interconnect studies.\n\n**Top Candidate and Predicted Economics**\n\nThe highest-scoring candidate emerging from this run is Markham, ON (CA-ON), with a predicted LCOE of $67.0/MWh (NREL utility rates methodology applied to Ontario industrial tariff structures) and an uptime range of 0.9946 to 0.9993 (IESO and Alectra reliability data). This uptime band implies between approximately 3.7 and 19.0 hours of expected annual downtime, which is consistent with the reliability tolerance of batch training workloads. Markham's position within the GTA corridor provides access to established fiber and cooling infrastructure, and its location within Alectra's service territory simplifies the utility coordination pathway. Two additional scored candidates were evaluated but did not surpass Markham on the composite scoring criteria; detailed site-level economics for those candidates are available in the full scoring output but are not reproduced here given the single best-candidate instruction in the pipeline results.\n\n**Recommended Next Steps**\n\nThe immediate priority following this siting run is to commission a formal interconnect feasibility study with Alectra Utilities and the IESO for the Markham candidate, targeting confirmation of available substation capacity at or near 75 MW and identifying any required transmission upgrades or cost allocation under Ontario's connection cost responsibility framework. In parallel, an environmental and land-use review should be initiated under Ontario's Planning Act and applicable municipal zoning in Markham to confirm industrial or data center use permissions and assess any constraints related to water access for cooling systems. A detailed power purchase or rate structure negotiation with Alectra should follow interconnect confirmation, with particular attention to Ontario's Large Consumer rate classes and any demand response obligations that may apply at this load scale. Finally, a redundancy and resilience assessment should validate whether the uptime upper bound of 0.9993 (IESO and Alectra reliability data) is achievable with on-site backup generation or whether additional infrastructure investment is warranted to meet the operator's availability targets.",
+    "regions_analyzed": 1,
+    "sites_generated": 4,
+    "sites_scored": 3,
+    "region_insights": [
+      {
+        "region_iso": "CA-ON",
+        "market_outlook": "Ontario's IESO-managed grid delivers a carbon intensity of approximately 30 gCO₂/kWh (IESO fuel mix data combined with IPCC AR5 lifecycle factors), driven by a generation mix of approximately 55% nuclear and 24% hydro, making Alectra territory an exceptionally strong fit for a carbon-conscious AI training cluster that demands both high utilization and low-emissions credentials. Among the three scored candidates, Markham presents the lowest LCOE at $67.0/MWh (candidate scoring data), followed closely by Vaughan at $67.5/MWh and Mississauga at $73.9/MWh, suggesting a meaningful cost advantage of up to $6.9/MWh for the northern GTA sites over the western corridor. AI training workloads are typically power-dense and continuous, meaning even modest LCOE differentials compound materially at scale across multi-year depreciation horizons. The IESO market structure, with its capacity auction and Global Adjustment mechanism, provides rate predictability that is generally favorable for long-duration, baseload-equivalent industrial loads such as GPU clusters.",
+        "transmission_constraints": "Transmission headroom and point-of-interconnection capacity data are noted as partially available in the provided regional context, and specific MW headroom figures per substation are data not available for this analysis; prospective developers should request Schedule C studies directly from Alectra Utilities and IESO's connection assessment process before committing to a site. The GTA transmission corridor is known in comparable dense urban regions to face congestion risk as large industrial loads cluster near existing fiber and road infrastructure, which could affect interconnection queue position and cost allocation for network upgrades. Markham and Vaughan, as the lower-LCOE candidates, sit on the northeastern fringe of the Alectra territory where distribution feeder capacity and 115 kV or 230 kV bulk transmission access should be validated against IESO's publicly filed transmission system plans prior to site selection.",
+        "regulatory_context": "Siting of large industrial loads in Ontario is subject to IESO's connection and network impact assessment process, and Alectra Utilities' own distribution system code under the Ontario Energy Board (OEB) framework, which governs service extensions and cost-of-service allocations for loads typically exceeding 1 MW; specific queue position data and current interconnection backlog figures are data not available for this analysis. Ontario does not currently offer a dedicated data center investment tax credit at the provincial level comparable to some U.S. jurisdictions, though the federal Canada Investment Tax Credit for Clean Electricity (as proposed under Budget 2023 and subject to legislative progression) may apply to on-site clean generation or storage assets co-located with the facility. Municipal incentives in Markham and Vaughan, including development charge structures and shovel-ready industrial land designations, vary by site and should be confirmed directly with York Region and the respective municipal economic development offices, as specific incentive values are data not available for this analysis.",
+        "top_sites": [
+          {
+            "site": {
+              "site_id": "CA-ON-003",
+              "name": "Markham, ON",
+              "latitude": 43.86,
+              "longitude": -79.34,
+              "address": "Markham, ON",
+              "region_iso": "CA-ON",
+              "topology_block": null,
+              "parcel_path": null,
+              "profile": {
+                "capacity_mw": 92.36737914709562,
+                "transmission_headroom_mw": 81.73138519630743,
+                "pue": 1.36,
+                "fiber_latency_ms": 0.12,
+                "water_l_per_mwh": 0.87,
+                "substation_distance_km": 0.76,
+                "spot_lmp_usd_mwh": 48.62,
+                "lease_cost_usd_yr": 2549458.0,
+                "meets_constraints": true,
+                "overall_score": 0.337,
+                "has_policy_blockers": false,
+                "has_alerts": false,
+                "deployment_months": 11.3
+              },
+              "pareto_objectives": {
+                "cost_economics": 0.41,
+                "carbon_intensity": 0.5,
+                "latency_fit": 0.5,
+                "transmission_headroom": 0.39,
+                "deployment_speed": 0.82,
+                "operational_resilience": 0.9,
+                "pareto_rank": 1,
+                "weighted_score": 0.542
+              },
+              "generation_method": "ferc_queue+poi_expansion",
+              "parent_site_id": null,
+              "distance_to_known_dc_km": null,
+              "nearest_known_operator": null,
+              "diversity_cluster": null,
+              "rank": 2
+            },
+            "region_iso": "CA-ON",
+            "topology_id": "CA-ON",
+            "levelized_cost_usd_mwh": 67.0,
+            "uptime_lb": 0.9946,
+            "uptime_ub": 0.9993,
+            "plan_path": "data/transmission/plan_CA-ON_a16e1e14.geojson",
+            "plan_file": "plan_CA-ON_a16e1e14.geojson",
+            "topology_file": null,
+            "scoring_method": "mock",
+            "interactions": [],
+            "rank": 2,
+            "explanation": "Estimated LCOE: $67.0/MWh"
+          },
+          {
+            "site": {
+              "site_id": "CA-ON-002",
+              "name": "Vaughan, ON",
+              "latitude": 43.84,
+              "longitude": -79.51,
+              "address": "Vaughan, ON",
+              "region_iso": "CA-ON",
+              "topology_block": null,
+              "parcel_path": null,
+              "profile": {
+                "capacity_mw": 81.88012968371409,
+                "transmission_headroom_mw": 108.25642154173198,
+                "pue": 1.28,
+                "fiber_latency_ms": 0.12,
+                "water_l_per_mwh": 1.12,
+                "substation_distance_km": 4.27,
+                "spot_lmp_usd_mwh": 48.62,
+                "lease_cost_usd_yr": 1116348.0,
+                "meets_constraints": true,
+                "overall_score": 0.398,
+                "has_policy_blockers": false,
+                "has_alerts": false,
+                "deployment_months": 28.6
+              },
+              "pareto_objectives": {
+                "cost_economics": 0.41,
+                "carbon_intensity": 0.5,
+                "latency_fit": 0.5,
+                "transmission_headroom": 0.63,
+                "deployment_speed": 0.25,
+                "operational_resilience": 1.0,
+                "pareto_rank": 1,
+                "weighted_score": 0.527
+              },
+              "generation_method": "ferc_queue+poi_expansion",
+              "parent_site_id": null,
+              "distance_to_known_dc_km": null,
+              "nearest_known_operator": null,
+              "diversity_cluster": null,
+              "rank": 1
+            },
+            "region_iso": "CA-ON",
+            "topology_id": "CA-ON",
+            "levelized_cost_usd_mwh": 67.5,
+            "uptime_lb": 0.9853,
+            "uptime_ub": 0.9985,
+            "plan_path": "data/transmission/plan_CA-ON_384a38bd.geojson",
+            "plan_file": "plan_CA-ON_384a38bd.geojson",
+            "topology_file": null,
+            "scoring_method": "mock",
+            "interactions": [],
+            "rank": 1,
+            "explanation": "Estimated LCOE: $67.5/MWh"
+          },
+          {
+            "site": {
+              "site_id": "CA-ON-001",
+              "name": "Mississauga, ON",
+              "latitude": 43.59,
+              "longitude": -79.64,
+              "address": "Mississauga, ON",
+              "region_iso": "CA-ON",
+              "topology_block": null,
+              "parcel_path": null,
+              "profile": {
+                "capacity_mw": 107.29910400807886,
+                "transmission_headroom_mw": 58.444236316317344,
+                "pue": 1.24,
+                "fiber_latency_ms": 0.11,
+                "water_l_per_mwh": 1.51,
+                "substation_distance_km": 2.09,
+                "spot_lmp_usd_mwh": 48.62,
+                "lease_cost_usd_yr": 2216661.0,
+                "meets_constraints": true,
+                "overall_score": 0.334,
+                "has_policy_blockers": false,
+                "has_alerts": false,
+                "deployment_months": 15.8
+              },
+              "pareto_objectives": {
+                "cost_economics": 0.33,
+                "carbon_intensity": 0.5,
+                "latency_fit": 0.5,
+                "transmission_headroom": 0.19,
+                "deployment_speed": 0.67,
+                "operational_resilience": 1.0,
+                "pareto_rank": 1,
+                "weighted_score": 0.464
+              },
+              "generation_method": "ferc_queue+poi_expansion",
+              "parent_site_id": null,
+              "distance_to_known_dc_km": null,
+              "nearest_known_operator": null,
+              "diversity_cluster": null,
+              "rank": 3
+            },
+            "region_iso": "CA-ON",
+            "topology_id": "CA-ON",
+            "levelized_cost_usd_mwh": 73.9,
+            "uptime_lb": 0.9861,
+            "uptime_ub": 0.9988,
+            "plan_path": "data/transmission/plan_CA-ON_8c1515f5.geojson",
+            "plan_file": "plan_CA-ON_8c1515f5.geojson",
+            "topology_file": null,
+            "scoring_method": "mock",
+            "interactions": [],
+            "rank": 3,
+            "explanation": "Estimated LCOE: $73.9/MWh"
+          }
+        ],
+        "news_items": [
+          {
+            "arxiv_id": "2303.02419v1",
+            "title": "Age of Information of CSMA/CA Based Wireless Networks",
+            "authors": [
+              "Liang Li",
+              "Yunquan Dong",
+              "Chengsheng Pan",
+              "Pingyi Fan"
+            ],
+            "summary": "We consider a wireless network where N nodes compete for a shared channel over the CSMA/CA protocol to deliver observed updates to a common remote monitor. For this network, we rate the information freshness of the CSMA/CA based network using the age of information (AoI). Different from previous work, the network we consider is unsaturated. To theoretically analyze the transmission behavior of the CSMA/CA based network, we, therefore, develop an equivalent and tractable Markov transmission model. Based on this newly developed model, the transmission probability, collision probability and avera",
+            "published": "2023-03-04",
+            "url": "https://arxiv.org/abs/2303.02419v1",
+            "categories": [
+              "cs.IT"
+            ]
+          },
+          {
+            "arxiv_id": "1507.06049v1",
+            "title": "Native point defects in CaS: A focus on doping limit for persistent luminescence",
+            "authors": [
+              "Bolong Huang"
+            ],
+            "summary": "We studied native point defects in CaS by DFT+ Hubbard U method. The effect of the localization of the d orbitals of Ca pseudopotential has been included. The Hubbard U corrected d-orbital for Ca sites are playing a role assisting the charge transfer from p orbitals of S site to the Ca site, giving both localized electron and hole states within the band gap, with an energy interval of 1.2~1.4 eV. This corresponds to the localized excitonic levels below the conduction band edge for the optical absorption. The electronic properties and formation energies of native point defects have been discuss",
+            "published": "2015-07-22",
+            "url": "https://arxiv.org/abs/1507.06049v1",
+            "categories": [
+              "cond-mat.mtrl-sci"
+            ]
+          },
+          {
+            "arxiv_id": "cond-mat/0412154v1",
+            "title": "Effect of Ca doping for Y on structural / microstructural and superconducting properties of YBa2Cu 3O7-d",
+            "authors": [
+              "Rajiv Giri",
+              "H. K. Singh",
+              "O. N. Srivastava",
+              "V. P. S. Awana",
+              "Anurag Gupta"
+            ],
+            "summary": "We report systematic studies of structural, microstructural and transport properties of Y1-xCaxBa2Cu3O7-d bulk samples with 0.20 x 0.0. The partial substitution of Ca2+ at Y3+ site in YBa2Cu3O7-d leads towards slightly overdoped regime, which along with disorder in CuO2 planes is responsible for decrease in superconducting transition temperature (Tc) of the doped system. The microstructural variants being studied by transmission electron microscopy (TEM) technique in imaging and selected area diffraction modes revealed an increase in the density of twins with increase in Ca concentration despi",
+            "published": "2004-12-07",
+            "url": "https://arxiv.org/abs/cond-mat/0412154v1",
+            "categories": [
+              "cond-mat.supr-con",
+              "cond-mat.str-el"
+            ]
+          },
+          {
+            "arxiv_id": "2201.04277v1",
+            "title": "Stabilization of layered perovskite structures via strontium substitution in Ca$_3$Ti$_2$O$_7$ revealed via elemental mapping",
+            "authors": [
+              "Kosuke Kurushima",
+              "Hiroshi Nakajima",
+              "Shinya Mine",
+              "Hirofumi Tsukasaki",
+              "Masaya Matsuoka"
+            ],
+            "summary": "Extensive studies have been performed on layered compounds, ranging from layered cuprates to van der Waals materials with critical issues of intergrowths and stacking faults. However, such structures have been studied less because of experimental difficulty. We present characteristic defect structures of intergrowths in the Ruddlesden-Popper Ca$_{2.46}$Sr$_{0.54}$Ti$_2$O$_7$, which is known to exhibit hybrid improper ferroelectricity. Transmission electron microscopy reveals that numerous intergrowths composed of 7 and 15 layers are introduced in the ferroelectric domains. Elemental maps demon",
+            "published": "2022-01-12",
+            "url": "https://arxiv.org/abs/2201.04277v1",
+            "categories": [
+              "cond-mat.mtrl-sci"
+            ]
+          },
+          {
+            "arxiv_id": "1808.02981v1",
+            "title": "Reaction rates for the $^{39}$K(p,$γ$)$^{40}$Ca reaction",
+            "authors": [
+              "Richard Longland",
+              "John Dermigny",
+              "Caleb Marshall"
+            ],
+            "summary": "The magnesium-potassium anti-correlation observed in globular cluster NGC2419 can be explained by nuclear burning of hydrogen in hot environments. The exact site of this nuclear burning is, as yet, unknown. In order to constrain the sites responsible for this anti-correlation, the nuclear reactions involved must be well understood. The $^{39}$K+p reactions are one such pair of reactions. Here, we report a new evaluation of the $^{39}$K(p,$γ$)$^{40}$Ca reaction rate by taking into account ambiguities and measurement uncertainties in the nuclear data. The uncertainty in the $^{39}$K(p,$γ$)$^{40}",
+            "published": "2018-08-09",
+            "url": "https://arxiv.org/abs/1808.02981v1",
+            "categories": [
+              "nucl-ex",
+              "astro-ph.SR"
+            ]
+          }
+        ],
+        "topology_graph": null
+      }
+    ],
+    "top_candidates": [
+      {
+        "site": {
+          "site_id": "CA-ON-003",
+          "name": "Markham, ON",
+          "latitude": 43.86,
+          "longitude": -79.34,
+          "address": "Markham, ON",
+          "region_iso": "CA-ON",
+          "topology_block": null,
+          "parcel_path": null,
+          "profile": {
+            "capacity_mw": 92.36737914709562,
+            "transmission_headroom_mw": 81.73138519630743,
+            "pue": 1.36,
+            "fiber_latency_ms": 0.12,
+            "water_l_per_mwh": 0.87,
+            "substation_distance_km": 0.76,
+            "spot_lmp_usd_mwh": 48.62,
+            "lease_cost_usd_yr": 2549458.0,
+            "meets_constraints": true,
+            "overall_score": 0.337,
+            "has_policy_blockers": false,
+            "has_alerts": false,
+            "deployment_months": 11.3
+          },
+          "pareto_objectives": {
+            "cost_economics": 0.41,
+            "carbon_intensity": 0.5,
+            "latency_fit": 0.5,
+            "transmission_headroom": 0.39,
+            "deployment_speed": 0.82,
+            "operational_resilience": 0.9,
+            "pareto_rank": 1,
+            "weighted_score": 0.542
+          },
+          "generation_method": "ferc_queue+poi_expansion",
+          "parent_site_id": null,
+          "distance_to_known_dc_km": null,
+          "nearest_known_operator": null,
+          "diversity_cluster": null,
+          "rank": 2
+        },
+        "region_iso": "CA-ON",
+        "topology_id": "CA-ON",
+        "levelized_cost_usd_mwh": 67.0,
+        "uptime_lb": 0.9946,
+        "uptime_ub": 0.9993,
+        "plan_path": "data/transmission/plan_CA-ON_a16e1e14.geojson",
+        "plan_file": "plan_CA-ON_a16e1e14.geojson",
+        "topology_file": null,
+        "scoring_method": "mock",
+        "interactions": [],
+        "rank": 2,
+        "explanation": "Estimated LCOE: $67.0/MWh"
+      },
+      {
+        "site": {
+          "site_id": "CA-ON-002",
+          "name": "Vaughan, ON",
+          "latitude": 43.84,
+          "longitude": -79.51,
+          "address": "Vaughan, ON",
+          "region_iso": "CA-ON",
+          "topology_block": null,
+          "parcel_path": null,
+          "profile": {
+            "capacity_mw": 81.88012968371409,
+            "transmission_headroom_mw": 108.25642154173198,
+            "pue": 1.28,
+            "fiber_latency_ms": 0.12,
+            "water_l_per_mwh": 1.12,
+            "substation_distance_km": 4.27,
+            "spot_lmp_usd_mwh": 48.62,
+            "lease_cost_usd_yr": 1116348.0,
+            "meets_constraints": true,
+            "overall_score": 0.398,
+            "has_policy_blockers": false,
+            "has_alerts": false,
+            "deployment_months": 28.6
+          },
+          "pareto_objectives": {
+            "cost_economics": 0.41,
+            "carbon_intensity": 0.5,
+            "latency_fit": 0.5,
+            "transmission_headroom": 0.63,
+            "deployment_speed": 0.25,
+            "operational_resilience": 1.0,
+            "pareto_rank": 1,
+            "weighted_score": 0.527
+          },
+          "generation_method": "ferc_queue+poi_expansion",
+          "parent_site_id": null,
+          "distance_to_known_dc_km": null,
+          "nearest_known_operator": null,
+          "diversity_cluster": null,
+          "rank": 1
+        },
+        "region_iso": "CA-ON",
+        "topology_id": "CA-ON",
+        "levelized_cost_usd_mwh": 67.5,
+        "uptime_lb": 0.9853,
+        "uptime_ub": 0.9985,
+        "plan_path": "data/transmission/plan_CA-ON_384a38bd.geojson",
+        "plan_file": "plan_CA-ON_384a38bd.geojson",
+        "topology_file": null,
+        "scoring_method": "mock",
+        "interactions": [],
+        "rank": 1,
+        "explanation": "Estimated LCOE: $67.5/MWh"
+      },
+      {
+        "site": {
+          "site_id": "CA-ON-001",
+          "name": "Mississauga, ON",
+          "latitude": 43.59,
+          "longitude": -79.64,
+          "address": "Mississauga, ON",
+          "region_iso": "CA-ON",
+          "topology_block": null,
+          "parcel_path": null,
+          "profile": {
+            "capacity_mw": 107.29910400807886,
+            "transmission_headroom_mw": 58.444236316317344,
+            "pue": 1.24,
+            "fiber_latency_ms": 0.11,
+            "water_l_per_mwh": 1.51,
+            "substation_distance_km": 2.09,
+            "spot_lmp_usd_mwh": 48.62,
+            "lease_cost_usd_yr": 2216661.0,
+            "meets_constraints": true,
+            "overall_score": 0.334,
+            "has_policy_blockers": false,
+            "has_alerts": false,
+            "deployment_months": 15.8
+          },
+          "pareto_objectives": {
+            "cost_economics": 0.33,
+            "carbon_intensity": 0.5,
+            "latency_fit": 0.5,
+            "transmission_headroom": 0.19,
+            "deployment_speed": 0.67,
+            "operational_resilience": 1.0,
+            "pareto_rank": 1,
+            "weighted_score": 0.464
+          },
+          "generation_method": "ferc_queue+poi_expansion",
+          "parent_site_id": null,
+          "distance_to_known_dc_km": null,
+          "nearest_known_operator": null,
+          "diversity_cluster": null,
+          "rank": 3
+        },
+        "region_iso": "CA-ON",
+        "topology_id": "CA-ON",
+        "levelized_cost_usd_mwh": 73.9,
+        "uptime_lb": 0.9861,
+        "uptime_ub": 0.9988,
+        "plan_path": "data/transmission/plan_CA-ON_8c1515f5.geojson",
+        "plan_file": "plan_CA-ON_8c1515f5.geojson",
+        "topology_file": null,
+        "scoring_method": "mock",
+        "interactions": [],
+        "rank": 3,
+        "explanation": "Estimated LCOE: $73.9/MWh"
+      }
+    ],
+    "safety_flags": [],
+    "limitations": [
+      "LCOE values are forecasts. Refine with utility-specific tariff studies.",
+      "Carbon intensity is sampled from the current hour. Treat as a snapshot, not a forward curve.",
+      "Transmission headroom is read from the live ISO snapshot. Re-validate at the interconnect study stage.",
+      "Site economics use 2D parcel proxies; on-site survey will reshape capex.",
+      "No live grid telemetry available for: CA-ON. Scoring fell back to property-based heuristics."
+    ],
+    "methodology_notes": "Regions identified via OpenEI region-utility associations and ISO topology snapshots. Grid telemetry retrieved from EIA Open Data v2 plus IESO / AESO / Hydro-Québec public fuel-mix feeds, with carbon intensity computed from IPCC AR5 Annex III lifecycle factors. Sites generated through FERC queue lookups, POI expansion and Claude-guided proposals. Feasibility filtering via capacity / latency / policy heuristics. Placement scoring performed with the LP scenario engine (or mock fallback). Interaction analysis and narrative generation via the Anthropic Claude API.",
+    "generated_at": "2026-05-27T02:44:31.150954",
+    "pipeline_duration_seconds": 134.3,
+    "news_items": [],
+    "pareto_analysis": {
+      "weights": {
+        "cost_economics": 0.2,
+        "carbon_intensity": 0.3,
+        "latency_fit": 0.0,
+        "transmission_headroom": 0.25,
+        "deployment_speed": 0.15,
+        "operational_resilience": 0.1,
+        "rationale": "An AI training cluster is latency-insensitive, so carbon intensity and transmission headroom dominate given the workload's explicit preference for Ontario's low-carbon nuclear/hydro mix and the 75 MW scale requiring substantial local grid capacity, with cost and deployment speed as meaningful secondary factors."
+      },
+      "pareto_front_count": 3,
+      "workload_context": "An AI training cluster is latency-insensitive, so carbon intensity and transmission headroom dominate given the workload's explicit preference for Ontario's low-carbon nuclear/hydro mix and the 75 MW scale requiring substantial local grid capacity, with cost and deployment speed as meaningful secondary factors.",
+      "is_latency_critical": false
+    },
+    "sources": [
+      "ArcGIS GeoEnrichment (Esri Canada): Markham, ON (CY): 95,023 households, population 365,081"
+    ]
+  }
+}

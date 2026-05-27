@@ -86,7 +86,7 @@ function WorkloadSpecViz({ plan }: { plan: ResiliencePlan }) {
       sub: `${cold_event.min_temp_c.toFixed(1)}°C × ${cold_event.duration_hours}h`,
     },
     { label: 'SCENARIOS', value: String(spec.scenarios.length), sub: spec.scenarios.map((s) => s.name).join(' · ') },
-    { label: 'HORIZON', value: String(spec.horizon_year), sub: 'analysis year' },
+    { label: 'HORIZON', value: String(spec.horizon_year), sub: 'adoption target year' },
   ]
   return (
     <div className="viz-grid">

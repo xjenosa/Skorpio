@@ -5,15 +5,16 @@
 // `frontend/src/demo/fixtures/<pipeline>/` and stay the same across reloads
 // so the operator can rehearse a predictable walkthrough.
 //
-// Linked job-id prefixes (captured against the live backend, re-captured
-// after the §0 data-provenance fixes shipped on 2026-05-18 — prior IDs
-// 9dce7ec5 / 335ead0d / 57b8f39f / ce7f3fec / fefe91c6 used stale backend
-// logic and were deleted):
-//   siting           → a06b5cda
-//   expansion        → 0801f572
-//   winter-peak      → 476a2f1a
-//   electrification  → 331e1dbc
-//   investment       → f01f3b45
+// Linked job-id prefixes (re-captured against the live backend on
+// 2026-05-26 after the latest pipeline fixes — feeder load distribution,
+// HP physics, expanded cold-event catalog, label cleanup, and the
+// inline-chip + threshold-line UI). Source of truth lives in
+// `frontend/src/demo/jobs.ts::DEMO_JOB_PREFIXES`:
+//   siting           → 49d354bd
+//   expansion        → ce0585bf
+//   winter-peak      → e5d77262
+//   electrification  → f4b26d6a
+//   investment       → 2621702d
 
 import type { PipelineId } from '../pipelines'
 

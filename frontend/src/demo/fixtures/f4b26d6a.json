@@ -1,115 +1,115 @@
 {
-  "prefix": "331e1dbc",
+  "prefix": "f4b26d6a",
   "pipeline_id": "electrification-readiness",
   "job_list_item": {
-    "job_id": "331e1dbc-7907-4ce0-b453-47f81745f241",
-    "workload_spec": "Score Mississauga (L5B) for EV and heat pump growth through 2030.",
+    "job_id": "f4b26d6a-c794-4552-83c4-4f46f6c74438",
+    "workload_spec": "Score Mississauga (L5B) for EV and heat pump growth through 2030",
     "stage": "completed",
     "progress": 100.0,
-    "created_at": "2026-05-25T03:54:37.366770",
+    "created_at": "2026-05-27T02:35:17.082073",
     "pipeline_id": "electrification-readiness",
     "imported": false,
     "imported_from_email": null
   },
   "job_status": {
-    "job_id": "331e1dbc-7907-4ce0-b453-47f81745f241",
-    "workload_spec": "Score Mississauga (L5B) for EV and heat pump growth through 2030.",
+    "job_id": "f4b26d6a-c794-4552-83c4-4f46f6c74438",
+    "workload_spec": "Score Mississauga (L5B) for EV and heat pump growth through 2030",
     "stage": "completed",
     "progress": 100.0,
     "message": "Readiness plan ready",
-    "started_at": "2026-05-25T03:54:37.492846",
-    "updated_at": "2026-05-25T03:55:10.200014",
+    "started_at": "2026-05-27T02:35:17.091672",
+    "updated_at": "2026-05-27T02:35:49.168890",
     "error": null,
     "has_results": true,
     "pipeline_id": "electrification-readiness",
     "paused": false,
     "progress_log": [
       {
-        "ts": "03:54:37",
+        "ts": "02:35:17",
         "text": "Queued",
         "level": "info"
       },
       {
-        "ts": "03:54:37",
+        "ts": "02:35:17",
         "text": "Parsing electrification readiness query...",
         "level": "info"
       },
       {
-        "ts": "03:54:37",
+        "ts": "02:35:17",
         "text": "Parsing electrification scope with AI...",
         "level": "info"
       },
       {
-        "ts": "03:54:39",
+        "ts": "02:35:19",
         "text": "Parsed: Mississauga · 1 FSA(s) · 3 scenario(s)",
         "level": "info"
       },
       {
-        "ts": "03:54:45",
+        "ts": "02:35:26",
         "text": "Loading FSA demographic + housing data...",
         "level": "info"
       },
       {
-        "ts": "03:54:45",
+        "ts": "02:35:26",
         "text": "Fetching demographic + housing data for 1 FSA(s)...",
         "level": "info"
       },
       {
-        "ts": "03:54:46",
+        "ts": "02:35:26",
         "text": "Loaded 1 FSA profile(s) (1 from live registry, 0 synthesized)",
         "level": "info"
       },
       {
-        "ts": "03:54:46",
+        "ts": "02:35:26",
         "text": "Modeling per-FSA load impact under each scenario...",
         "level": "info"
       },
       {
-        "ts": "03:54:46",
-        "text": "Modeled L5B · Today (5% HP, 7% EV) â†’ +19.1 MW peak",
+        "ts": "02:35:26",
+        "text": "Modeled L5B · Today (5% HP, 7% EV) → +14.0 MW peak",
         "level": "info"
       },
       {
-        "ts": "03:54:46",
-        "text": "Modeled L5B · 2030 Plans (25% HP, 30% EV) â†’ +103.8 MW peak",
+        "ts": "02:35:26",
+        "text": "Modeled L5B · 2030 Plans (25% HP, 30% EV) → +76.1 MW peak",
         "level": "info"
       },
       {
-        "ts": "03:54:46",
-        "text": "Modeled L5B · 2035 Net-Zero (50% HP, 60% EV) â†’ +214.0 MW peak",
+        "ts": "02:35:26",
+        "text": "Modeled L5B · 2035 Net-Zero (50% HP, 60% EV) → +157.5 MW peak",
         "level": "info"
       },
       {
-        "ts": "03:54:46",
+        "ts": "02:35:26",
         "text": "Scoring readiness across grid, building, affordability, policy...",
         "level": "info"
       },
       {
-        "ts": "03:54:46",
-        "text": "Generating rationales for 3 (FSA Ã— scenario) pairs in parallel...",
+        "ts": "02:35:26",
+        "text": "Generating rationales for 3 (FSA × scenario) pairs in parallel...",
         "level": "info"
       },
       {
-        "ts": "03:54:50",
-        "text": "Scored 3 (FSA Ã— scenario) pairs",
+        "ts": "02:35:30",
+        "text": "Scored 3 (FSA × scenario) pairs",
         "level": "info"
       },
       {
-        "ts": "03:54:50",
+        "ts": "02:35:30",
         "text": "Composing electrification readiness report...",
         "level": "info"
       },
       {
-        "ts": "03:55:10",
+        "ts": "02:35:49",
         "text": "Readiness plan ready",
         "level": "ok"
       }
     ]
   },
   "result": {
-    "job_id": "331e1dbc-7907-4ce0-b453-47f81745f241",
+    "job_id": "f4b26d6a-c794-4552-83c4-4f46f6c74438",
     "spec": {
-      "query": "Score Mississauga (L5B) for EV and heat pump growth through 2030.",
+      "query": "Score Mississauga (L5B) for EV and heat pump growth through 2030",
       "normalized_name": "Mississauga L5B · 2030 All Scenarios",
       "city": "Mississauga",
       "province": "ON",
@@ -144,7 +144,7 @@
         }
       ],
       "horizon_year": 2030,
-      "context_summary": "Data not available for grid headroom, carbon intensity, LCOE, substation capacity, or feeder-level load metrics for FSA L5B in Mississauga. Without source-grounded figures from the underlying dataset, I cannot responsibly write a data-cited paragraph that meets the source grounding rules for this study.\n\nWhat I can tell you is that the study structure is valid and well-formed: it covers FSA L5B in Mississauga, assesses both heat pump adoption and EV uptake across three scenarios (conservative at 5% HP / 7% EV today, moderate at 25% HP / 30% EV by 2030, and aggressive at 50% HP / 60% EV by 2035), with a planning horizon of 2030. Once the underlying grid data, carbon intensity readings, and load metrics are supplied for this FSA, I can produce a fully source-grounded paragraph that names every number's origin field or API. Would you like to provide that data, or would a clearly hedged, context-only paragraph with no specific invented figures be acceptable instead?"
+      "context_summary": "{\"city\": \"Mississauga\", \"fsas\": [\"L5B\"], \"scope\": [\"heating\", \"ev\"], \"scenarios\": [\"conservative\", \"moderate\", \"aggressive\"], \"horizon_year\": 2030}\n\nThis study examines the electrical grid readiness of the L5B postal district in Mississauga, Ontario, assessing how the local distribution network can support a growing shift toward electric heating and electric vehicles across three adoption scenarios — from today's early-stage uptake through a 2035 net-zero target. By modeling heat pump conversions ranging from 5% to 50% of homes and EV adoption from 7% to 60% of vehicles, the analysis quantifies how peak demand on neighborhood-level infrastructure is likely to evolve between now and 2030. This matters because distribution transformers and feeder lines serving residential streets are sized for historical loads, and without proactive planning, accelerating electrification can trigger capacity shortfalls that are costly and disruptive to address after the fact. The findings are intended to give grid planners and local policymakers a clear, evidence-based picture of where and when upgrades will be needed to keep pace with Mississauga's decarbonization commitments."
     },
     "neighborhoods": [
       {
@@ -152,17 +152,17 @@
         "label": "Greater Toronto Area · L5B",
         "city": "Greater Toronto Area",
         "province": "ON",
-        "latitude": 43.5665,
-        "longitude": -79.6035,
-        "households": 27315,
-        "median_household_income_cad": 79000.0,
-        "avg_household_size": 2.4,
+        "latitude": 43.577957459,
+        "longitude": -79.630291525,
+        "households": 19147,
+        "median_household_income_cad": 68047.63,
+        "avg_household_size": 2.51,
         "dwelling_mix": {
-          "single_detached": 0.1424,
-          "semi_detached": 0.0457,
-          "row": 0.0333,
-          "apartment_low_rise": 0.0472,
-          "apartment_high_rise": 0.7314,
+          "single_detached": 0.1358909174948001,
+          "semi_detached": 0.04153322988543696,
+          "row": 0.03093532305457427,
+          "apartment_low_rise": 0.7916405295651887,
+          "apartment_high_rise": 0.0,
           "other": 0.0
         },
         "heating_mix": {
@@ -180,7 +180,8 @@
         "sources": [
           "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
           "ECCC Climate Normals 1981–2010",
-          "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
+          "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 10.8 km away)",
+          "ArcGIS GeoEnrichment (Esri Canada): households, median_household_income, avg_household_size, dwelling_mix"
         ],
         "is_synthesized": false
       }
@@ -192,17 +193,17 @@
           "label": "Greater Toronto Area · L5B",
           "city": "Greater Toronto Area",
           "province": "ON",
-          "latitude": 43.5665,
-          "longitude": -79.6035,
-          "households": 27315,
-          "median_household_income_cad": 79000.0,
-          "avg_household_size": 2.4,
+          "latitude": 43.577957459,
+          "longitude": -79.630291525,
+          "households": 19147,
+          "median_household_income_cad": 68047.63,
+          "avg_household_size": 2.51,
           "dwelling_mix": {
-            "single_detached": 0.1424,
-            "semi_detached": 0.0457,
-            "row": 0.0333,
-            "apartment_low_rise": 0.0472,
-            "apartment_high_rise": 0.7314,
+            "single_detached": 0.1358909174948001,
+            "semi_detached": 0.04153322988543696,
+            "row": 0.03093532305457427,
+            "apartment_low_rise": 0.7916405295651887,
+            "apartment_high_rise": 0.0,
             "other": 0.0
           },
           "heating_mix": {
@@ -220,7 +221,8 @@
           "sources": [
             "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
             "ECCC Climate Normals 1981–2010",
-            "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
+            "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 10.8 km away)",
+            "ArcGIS GeoEnrichment (Esri Canada): households, median_household_income, avg_household_size, dwelling_mix"
           ],
           "is_synthesized": false
         },
@@ -239,192 +241,192 @@
             {
               "hour": 0,
               "base_load_kw_per_household": 1.49,
-              "new_heat_pump_kw_per_household": 0.19,
+              "new_heat_pump_kw_per_household": 0.23,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 1.81
+              "total_kw_per_household": 1.85
             },
             {
               "hour": 1,
               "base_load_kw_per_household": 1.46,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.23,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 1.78
+              "total_kw_per_household": 1.82
             },
             {
               "hour": 2,
               "base_load_kw_per_household": 1.45,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.24,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 1.77
+              "total_kw_per_household": 1.81
             },
             {
               "hour": 3,
               "base_load_kw_per_household": 1.45,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.24,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 1.77
+              "total_kw_per_household": 1.81
             },
             {
               "hour": 4,
               "base_load_kw_per_household": 1.46,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.24,
               "new_ev_kw_per_household": 0.06,
-              "total_kw_per_household": 1.72
+              "total_kw_per_household": 1.76
             },
             {
               "hour": 5,
               "base_load_kw_per_household": 1.51,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.24,
               "new_ev_kw_per_household": 0.06,
-              "total_kw_per_household": 1.77
+              "total_kw_per_household": 1.81
             },
             {
               "hour": 6,
               "base_load_kw_per_household": 1.61,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.24,
               "new_ev_kw_per_household": 0.06,
-              "total_kw_per_household": 1.87
+              "total_kw_per_household": 1.91
             },
             {
               "hour": 7,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.24,
               "new_ev_kw_per_household": 0.06,
-              "total_kw_per_household": 1.97
+              "total_kw_per_household": 2.01
             },
             {
               "hour": 8,
               "base_load_kw_per_household": 1.74,
-              "new_heat_pump_kw_per_household": 0.2,
+              "new_heat_pump_kw_per_household": 0.24,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 2.06
+              "total_kw_per_household": 2.1
             },
             {
               "hour": 9,
               "base_load_kw_per_household": 1.74,
-              "new_heat_pump_kw_per_household": 0.19,
+              "new_heat_pump_kw_per_household": 0.23,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 2.05
+              "total_kw_per_household": 2.09
             },
             {
               "hour": 10,
               "base_load_kw_per_household": 1.73,
-              "new_heat_pump_kw_per_household": 0.18,
+              "new_heat_pump_kw_per_household": 0.22,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 2.03
+              "total_kw_per_household": 2.07
             },
             {
               "hour": 11,
               "base_load_kw_per_household": 1.72,
-              "new_heat_pump_kw_per_household": 0.18,
+              "new_heat_pump_kw_per_household": 0.21,
               "new_ev_kw_per_household": 0.12,
-              "total_kw_per_household": 2.01
+              "total_kw_per_household": 2.04
             },
             {
               "hour": 12,
               "base_load_kw_per_household": 1.7,
-              "new_heat_pump_kw_per_household": 0.17,
+              "new_heat_pump_kw_per_household": 0.21,
               "new_ev_kw_per_household": 0.23,
-              "total_kw_per_household": 2.1
+              "total_kw_per_household": 2.14
             },
             {
               "hour": 13,
               "base_load_kw_per_household": 1.7,
-              "new_heat_pump_kw_per_household": 0.17,
+              "new_heat_pump_kw_per_household": 0.2,
               "new_ev_kw_per_household": 0.34,
-              "total_kw_per_household": 2.21
+              "total_kw_per_household": 2.24
             },
             {
               "hour": 14,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 0.17,
+              "new_heat_pump_kw_per_household": 0.2,
               "new_ev_kw_per_household": 0.46,
-              "total_kw_per_household": 2.33
+              "total_kw_per_household": 2.37
             },
             {
               "hour": 15,
               "base_load_kw_per_household": 1.73,
-              "new_heat_pump_kw_per_household": 0.17,
+              "new_heat_pump_kw_per_household": 0.2,
               "new_ev_kw_per_household": 0.52,
-              "total_kw_per_household": 2.42
+              "total_kw_per_household": 2.46
             },
             {
               "hour": 16,
               "base_load_kw_per_household": 1.78,
-              "new_heat_pump_kw_per_household": 0.17,
+              "new_heat_pump_kw_per_household": 0.2,
               "new_ev_kw_per_household": 0.52,
-              "total_kw_per_household": 2.47
+              "total_kw_per_household": 2.51
             },
             {
               "hour": 17,
               "base_load_kw_per_household": 1.83,
-              "new_heat_pump_kw_per_household": 0.17,
+              "new_heat_pump_kw_per_household": 0.21,
               "new_ev_kw_per_household": 0.52,
-              "total_kw_per_household": 2.53
+              "total_kw_per_household": 2.56
             },
             {
               "hour": 18,
               "base_load_kw_per_household": 1.82,
-              "new_heat_pump_kw_per_household": 0.18,
+              "new_heat_pump_kw_per_household": 0.21,
               "new_ev_kw_per_household": 0.52,
-              "total_kw_per_household": 2.52
+              "total_kw_per_household": 2.56
             },
             {
               "hour": 19,
               "base_load_kw_per_household": 1.8,
-              "new_heat_pump_kw_per_household": 0.18,
+              "new_heat_pump_kw_per_household": 0.22,
               "new_ev_kw_per_household": 0.52,
-              "total_kw_per_household": 2.5
+              "total_kw_per_household": 2.54
             },
             {
               "hour": 20,
               "base_load_kw_per_household": 1.77,
-              "new_heat_pump_kw_per_household": 0.19,
+              "new_heat_pump_kw_per_household": 0.22,
               "new_ev_kw_per_household": 0.52,
-              "total_kw_per_household": 2.48
+              "total_kw_per_household": 2.51
             },
             {
               "hour": 21,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 0.19,
+              "new_heat_pump_kw_per_household": 0.23,
               "new_ev_kw_per_household": 0.52,
-              "total_kw_per_household": 2.42
+              "total_kw_per_household": 2.46
             },
             {
               "hour": 22,
               "base_load_kw_per_household": 1.63,
-              "new_heat_pump_kw_per_household": 0.19,
+              "new_heat_pump_kw_per_household": 0.23,
               "new_ev_kw_per_household": 0.48,
-              "total_kw_per_household": 2.3
+              "total_kw_per_household": 2.34
             },
             {
               "hour": 23,
               "base_load_kw_per_household": 1.56,
-              "new_heat_pump_kw_per_household": 0.19,
+              "new_heat_pump_kw_per_household": 0.23,
               "new_ev_kw_per_household": 0.24,
-              "total_kw_per_household": 1.99
+              "total_kw_per_household": 2.03
             }
           ],
-          "peak_kw_per_household": 2.53,
+          "peak_kw_per_household": 2.56,
           "peak_hour": 17,
-          "incremental_peak_mw": 19.05,
-          "transformer_overload_count": 682,
+          "incremental_peak_mw": 14.0,
+          "transformer_overload_count": 478,
           "panel_upgrade_household_pct": 0.0
         },
         "readiness": {
           "fsa": "L5B",
           "scenario_name": "Conservative",
           "grid_score": 0.0,
-          "building_score": 0.888,
-          "affordability_score": 0.985,
+          "building_score": 0.885,
+          "affordability_score": 0.981,
           "policy_score": 0.55,
-          "overall_score": 0.501,
+          "overall_score": 0.5,
           "verdict": "CONSTRAINED",
           "rank": 1,
           "blockers": [
-            "682 local transformers projected to overload"
+            "478 local transformers projected to overload"
           ],
-          "rationale": "The L5B postal district scores 0.50 out of 1.0 (Constrained), driven by 682 local transformers projected to overload under today's modest adoption of 5% heat pumps and 7% EVs, adding 19.1 incremental peak MW to the grid. Panel upgrades are needed in 0% of homes, so the sole blocker is transformer infrastructure, which will require targeted replacement or load-balancing before electrification can safely scale."
+          "rationale": "The L5B forward sortation area scores 0.50 out of 1.0 (CONSTRAINED) under today's scenario of 5% heat pump and 7% EV adoption, driven entirely by 478 local transformers projected to overload against an incremental peak demand of 14.0 MW (verdict engine output). Panel upgrades are not a limiting factor at 0% of homes requiring intervention (panel upgrade field), but the transformer overload count alone is sufficient to block reliable electrification expansion without targeted grid reinforcement."
         }
       },
       {
@@ -433,17 +435,17 @@
           "label": "Greater Toronto Area · L5B",
           "city": "Greater Toronto Area",
           "province": "ON",
-          "latitude": 43.5665,
-          "longitude": -79.6035,
-          "households": 27315,
-          "median_household_income_cad": 79000.0,
-          "avg_household_size": 2.4,
+          "latitude": 43.577957459,
+          "longitude": -79.630291525,
+          "households": 19147,
+          "median_household_income_cad": 68047.63,
+          "avg_household_size": 2.51,
           "dwelling_mix": {
-            "single_detached": 0.1424,
-            "semi_detached": 0.0457,
-            "row": 0.0333,
-            "apartment_low_rise": 0.0472,
-            "apartment_high_rise": 0.7314,
+            "single_detached": 0.1358909174948001,
+            "semi_detached": 0.04153322988543696,
+            "row": 0.03093532305457427,
+            "apartment_low_rise": 0.7916405295651887,
+            "apartment_high_rise": 0.0,
             "other": 0.0
           },
           "heating_mix": {
@@ -461,7 +463,8 @@
           "sources": [
             "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
             "ECCC Climate Normals 1981–2010",
-            "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
+            "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 10.8 km away)",
+            "ArcGIS GeoEnrichment (Esri Canada): households, median_household_income, avg_household_size, dwelling_mix"
           ],
           "is_synthesized": false
         },
@@ -480,192 +483,192 @@
             {
               "hour": 0,
               "base_load_kw_per_household": 1.49,
-              "new_heat_pump_kw_per_household": 0.96,
+              "new_heat_pump_kw_per_household": 1.15,
               "new_ev_kw_per_household": 0.67,
-              "total_kw_per_household": 3.13
+              "total_kw_per_household": 3.32
             },
             {
               "hour": 1,
               "base_load_kw_per_household": 1.46,
-              "new_heat_pump_kw_per_household": 0.98,
+              "new_heat_pump_kw_per_household": 1.17,
               "new_ev_kw_per_household": 0.68,
-              "total_kw_per_household": 3.12
+              "total_kw_per_household": 3.31
             },
             {
               "hour": 2,
               "base_load_kw_per_household": 1.45,
-              "new_heat_pump_kw_per_household": 0.98,
+              "new_heat_pump_kw_per_household": 1.18,
               "new_ev_kw_per_household": 0.68,
-              "total_kw_per_household": 3.12
+              "total_kw_per_household": 3.31
             },
             {
               "hour": 3,
               "base_load_kw_per_household": 1.45,
-              "new_heat_pump_kw_per_household": 0.99,
+              "new_heat_pump_kw_per_household": 1.18,
               "new_ev_kw_per_household": 0.68,
-              "total_kw_per_household": 3.12
+              "total_kw_per_household": 3.31
             },
             {
               "hour": 4,
               "base_load_kw_per_household": 1.46,
-              "new_heat_pump_kw_per_household": 0.99,
+              "new_heat_pump_kw_per_household": 1.18,
               "new_ev_kw_per_household": 0.34,
-              "total_kw_per_household": 2.8
+              "total_kw_per_household": 2.99
             },
             {
               "hour": 5,
               "base_load_kw_per_household": 1.51,
-              "new_heat_pump_kw_per_household": 1.0,
+              "new_heat_pump_kw_per_household": 1.2,
               "new_ev_kw_per_household": 0.34,
-              "total_kw_per_household": 2.86
+              "total_kw_per_household": 3.05
             },
             {
               "hour": 6,
               "base_load_kw_per_household": 1.61,
-              "new_heat_pump_kw_per_household": 1.01,
+              "new_heat_pump_kw_per_household": 1.2,
               "new_ev_kw_per_household": 0.34,
-              "total_kw_per_household": 2.96
+              "total_kw_per_household": 3.15
             },
             {
               "hour": 7,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 1.01,
+              "new_heat_pump_kw_per_household": 1.2,
               "new_ev_kw_per_household": 0.34,
-              "total_kw_per_household": 3.06
+              "total_kw_per_household": 3.26
             },
             {
               "hour": 8,
               "base_load_kw_per_household": 1.74,
-              "new_heat_pump_kw_per_household": 1.0,
+              "new_heat_pump_kw_per_household": 1.2,
               "new_ev_kw_per_household": 0.69,
-              "total_kw_per_household": 3.43
+              "total_kw_per_household": 3.62
             },
             {
               "hour": 9,
               "base_load_kw_per_household": 1.74,
-              "new_heat_pump_kw_per_household": 0.96,
+              "new_heat_pump_kw_per_household": 1.15,
               "new_ev_kw_per_household": 0.67,
-              "total_kw_per_household": 3.37
+              "total_kw_per_household": 3.56
             },
             {
               "hour": 10,
               "base_load_kw_per_household": 1.73,
-              "new_heat_pump_kw_per_household": 0.91,
+              "new_heat_pump_kw_per_household": 1.09,
               "new_ev_kw_per_household": 0.66,
-              "total_kw_per_household": 3.3
+              "total_kw_per_household": 3.48
             },
             {
               "hour": 11,
               "base_load_kw_per_household": 1.72,
-              "new_heat_pump_kw_per_household": 0.88,
+              "new_heat_pump_kw_per_household": 1.05,
               "new_ev_kw_per_household": 0.64,
-              "total_kw_per_household": 3.23
+              "total_kw_per_household": 3.4
             },
             {
               "hour": 12,
               "base_load_kw_per_household": 1.7,
-              "new_heat_pump_kw_per_household": 0.86,
+              "new_heat_pump_kw_per_household": 1.03,
               "new_ev_kw_per_household": 1.27,
-              "total_kw_per_household": 3.84
+              "total_kw_per_household": 4.01
             },
             {
               "hour": 13,
               "base_load_kw_per_household": 1.7,
-              "new_heat_pump_kw_per_household": 0.85,
+              "new_heat_pump_kw_per_household": 1.02,
               "new_ev_kw_per_household": 1.9,
-              "total_kw_per_household": 4.45
+              "total_kw_per_household": 4.62
             },
             {
               "hour": 14,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 0.85,
+              "new_heat_pump_kw_per_household": 1.02,
               "new_ev_kw_per_household": 2.53,
-              "total_kw_per_household": 5.09
+              "total_kw_per_household": 5.26
             },
             {
               "hour": 15,
               "base_load_kw_per_household": 1.73,
-              "new_heat_pump_kw_per_household": 0.85,
+              "new_heat_pump_kw_per_household": 1.01,
               "new_ev_kw_per_household": 2.91,
-              "total_kw_per_household": 5.49
+              "total_kw_per_household": 5.65
             },
             {
               "hour": 16,
               "base_load_kw_per_household": 1.78,
-              "new_heat_pump_kw_per_household": 0.85,
+              "new_heat_pump_kw_per_household": 1.02,
               "new_ev_kw_per_household": 2.91,
-              "total_kw_per_household": 5.54
+              "total_kw_per_household": 5.71
             },
             {
               "hour": 17,
               "base_load_kw_per_household": 1.83,
-              "new_heat_pump_kw_per_household": 0.87,
+              "new_heat_pump_kw_per_household": 1.04,
               "new_ev_kw_per_household": 2.91,
-              "total_kw_per_household": 5.61
+              "total_kw_per_household": 5.78
             },
             {
               "hour": 18,
               "base_load_kw_per_household": 1.82,
-              "new_heat_pump_kw_per_household": 0.89,
+              "new_heat_pump_kw_per_household": 1.07,
               "new_ev_kw_per_household": 2.91,
-              "total_kw_per_household": 5.62
+              "total_kw_per_household": 5.8
             },
             {
               "hour": 19,
               "base_load_kw_per_household": 1.8,
-              "new_heat_pump_kw_per_household": 0.91,
+              "new_heat_pump_kw_per_household": 1.09,
               "new_ev_kw_per_household": 2.91,
-              "total_kw_per_household": 5.61
+              "total_kw_per_household": 5.79
             },
             {
               "hour": 20,
               "base_load_kw_per_household": 1.77,
-              "new_heat_pump_kw_per_household": 0.93,
+              "new_heat_pump_kw_per_household": 1.11,
               "new_ev_kw_per_household": 2.91,
-              "total_kw_per_household": 5.6
+              "total_kw_per_household": 5.78
             },
             {
               "hour": 21,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 0.94,
+              "new_heat_pump_kw_per_household": 1.13,
               "new_ev_kw_per_household": 2.91,
-              "total_kw_per_household": 5.56
+              "total_kw_per_household": 5.75
             },
             {
               "hour": 22,
               "base_load_kw_per_household": 1.63,
-              "new_heat_pump_kw_per_household": 0.95,
+              "new_heat_pump_kw_per_household": 1.14,
               "new_ev_kw_per_household": 2.68,
-              "total_kw_per_household": 5.26
+              "total_kw_per_household": 5.45
             },
             {
               "hour": 23,
               "base_load_kw_per_household": 1.56,
-              "new_heat_pump_kw_per_household": 0.96,
+              "new_heat_pump_kw_per_household": 1.14,
               "new_ev_kw_per_household": 1.34,
-              "total_kw_per_household": 3.86
+              "total_kw_per_household": 4.05
             }
           ],
-          "peak_kw_per_household": 5.62,
+          "peak_kw_per_household": 5.8,
           "peak_hour": 18,
-          "incremental_peak_mw": 103.8,
-          "transformer_overload_count": 682,
+          "incremental_peak_mw": 76.09,
+          "transformer_overload_count": 478,
           "panel_upgrade_household_pct": 0.0
         },
         "readiness": {
           "fsa": "L5B",
           "scenario_name": "Moderate",
           "grid_score": 0.0,
-          "building_score": 0.888,
-          "affordability_score": 0.927,
+          "building_score": 0.885,
+          "affordability_score": 0.903,
           "policy_score": 0.55,
-          "overall_score": 0.49,
+          "overall_score": 0.484,
           "verdict": "CONSTRAINED",
           "rank": 1,
           "blockers": [
-            "682 local transformers projected to overload"
+            "478 local transformers projected to overload"
           ],
-          "rationale": "The L5B postal district scores 0.49 out of 1.0 (CONSTRAINED), driven primarily by 682 local transformers projected to overload under the 2030 scenario of 25% heat pump and 30% EV adoption, which adds 103.8 incremental peak MW to the local grid (all figures from scenario verdict data). Panel upgrade exposure is 0% of homes (scenario verdict data), meaning the constraint is squarely a distribution infrastructure problem that must be resolved before electrification targets can be safely met."
+          "rationale": "The L5B postal zone scores 0.48/1.0 (CONSTRAINED) under the 2030 scenario, driven by 478 local transformers projected to overload against an incremental peak demand of 76.1 MW (scenario modeling fields). Panel upgrades are not a limiting factor at 0% of homes (panel upgrade field), but the transformer overload count alone is the primary blocker preventing safe electrification scaling by 2030."
         }
       },
       {
@@ -674,17 +677,17 @@
           "label": "Greater Toronto Area · L5B",
           "city": "Greater Toronto Area",
           "province": "ON",
-          "latitude": 43.5665,
-          "longitude": -79.6035,
-          "households": 27315,
-          "median_household_income_cad": 79000.0,
-          "avg_household_size": 2.4,
+          "latitude": 43.577957459,
+          "longitude": -79.630291525,
+          "households": 19147,
+          "median_household_income_cad": 68047.63,
+          "avg_household_size": 2.51,
           "dwelling_mix": {
-            "single_detached": 0.1424,
-            "semi_detached": 0.0457,
-            "row": 0.0333,
-            "apartment_low_rise": 0.0472,
-            "apartment_high_rise": 0.7314,
+            "single_detached": 0.1358909174948001,
+            "semi_detached": 0.04153322988543696,
+            "row": 0.03093532305457427,
+            "apartment_low_rise": 0.7916405295651887,
+            "apartment_high_rise": 0.0,
             "other": 0.0
           },
           "heating_mix": {
@@ -702,7 +705,8 @@
           "sources": [
             "StatsCan Census 2021 Profile (Table 98-401-X2021006)",
             "ECCC Climate Normals 1981–2010",
-            "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 12.2 km away)"
+            "ECCC Climate Normals 1981-2010, station TORONTO LESTER B. PEARSON INT'L A (id 6158733, 10.8 km away)",
+            "ArcGIS GeoEnrichment (Esri Canada): households, median_household_income, avg_household_size, dwelling_mix"
           ],
           "is_synthesized": false
         },
@@ -721,208 +725,208 @@
             {
               "hour": 0,
               "base_load_kw_per_household": 1.49,
-              "new_heat_pump_kw_per_household": 1.93,
+              "new_heat_pump_kw_per_household": 2.3,
               "new_ev_kw_per_household": 1.39,
-              "total_kw_per_household": 4.82
+              "total_kw_per_household": 5.19
             },
             {
               "hour": 1,
               "base_load_kw_per_household": 1.46,
-              "new_heat_pump_kw_per_household": 1.96,
+              "new_heat_pump_kw_per_household": 2.34,
               "new_ev_kw_per_household": 1.41,
-              "total_kw_per_household": 4.83
+              "total_kw_per_household": 5.21
             },
             {
               "hour": 2,
               "base_load_kw_per_household": 1.45,
-              "new_heat_pump_kw_per_household": 1.97,
+              "new_heat_pump_kw_per_household": 2.35,
               "new_ev_kw_per_household": 1.41,
-              "total_kw_per_household": 4.83
+              "total_kw_per_household": 5.21
             },
             {
               "hour": 3,
               "base_load_kw_per_household": 1.45,
-              "new_heat_pump_kw_per_household": 1.97,
+              "new_heat_pump_kw_per_household": 2.36,
               "new_ev_kw_per_household": 1.41,
-              "total_kw_per_household": 4.83
+              "total_kw_per_household": 5.22
             },
             {
               "hour": 4,
               "base_load_kw_per_household": 1.46,
-              "new_heat_pump_kw_per_household": 1.98,
+              "new_heat_pump_kw_per_household": 2.37,
               "new_ev_kw_per_household": 0.71,
-              "total_kw_per_household": 4.15
+              "total_kw_per_household": 4.54
             },
             {
               "hour": 5,
               "base_load_kw_per_household": 1.51,
-              "new_heat_pump_kw_per_household": 2.0,
+              "new_heat_pump_kw_per_household": 2.39,
               "new_ev_kw_per_household": 0.71,
-              "total_kw_per_household": 4.23
+              "total_kw_per_household": 4.62
             },
             {
               "hour": 6,
               "base_load_kw_per_household": 1.61,
-              "new_heat_pump_kw_per_household": 2.01,
+              "new_heat_pump_kw_per_household": 2.41,
               "new_ev_kw_per_household": 0.71,
-              "total_kw_per_household": 4.33
+              "total_kw_per_household": 4.73
             },
             {
               "hour": 7,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 2.01,
+              "new_heat_pump_kw_per_household": 2.41,
               "new_ev_kw_per_household": 0.71,
-              "total_kw_per_household": 4.44
+              "total_kw_per_household": 4.83
             },
             {
               "hour": 8,
               "base_load_kw_per_household": 1.74,
-              "new_heat_pump_kw_per_household": 2.0,
+              "new_heat_pump_kw_per_household": 2.39,
               "new_ev_kw_per_household": 1.42,
-              "total_kw_per_household": 5.17
+              "total_kw_per_household": 5.56
             },
             {
               "hour": 9,
               "base_load_kw_per_household": 1.74,
-              "new_heat_pump_kw_per_household": 1.93,
+              "new_heat_pump_kw_per_household": 2.3,
               "new_ev_kw_per_household": 1.39,
-              "total_kw_per_household": 5.06
+              "total_kw_per_household": 5.43
             },
             {
               "hour": 10,
               "base_load_kw_per_household": 1.73,
-              "new_heat_pump_kw_per_household": 1.83,
+              "new_heat_pump_kw_per_household": 2.19,
               "new_ev_kw_per_household": 1.36,
-              "total_kw_per_household": 4.92
+              "total_kw_per_household": 5.27
             },
             {
               "hour": 11,
               "base_load_kw_per_household": 1.72,
-              "new_heat_pump_kw_per_household": 1.75,
+              "new_heat_pump_kw_per_household": 2.09,
               "new_ev_kw_per_household": 1.33,
-              "total_kw_per_household": 4.8
+              "total_kw_per_household": 5.14
             },
             {
               "hour": 12,
               "base_load_kw_per_household": 1.7,
-              "new_heat_pump_kw_per_household": 1.73,
+              "new_heat_pump_kw_per_household": 2.06,
               "new_ev_kw_per_household": 2.64,
-              "total_kw_per_household": 6.06
+              "total_kw_per_household": 6.4
             },
             {
               "hour": 13,
               "base_load_kw_per_household": 1.7,
-              "new_heat_pump_kw_per_household": 1.71,
+              "new_heat_pump_kw_per_household": 2.04,
               "new_ev_kw_per_household": 3.93,
-              "total_kw_per_household": 7.34
+              "total_kw_per_household": 7.67
             },
             {
               "hour": 14,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 1.71,
+              "new_heat_pump_kw_per_household": 2.04,
               "new_ev_kw_per_household": 5.24,
-              "total_kw_per_household": 8.66
+              "total_kw_per_household": 8.99
             },
             {
               "hour": 15,
               "base_load_kw_per_household": 1.73,
-              "new_heat_pump_kw_per_household": 1.7,
+              "new_heat_pump_kw_per_household": 2.03,
               "new_ev_kw_per_household": 6.01,
-              "total_kw_per_household": 9.44
+              "total_kw_per_household": 9.77
             },
             {
               "hour": 16,
               "base_load_kw_per_household": 1.78,
-              "new_heat_pump_kw_per_household": 1.71,
+              "new_heat_pump_kw_per_household": 2.04,
               "new_ev_kw_per_household": 6.01,
-              "total_kw_per_household": 9.5
+              "total_kw_per_household": 9.83
             },
             {
               "hour": 17,
               "base_load_kw_per_household": 1.83,
-              "new_heat_pump_kw_per_household": 1.74,
+              "new_heat_pump_kw_per_household": 2.08,
               "new_ev_kw_per_household": 6.01,
-              "total_kw_per_household": 9.59
+              "total_kw_per_household": 9.93
             },
             {
               "hour": 18,
               "base_load_kw_per_household": 1.82,
-              "new_heat_pump_kw_per_household": 1.79,
+              "new_heat_pump_kw_per_household": 2.14,
               "new_ev_kw_per_household": 6.01,
-              "total_kw_per_household": 9.62
+              "total_kw_per_household": 9.97
             },
             {
               "hour": 19,
               "base_load_kw_per_household": 1.8,
-              "new_heat_pump_kw_per_household": 1.82,
+              "new_heat_pump_kw_per_household": 2.17,
               "new_ev_kw_per_household": 6.01,
-              "total_kw_per_household": 9.63
+              "total_kw_per_household": 9.99
             },
             {
               "hour": 20,
               "base_load_kw_per_household": 1.77,
-              "new_heat_pump_kw_per_household": 1.85,
+              "new_heat_pump_kw_per_household": 2.21,
               "new_ev_kw_per_household": 6.01,
-              "total_kw_per_household": 9.63
+              "total_kw_per_household": 9.99
             },
             {
               "hour": 21,
               "base_load_kw_per_household": 1.71,
-              "new_heat_pump_kw_per_household": 1.89,
+              "new_heat_pump_kw_per_household": 2.25,
               "new_ev_kw_per_household": 6.01,
-              "total_kw_per_household": 9.61
+              "total_kw_per_household": 9.98
             },
             {
               "hour": 22,
               "base_load_kw_per_household": 1.63,
-              "new_heat_pump_kw_per_household": 1.91,
+              "new_heat_pump_kw_per_household": 2.28,
               "new_ev_kw_per_household": 5.55,
-              "total_kw_per_household": 9.08
+              "total_kw_per_household": 9.46
             },
             {
               "hour": 23,
               "base_load_kw_per_household": 1.56,
-              "new_heat_pump_kw_per_household": 1.92,
+              "new_heat_pump_kw_per_household": 2.29,
               "new_ev_kw_per_household": 2.78,
-              "total_kw_per_household": 6.26
+              "total_kw_per_household": 6.63
             }
           ],
-          "peak_kw_per_household": 9.63,
-          "peak_hour": 19,
-          "incremental_peak_mw": 213.97,
-          "transformer_overload_count": 682,
+          "peak_kw_per_household": 9.99,
+          "peak_hour": 20,
+          "incremental_peak_mw": 157.47,
+          "transformer_overload_count": 478,
           "panel_upgrade_household_pct": 0.0
         },
         "readiness": {
           "fsa": "L5B",
           "scenario_name": "Aggressive",
           "grid_score": 0.0,
-          "building_score": 0.888,
-          "affordability_score": 0.854,
+          "building_score": 0.885,
+          "affordability_score": 0.805,
           "policy_score": 0.55,
-          "overall_score": 0.475,
+          "overall_score": 0.465,
           "verdict": "CONSTRAINED",
           "rank": 1,
           "blockers": [
-            "682 local transformers projected to overload"
+            "478 local transformers projected to overload"
           ],
-          "rationale": "The Greater Toronto Area L5B postal zone scores 0.48 out of 1.0 (CONSTRAINED) under the 2035 Net-Zero scenario, driven by a projected 214.0 MW incremental peak demand increase that would overload 682 local transformers (verdict data). Panel upgrades are not a bottleneck at 0% of homes requiring upgrades (verdict data), but transformer overloads represent the primary infrastructure blocker that must be resolved before 50% heat pump and 60% EV adoption targets can be safely achieved."
+          "rationale": "The L5B forward sortation area scores 0.46 out of 1.0 under the 2035 Net-Zero scenario, driven primarily by 478 local transformers projected to overload against an incremental peak demand of 157.5 MW (verdict score and transformer count from electrification readiness model). Panel upgrades are not a constraint at 0% of homes requiring upgrades (panel upgrade field), but the transformer overload count alone is sufficient to classify the area as CONSTRAINED and will require targeted grid reinforcement before the 50% heat pump and 60% EV adoption targets can be safely absorbed."
         }
       }
     ],
     "interventions": [
       {
         "intervention_id": "transformer_upgrade",
-        "title": "Upgrade 682 local distribution transformers",
+        "title": "Upgrade 478 local distribution transformers",
         "category": "transformer_upgrade",
         "targeted_fsas": [
           "L5B"
         ],
-        "households_unlocked": 27280,
-        "estimated_cost_cad": 12276000.0,
+        "households_unlocked": 19120,
+        "estimated_cost_cad": 8604000.0,
         "deployment_months": 12,
         "readiness_lift_pct": 18.0,
-        "rationale": "At the 2035 net-zero (50% hp, 60% ev) target, 682 pad-mount transformers are projected to exceed 75 kVA continuous loading. Replacing with 100/167 kVA units in the first capital cycle is cheaper than emergency replacement after a failure."
+        "rationale": "At the 2035 net-zero (50% hp, 60% ev) target, 478 pad-mount transformers are projected to exceed 75 kVA continuous loading. Replacing with 100/167 kVA units in the first capital cycle is cheaper than emergency replacement after a failure."
       },
       {
         "intervention_id": "managed_charging",
@@ -931,11 +935,11 @@
         "targeted_fsas": [
           "L5B"
         ],
-        "households_unlocked": 16389,
+        "households_unlocked": 11488,
         "estimated_cost_cad": 350000.0,
         "deployment_months": 9,
         "readiness_lift_pct": 10.0,
-        "rationale": "Shifting EV charge to overnight off-peak slots cuts the evening distribution peak by ~42.8 MW across the studied FSAs with no infrastructure spend. Opt-out tariff structure has the best uptake in field trials (Hydro One TOU pilot)."
+        "rationale": "Shifting EV charge to overnight off-peak slots cuts the evening distribution peak by ~31.5 MW across the studied FSAs with no infrastructure spend. Opt-out tariff structure has the best uptake in field trials (Hydro One TOU pilot)."
       },
       {
         "intervention_id": "ev_hp_rough_in_code",
@@ -948,10 +952,10 @@
         "estimated_cost_cad": 80000.0,
         "deployment_months": 4,
         "readiness_lift_pct": 4.0,
-        "rationale": "Adds ~$1.5K to new-build cost but avoids 6Ã— retrofit cost. Vancouver and Burnaby have demonstrated this is politically feasible at the municipal layer; it stacks on provincial step-code requirements."
+        "rationale": "Adds ~$1.5K to new-build cost but avoids 6× retrofit cost. Vancouver and Burnaby have demonstrated this is politically feasible at the municipal layer; it stacks on provincial step-code requirements."
       }
     ],
-    "executive_summary": "# Executive Summary: Electrification Readiness Assessment for Mississauga FSA L5B\n\n**Verdict: Constrained**\n\nThe electrification readiness assessment for Mississauga's L5B forward sortation area returns an overall verdict of CONSTRAINED. All three technology-scenario pairings evaluated. Today (7% heat pump penetration, 5% EV adoption), 50 Plans (5% heat pump, 5% EV), and 55 Net-Zero (5% heat pump, 5% EV). Were found to be constrained, with zero pairings rated Ready and zero rated Blocked outright. This finding means the distribution system can support incremental electrification but will require targeted capital investment before the 2030 and 2035 policy milestones can be met safely and reliably.\n\n**The Binding Constraint**\n\nThe primary binding constraint identified across all three scenarios is local distribution transformer capacity within the L5B study area, where the modeling flags 682 transformers as requiring upgrade to accommodate projected coincident load growth. Data not available for specific headroom MW figures or individual transformer ratings from the source data provided; however, the sheer count of flagged assets. 682 units concentrated within a single FSA. Signals that the constraint is systemic rather than isolated to one or two feeder segments. L5B is the sole FSA studied in this engagement, so it both drives and defines the headline conclusion for this report.\n\n**Scenario Sensitivity**\n\nThe Today scenario (5% heat pump, 5% EV) already registers as constrained, indicating that even the current baseline trajectory is sufficient to stress local distribution assets without intervention. Conditions worsen materially under the 50 Plans scenario (5% heat pump, 5% EV) and reach their most demanding expression under the 55 Net-Zero scenario (5% heat pump, 5% EV), where coincident evening loads from simultaneous charging and heating cycles are typically the critical design hour in comparable regions. The absence of any Ready pairings confirms that no tested combination of penetration rates clears the grid threshold without remediation.\n\n**Modeling Caveats**\n\nThis assessment is based on scenario-level penetration assumptions and transformer inventory data; granular load-flow modeling at the individual feeder or service-entrance level was outside the scope of this engagement, and data not available for specific customer counts, panel capacity distributions, or real-time grid latency metrics within L5B. Results should be treated as a planning-grade screen rather than an engineering design study, and Hydro One distribution planning staff should validate transformer upgrade priorities against their own asset condition records before procurement. Affordability impacts on low-to-moderate income households were not quantified in this phase and warrant a dedicated equity analysis prior to bylaw implementation.\n\n**First Investment Priority**\n\nThe single highest-leverage action available to council is funding the accelerated upgrade of the 682 flagged local distribution transformers, as this intervention directly addresses the binding constraint across all three scenarios and is a prerequisite for any other electrification measure to deliver its intended benefit. Pairing transformer upgrades with an immediate default-on managed EV charging tariff can defer a portion of that capital cost by flattening coincident overnight demand peaks. An approach that industry experience in comparable regions suggests can reduce required transformer oversizing by a meaningful margin, though site-specific deferral potential should be quantified in the follow-on engineering study. Mandatory heat pump and EV rough-in requirements embedded in the zoning bylaw should be advanced concurrently so that new construction does not add unmanaged load to a system still mid-upgrade.",
+    "executive_summary": "# Executive Summary: Electrification Readiness Assessment for Mississauga FSA L5B\n\n**Verdict: Constrained**\n\nThe neighborhood electrification readiness study for Mississauga's L5B forward sortation area returns a headline verdict of CONSTRAINED. All three scenario pairings tested returned a constrained status, with zero pairings rated Ready and zero rated Blocked, meaning the distribution system can absorb near-term electrification load but will require deliberate intervention before mid-decade targets are achievable. This is not a crisis finding, but it is a clear signal that passive grid management is no longer sufficient for the growth trajectory the city has committed to.\n\n**Binding Constraint: Distribution Infrastructure**\n\nThe binding constraint across all tested pairings is local distribution capacity, specifically the transformer network serving L5B. The study identifies 478 local distribution transformers requiring upgrade as the single largest infrastructure gap, and since all three constrained pairings point to the same FSA, L5B is both the geographic focus and the primary driver of the overall constrained verdict. Data on panel-level capacity headroom and affordability indices were not provided in the source dataset, so those dimensions could not be independently scored and may represent additional latent constraints not captured here.\n\n**Scenario Sensitivity**\n\nThe current baseline scenario of 5 percent heat pump adoption and 7 percent electric vehicle penetration (Today scenario) already contributes to constrained conditions, indicating that the grid is not comfortably absorbing even today's electrification load in L5B. The 2030 Plans scenario (25 percent heat pumps, 30 percent EVs) and the 2035 Net-Zero scenario (50 percent heat pumps, 60 percent EVs) both amplify this stress, and without transformer upgrades, the 2035 targets in particular carry a meaningful risk of tipping constrained pairings toward blocked status as coincident peak demand grows. Industry rule of thumb in comparable Ontario regions suggests that EV and heat pump loads together can increase residential transformer peak demand by 40 to 70 percent above baseline, reinforcing the urgency of early capital deployment.\n\n**Modeling Caveats**\n\nThis assessment is based on scenario inputs and infrastructure data available at the time of study, and several fields relevant to a complete readiness picture, including specific headroom values in megawatts, customer counts by feeder, and real-time grid latency metrics, were not available in the source dataset and therefore could not be incorporated into the scoring. The constrained verdict should be interpreted as a directional finding that warrants detailed engineering validation by Alectra Utilities before capital commitments are finalized. Seasonal load diversity, behind-the-meter battery storage uptake, and future density changes in L5B could each materially shift the results in either direction.\n\n**Priority Intervention: Transformer Upgrades**\n\nThe single most leveraged action the council can fund and advance immediately is the program to upgrade all 478 flagged local distribution transformers in L5B, as this intervention directly addresses the binding constraint identified across every tested scenario. Pairing that capital program with a default-on managed EV charging tariff will reduce coincident peak demand and extend the useful life of upgraded assets, while a mandatory heat pump and EV rough-in requirement embedded in the zoning bylaw ensures that new construction does not add unmanaged load to a system still in transition. Together, these three interventions form a sequenced and mutually reinforcing package that the council should treat as a single coordinated initiative rather than independent line items.",
     "methodology_notes": "Per-FSA load impact built from a 24-hour winter peak day temperature curve scaled by ECCC HDD18 normals. Heat pump draws use NRCan ccASHP COP curves with backup engagement below -10 °C. EV charging follows IESO ResLoad evening L2 shape with cold-weather multipliers. Transformer overload heuristic: 75 kVA serving ~40 households, 0.95 PF. Panel upgrade trigger: continuous peak > 18 kW per home.",
     "safety_flags": [],
     "limitations": [
