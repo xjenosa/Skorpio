@@ -13,6 +13,7 @@ Mirrors the Winter Peak / Datacenter Siting model layout:
 """
 from pydantic import BaseModel, Field
 from typing import Optional
+from backend.models.report import CitationSource
 
 
 # ── Inputs ────────────────────────────────────────────────────────────── #
@@ -162,6 +163,7 @@ class ElectrificationPlan(BaseModel):
     methodology_notes: str = ""
     safety_flags: list[str] = []
     limitations: list[str] = []
+    citation_sources: dict[str, CitationSource] = {}   # inline-citation table for exec summary markers
     chart_paths: dict[str, str] = {}
 
 

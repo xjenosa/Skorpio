@@ -11,6 +11,8 @@ from backend.models.investment import (
     InvestmentSpec,
     UpgradeProject,
 )
+from backend.models.report import CitationSource
+from backend.utils.citations import synthesize_with_citations
 from backend.utils.reconciliation import reconcile
 
 
@@ -78,11 +80,13 @@ class InvestmentSynthesisAgent(BaseAgent):
         portfolio_roi = (total_annual_relief * spec.horizon_years) / max(1.0, total_capex)
         customers_protected = sum(f.project.customers_protected for f in funded)
 
-        summary = await self._exec_summary(spec, assets, funded, unfunded, total_capex, total_annual_relief)
+        summary, citation_sources = await self._exec_summary(spec, assets, funded, unfunded, total_capex, total_annual_relief)
 
         # Pattern 3 — reconcile Claude's exec summary against portfolio facts.
         # Drifted budget, customer count, and capex figures are rewritten to
-        # match the actual computed values.
+        # match the actual computed values. The regex-based number rewriter
+        # operates on text including inside [[sN|...]] markers, so any number
+        # corrected here is also corrected within its citation wrapper.
         recon_facts = {
             "budget_cad": spec.budget_cad,
             "customers_protected": float(customers_protected),
@@ -155,6 +159,7 @@ class InvestmentSynthesisAgent(BaseAgent):
             portfolio_roi_ratio=round(portfolio_roi, 2),
             customers_protected=int(customers_protected),
             executive_summary=summary,
+            citation_sources=citation_sources,
             sources=arcgis_sources,
             methodology_notes=(
                 "Per-asset climate risk uses provincial hazard base rates from ECCC CCCS "
@@ -198,12 +203,12 @@ class InvestmentSynthesisAgent(BaseAgent):
         unfunded: list[UpgradeProject],
         total_capex: float,
         total_annual_relief: float,
-    ) -> str:
+    ) -> tuple[str, dict[str, CitationSource]]:
         if not funded:
             return (
                 f"No projects met the ROI threshold within ${spec.budget_cad/1e6:.0f}M for {spec.utility}. "
                 "Either the budget is too small or the candidate menu needs deeper exposure modeling."
-            )
+            ), {}
         top_titles = "; ".join(f.project.title for f in funded[:3])
         prompt = f"""Write a 4-5 paragraph executive summary for a utility board.
 
@@ -237,13 +242,32 @@ Paragraph 5: the one strategic move the board should make in the next
 budget cycle.
 
 Tone: confident, expert, plain English. Write for an executive who will skim.
-Each paragraph is 2-4 sentences."""
+Each paragraph is 2-4 sentences.
+
+DATA SOURCES YOU CAN CITE (use these labels verbatim in citation_sources;
+do NOT invent source names):
+- "Scenario inputs (user-defined)" — for the budget, horizon, target year (status: frozen)
+- "Hand-curated asset catalog · {{utility}}" — for asset names, ratings, ages (status: frozen)
+- "Per-asset NPV optimizer (modeled)" — for funded selection, ROI, avoided loss (status: modeled)
+- "Climate hazard model (modeled)" — for per-asset loss probabilities (status: modeled)
+- "ECCC CCCS hazard base rates" — for provincial flood/fire/storm frequencies (status: frozen)
+- "IBC/CatIQ insurance loss share" — for hazard loss multipliers (status: frozen)
+- For any industry pattern or rule of thumb you mention, status: llm,
+  label e.g. "Industry pattern · vegetation outages"."""
         try:
-            return (await self.ask_claude(SYSTEM, prompt, max_tokens=900)).strip()
+            text, sources = await synthesize_with_citations(
+                self,
+                system=SYSTEM,
+                prompt=prompt,
+                max_tokens=1800,
+            )
+            if text:
+                return text.strip(), sources
+            raise RuntimeError("synthesis returned empty text")
         except Exception as e:
             self.logger.warning(f"Exec summary failed: {e}")
             return (
                 f"Funded {len(funded)} of {len(funded) + len(unfunded)} candidate projects "
                 f"with ${total_capex/1e6:.0f}M of ${spec.budget_cad/1e6:.0f}M budget. "
                 f"Avoided loss: ${total_annual_relief/1e6:.1f}M/year."
-            )
+            ), {}

@@ -747,7 +747,7 @@
     "total_annual_loss_avoided_cad": 2823280.0,
     "portfolio_roi_ratio": 3.62,
     "customers_protected": 175000,
-    "executive_summary": "# Executive Summary: Alectra Climate Capital Plan 2025–2050\n\n**The Verdict**\n\nThe $50 million, 26-year capital plan is partially adequate: the $20 million committed across five funded projects addresses the highest-priority climate risks in Alectra's service territory and delivers a lifetime return of 3.62 times invested capital, with avoided annual losses of $2.8 million per year. The remaining $50000000 million in budget headroom is nominally available for the three unfunded but recommended projects, yet those projects currently lack approved capital allocation, leaving a meaningful portion of the asset base exposed through 2050. The funded program is financially sound; the gap is one of prioritization and scheduling, not affordability.\n\n**Highest-Value Funded Work**\n\nThe two cycle-cut right-of-way management projects, covering the St. Catharines downtown feeders and the Stoney Creek feeder bank, represent the most operationally consequential investments in the funded portfolio, as vegetation contact remains the leading cause of climate-correlated outages on overhead distribution systems in southern Ontario. The cooling and waterproofing retrofit at Vaughan Centre MS directly protects a major substation asset against the compound risk of extreme heat and increased precipitation intensity, both of which are projected to intensify through mid-century under regional climate trajectories. Together, these three projects anchor the plan's loss-avoidance case.\n\n**Residual Exposure**\n\nThe three unfunded but recommended projects leave specific assets and customer groups without scheduled protection before 2050; data not available for residual customer-hours-lost attributable to those gaps, and the board should request that figure before the next capital cycle closes. Without it, the utility cannot quantify its regulatory exposure under Ontario's evolving reliability reporting requirements, nor can it defend deferral decisions to the OEB with confidence.\n\n**Analytical Limitations**\n\nThe loss-avoidance figure of $2.8 million per year and the 3.62 times lifetime ROI are derived from the project-level data provided; independent validation against Alectra's outage management system and asset condition records has not been confirmed in this summary. Climate hazard projections used to size these investments typically carry a range of uncertainty across emissions scenarios, and actual avoided losses could be higher or lower depending on how quickly extreme-weather frequency accelerates relative to the planning assumptions embedded in the model.\n\n**One Move for the Next Budget Cycle**\n\nThe board should formally approve capital allocation for the three unfunded recommended projects in the next budget cycle, drawing on the $50000000 million of uncommitted plan capacity, and should require staff to attach a quantified residual-risk figure (in customer-hours and dollar terms) to each deferral decision going forward. Locking in that commitment now, while the ROW and substation work is still in early execution, allows Alectra to sequence contractor capacity efficiently and avoids the cost premium that typically accompanies reactive post-event remediation.",
+    "executive_summary": "# Executive Summary: Alectra Climate Capital Plan 2025–2050\n\n**The Verdict**\n\nThe [[s1|$50 million, 26-year capital plan]] is partially adequate: the [[s2|$20 million committed across five funded projects]] addresses the highest-priority climate risks in [[s3|Alectra's service territory]] and delivers a lifetime return of [[s4|3.62 times invested capital]], with avoided annual losses of [[s5|$2.8 million per year]]. The remaining $30 million in budget headroom is nominally available for the three unfunded but recommended projects, yet those projects currently lack approved capital allocation, leaving a meaningful portion of the asset base exposed through 2050. The funded program is financially sound; the gap is one of prioritization and scheduling, not affordability.\n\n**Highest-Value Funded Work**\n\nThe two cycle-cut right-of-way management projects, covering the [[s6|St. Catharines downtown feeders]] and the [[s7|Stoney Creek feeder bank]], represent the most operationally consequential investments in the funded portfolio, as [[s9|vegetation contact remains the leading cause of climate-correlated outages on overhead distribution systems in southern Ontario]]. The cooling and waterproofing retrofit at [[s8|Vaughan Centre MS]] directly protects a major substation asset against the compound risk of extreme heat and increased precipitation intensity, [[s10|both of which are projected to intensify through mid-century under regional climate trajectories]]. Together, these three projects anchor the plan's loss-avoidance case.\n\n**Residual Exposure**\n\nThe [[s2|three unfunded but recommended projects]] leave specific assets and customer groups without scheduled protection before 2050; data not available for residual customer-hours-lost attributable to those gaps, and the board should request that figure before the next capital cycle closes. Without it, the utility cannot quantify its regulatory exposure under [[s11|Ontario's evolving reliability reporting requirements]], nor can it defend deferral decisions to the OEB with confidence.\n\n**Analytical Limitations**\n\nThe loss-avoidance figure of [[s5|$2.8 million per year]] and the [[s4|3.62 times lifetime ROI]] are derived from the project-level data provided; [[s12|independent validation against Alectra's outage management system and asset condition records has not been confirmed in this summary]]. Climate hazard projections used to size these investments [[s13|typically carry a range of uncertainty across emissions scenarios]], and actual avoided losses could be higher or lower depending on how quickly extreme-weather frequency accelerates relative to the planning assumptions embedded in the model.\n\n**One Move for the Next Budget Cycle**\n\nThe board should formally approve capital allocation for the three unfunded recommended projects in the next budget cycle, drawing on the [[s1|$30 million of uncommitted plan capacity]], and should require staff to attach a quantified residual-risk figure (in customer-hours and dollar terms) to each deferral decision going forward. Locking in that commitment now, while the ROW and substation work is still in early execution, allows Alectra to sequence contractor capacity efficiently and avoids [[s14|the cost premium that typically accompanies reactive post-event remediation]].",
     "methodology_notes": "Per-asset climate risk uses provincial hazard base rates from ECCC CCCS scaled by IBC/CatIQ insurance loss share and asset-type susceptibility. Climate scaling: 1.0× by 2025, 1.15× by 2030, 1.30× by 2035, 1.60× by 2050. Asset age multiplier: 0.7× (<20y) → 1.6× (>60y). Project menu generated from 11 hardening templates × asset type × dominant hazard. Selection is a greedy ROI-ordered knapsack with horizon = 26y.",
     "safety_flags": [],
     "limitations": [
@@ -761,6 +761,92 @@
       "NRCan CWFIS National Fire Database (Esri Living Atlas): empirical wildfire probability applied to 5 of 5 asset(s)",
       "ArcGIS GeoEnrichment (Esri Canada): Mississauga, ON (CY): 192,532 households, population 768,433"
     ],
-    "chart_paths": {}
+    "chart_paths": {},
+    "citation_sources": {
+      "s1": {
+        "source_id": "s1",
+        "label": "Scenario inputs (user-defined)",
+        "detail": "$50M capital budget + 26-year horizon supplied at job submission",
+        "status": "frozen"
+      },
+      "s2": {
+        "source_id": "s2",
+        "label": "Funded portfolio output (modeled)",
+        "detail": "5 funded projects selected by ROI ranking; $20M of $50M committed",
+        "status": "modeled"
+      },
+      "s3": {
+        "source_id": "s3",
+        "label": "OEB Licensed Distributor Territories (KMZ)",
+        "detail": "Service territory polygons published by the Ontario Energy Board",
+        "status": "frozen"
+      },
+      "s4": {
+        "source_id": "s4",
+        "label": "Lifetime ROI calculation (modeled)",
+        "detail": "Sum of project NPVs / committed capital, 26y horizon, 5% discount",
+        "status": "modeled"
+      },
+      "s5": {
+        "source_id": "s5",
+        "label": "Climate hazard loss-avoidance (modeled)",
+        "detail": "Per-asset annual EAL · hazard frequency, NRCan + ECCC inputs",
+        "status": "modeled"
+      },
+      "s6": {
+        "source_id": "s6",
+        "label": "Hand-curated asset catalog · St. Catharines",
+        "detail": "Calibrated from Alectra public filings + OEB rate cases; coordinates from OSM/EnergyData.ca",
+        "status": "frozen"
+      },
+      "s7": {
+        "source_id": "s7",
+        "label": "Hand-curated asset catalog · Stoney Creek",
+        "detail": "Calibrated from Alectra public filings + OEB rate cases; coordinates from OSM/EnergyData.ca",
+        "status": "frozen"
+      },
+      "s8": {
+        "source_id": "s8",
+        "label": "Hand-curated asset catalog · Vaughan Centre MS",
+        "detail": "Calibrated from Alectra public filings + OEB rate cases; coordinates from OSM/EnergyData.ca",
+        "status": "frozen"
+      },
+      "s9": {
+        "source_id": "s9",
+        "label": "Industry pattern · vegetation outages",
+        "detail": "General utility-industry observation; not derived from project data",
+        "status": "llm"
+      },
+      "s10": {
+        "source_id": "s10",
+        "label": "Climate trajectory framing",
+        "detail": "Mid-century intensification reflects IPCC/ECCC regional pattern; not a project-specific projection",
+        "status": "llm"
+      },
+      "s11": {
+        "source_id": "s11",
+        "label": "Ontario regulatory trajectory",
+        "detail": "General context on OEB reliability-reporting direction; not pulled from a specific filing",
+        "status": "llm"
+      },
+      "s12": {
+        "source_id": "s12",
+        "label": "Data gap · OMS / asset condition records",
+        "detail": "Agent flagged authoritative systems that were not provided to this run; informational",
+        "status": "llm"
+      },
+      "s13": {
+        "source_id": "s13",
+        "label": "Emissions-scenario uncertainty",
+        "detail": "General observation that climate hazard projections vary across emissions scenarios; not project-specific",
+        "status": "llm"
+      },
+      "s14": {
+        "source_id": "s14",
+        "label": "Industry pattern · reactive remediation cost",
+        "detail": "Standard utility-industry rule of thumb that post-event repairs cost more than planned hardening",
+        "status": "llm"
+      }
+    }
   }
 }

@@ -64,3 +64,6 @@ memory/
 
 # ── Local mobile-audit scratch dir (Playwright screenshots) ────────────── #
 mobile-audit/
+
+# ── Local responsive-design scratch dir (Playwright screenshots) ───────── #
+responsive/

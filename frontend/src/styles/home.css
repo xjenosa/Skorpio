@@ -2185,29 +2185,19 @@ body:has(.help-button) .toast {
     to   { opacity: 1; }
   }
 
-  /* Hamburger button — visible only on phones. Sized to match the
-     spacer column on the right so the breadcrumb text reads centered. */
+  /* Hamburger button — visible only on phones. Placed at the start of
+     the flex topbar so the breadcrumbs read to its right. */
   .topbar-mobile-menu-btn {
     display: inline-flex;
-    justify-self: start;
+    margin-right: 4px;
   }
 
-  /* 3-column grid: hamburger | centered crumbs | empty spacer matching
-     the hamburger's column width. The spacer keeps the crumbs visually
-     centered without abandoning the natural flex layout on desktop. */
   .topbar {
     height: auto;
     min-height: 56px;
     padding: 10px 12px;
-    display: grid;
-    grid-template-columns: 44px 1fr 44px;
-    align-items: center;
-    gap: 8px;
-  }
-  .topbar .crumbs {
-    justify-self: center;
     flex-wrap: wrap;
-    justify-content: center;
+    gap: 8px;
   }
   .topbar .telemetry,
   .topbar .topbar-telemetry,

@@ -12,6 +12,8 @@ from backend.models.expansion import (
     OperatorFootprint,
     PhasedRollout,
 )
+from backend.models.report import CitationSource
+from backend.utils.citations import synthesize_with_citations
 from backend.utils.reconciliation import reconcile
 
 
@@ -85,7 +87,7 @@ class ExpansionSynthesisAgent(BaseAgent):
         rollout = _phase_rollout(funded, spec.horizon_years)
         blended = _blended_carbon(funded)
 
-        summary = await self._exec_summary(spec, footprint, demand, funded, total_new_mw, total_capex, coverage, blended)
+        summary, citation_sources = await self._exec_summary(spec, footprint, demand, funded, total_new_mw, total_capex, coverage, blended)
 
         # Pattern 3 — reconcile Claude's exec summary against portfolio facts.
         # Drifted capacity or carbon intensity is rewritten with the computed value.
@@ -127,6 +129,7 @@ class ExpansionSynthesisAgent(BaseAgent):
             blended_carbon_g_kwh=blended,
             coverage_pct=round(coverage, 1),
             executive_summary=summary,
+            citation_sources=citation_sources,
             methodology_notes=(
                 "Brownfield capacity per site capped at min(transformer headroom, "
                 "5 MW/acre plot density). Capex per MW: $9.5M (air), $11M (hybrid), "
@@ -186,13 +189,13 @@ class ExpansionSynthesisAgent(BaseAgent):
         total_capex: float,
         coverage: float,
         blended_carbon: float,
-    ) -> str:
+    ) -> tuple[str, dict[str, CitationSource]]:
         if not funded:
             return (
                 f"No expansion option made the cut for {spec.operator}. Either the target "
                 f"of +{spec.target_additional_mw:.0f} MW is unrealistic for the existing footprint "
                 "or all candidate options scored below threshold."
-            )
+            ), {}
         top_titles = "; ".join(o.title for o in funded[:3])
         # Routing context block: when the workload agent resolved a city
         # (and possibly pinned a site / overrode the LLM's operator pick),
@@ -247,13 +250,30 @@ was corrected from X to Y because Y is the only catalog operator with a site
 in the named city").
 Paragraph 5: the strategic call for next budget cycle.
 
-Tone: confident, expert, plain English. Each paragraph is 2-4 sentences."""
+Tone: confident, expert, plain English. Each paragraph is 2-4 sentences.
+
+DATA SOURCES YOU CAN CITE (use these labels verbatim; do NOT invent source names):
+- "Scenario inputs (user-defined)" — operator, target MW, target year, workload mix (status: frozen)
+- "Operator footprint catalog · {{operator}}" — for facility names, contracted MW, locations (status: frozen)
+- "Demand-forecast stage (modeled)" — for baseline / target-year demand (status: modeled)
+- "Expansion-scoring stage (modeled)" — for per-option capex, capacity, ranking (status: modeled)
+- "Provincial carbon mix (StatsCan + IPCC AR5)" — for blended carbon intensity (status: modeled)
+- For any industry pattern, workload framing, or recommendation framing,
+  use status: llm with label e.g. "Workload-pattern framing · AI inference"."""
         try:
-            return (await self.ask_claude(SYSTEM, prompt, max_tokens=900)).strip()
+            text, sources = await synthesize_with_citations(
+                self,
+                system=SYSTEM,
+                prompt=prompt,
+                max_tokens=1800,
+            )
+            if text:
+                return text.strip(), sources
+            raise RuntimeError("synthesis returned empty text")
         except Exception as e:
             self.logger.warning(f"Exec summary failed: {e}")
             return (
                 f"Funded {len(funded)} option(s) for {spec.operator}, adding "
                 f"{total_new_mw:.0f} MW at ${total_capex/1e9:.2f}B (coverage {coverage:.0f}%). "
                 f"Blended carbon {blended_carbon:.0f} g/kWh."
-            )
+            ), {}

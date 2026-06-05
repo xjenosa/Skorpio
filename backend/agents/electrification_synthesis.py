@@ -15,6 +15,8 @@ from backend.models.electrification import (
     NeighborhoodProfile,
     ReadinessScore,
 )
+from backend.models.report import CitationSource
+from backend.utils.citations import synthesize_with_citations
 from backend.utils.reconciliation import reconcile
 
 
@@ -65,7 +67,7 @@ class ElectrificationSynthesisAgent(BaseAgent):
 
         interventions = self._compose_interventions(profiles, scenarios, impacts, scores)
 
-        summary = await self._exec_summary(spec, profiles, scenarios, scores, interventions)
+        summary, citation_sources = await self._exec_summary(spec, profiles, scenarios, scores, interventions)
 
         # Pattern 3 — reconcile Claude's exec summary against scenario facts.
         # Drifted adoption percentages and readiness scores are rewritten with
@@ -106,6 +108,7 @@ class ElectrificationSynthesisAgent(BaseAgent):
             fsa_outcomes=outcomes,
             interventions=interventions,
             executive_summary=summary,
+            citation_sources=citation_sources,
             methodology_notes=(
                 "Per-FSA load impact built from a 24-hour winter peak day "
                 "temperature curve scaled by ECCC HDD18 normals. Heat pump "
@@ -253,7 +256,7 @@ class ElectrificationSynthesisAgent(BaseAgent):
         scenarios: list[AdoptionScenario],
         scores: dict[tuple[str, str], ReadinessScore],
         interventions: list[Intervention],
-    ) -> str:
+    ) -> tuple[str, dict[str, CitationSource]]:
         n_blocked = sum(1 for s in scores.values() if s.verdict == "BLOCKED")
         n_constrained = sum(1 for s in scores.values() if s.verdict == "CONSTRAINED")
         n_ready = sum(1 for s in scores.values() if s.verdict == "READY")
@@ -286,14 +289,31 @@ Paragraph 3: scenario sensitivity (which scenario(s) tip the city into trouble).
 Paragraph 4: caveats / limitations of the modeling.
 Paragraph 5: the most leveraged intervention the council should fund first.
 
-Tone: confident, expert, plain English. Each paragraph is 2-4 sentences."""
+Tone: confident, expert, plain English. Each paragraph is 2-4 sentences.
+
+DATA SOURCES YOU CAN CITE (use these labels verbatim; do NOT invent source names):
+- "Scenario inputs (user-defined)" — city, FSA, scenario penetration rates (status: frozen)
+- "StatsCan postal FSA geometry" — for the FSA boundary (status: frozen)
+- "Readiness-scoring stage (modeled)" — for verdict, pairing scorecard, transformer counts (status: modeled)
+- "ECCC HDD18 winter normals + NRCan ccASHP COP curves" — for the load impact (status: frozen)
+- "IESO ResLoad evening L2 EV charging shape" — for EV evening peak math (status: frozen)
+- For any industry rule of thumb, regulatory framing, or recommendation
+  framing, use status: llm with label e.g. "Industry rule of thumb · transformer load growth"."""
 
         try:
-            return (await self.ask_claude(SYSTEM, prompt, max_tokens=900)).strip()
+            text, sources = await synthesize_with_citations(
+                self,
+                system=SYSTEM,
+                prompt=prompt,
+                max_tokens=1800,
+            )
+            if text:
+                return text.strip(), sources
+            raise RuntimeError("synthesis returned empty text")
         except Exception as e:
             self.logger.warning(f"Exec summary failed: {e}")
             return (
                 f"Across {len(profiles)} FSA(s) and {len(scenarios)} scenario(s), "
                 f"{n_ready} pairings are READY, {n_constrained} CONSTRAINED, and "
                 f"{n_blocked} BLOCKED. Headline: {verdict}."
-            )
+            ), {}

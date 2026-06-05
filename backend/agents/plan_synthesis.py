@@ -16,6 +16,7 @@ from backend.grid.multi_objective import (
     compute_weighted_score,
 )
 from backend.models.report import (
+    CitationSource,
     NewsItem,
     ParetoAnalysis,
     PlacementScore,
@@ -26,6 +27,7 @@ from backend.agents.grounding import GROUNDING_RULES
 from backend.models.site import ObjectiveWeights, SiteLibrary
 from backend.models.workload import Region, Workload
 from backend.services.arxiv import arxiv_client
+from backend.utils.citations import synthesize_with_citations
 from backend.utils.reconciliation import reconcile
 
 
@@ -115,7 +117,7 @@ class PlanSynthesisAgent(BaseAgent):
         if progress_callback:
             await progress_callback("Generating executive summary...", 92)
 
-        exec_summary = await self._generate_executive_summary(
+        exec_summary, citation_sources = await self._generate_executive_summary(
             workload=workload,
             top_candidates=top_candidates,
             region_insights=region_insights,
@@ -188,6 +190,7 @@ class PlanSynthesisAgent(BaseAgent):
             target_latency_ms=workload.target_latency_ms,
             candidate_iso_codes=workload.candidate_iso_codes,
             executive_summary=exec_summary,
+            citation_sources=citation_sources,
             regions_analyzed=len(workload.regions),
             sites_generated=total_generated,
             sites_scored=total_scored,
@@ -422,7 +425,7 @@ Return JSON:
         total_generated: int,
         total_scored: int,
         news_items: list[NewsItem] | None = None,
-    ) -> str:
+    ) -> tuple[str, dict[str, CitationSource]]:
         regions_summary = "\n".join(
             f"- {r.region_iso}: {r.market_outlook[:150]}"
             for r in region_insights[:5]
@@ -473,21 +476,35 @@ Paragraph topics:
 4. Describe the top candidate sites and predicted economics
 5. Close with next steps (interconnect engineering, environmental review, etc.)
 
-Write in a professional, technical tone suitable for a senior infrastructure audience."""
+Write in a professional, technical tone suitable for a senior infrastructure audience.
+
+DATA SOURCES YOU CAN CITE (use these labels verbatim; do NOT invent source names):
+- "Scenario inputs (user-defined)" — workload spec, target capacity, latency requirement (status: frozen)
+- "OEB Licensed Distributor Territories (KMZ)" — for utility service territories in Canada (status: frozen)
+- "Provincial carbon intensity (computed)" — for carbon intensity values (status: modeled, detail: "StatsCan Table 25-10-0015 fuel mix × IPCC AR5 lifecycle factors")
+- "Candidate generation + scoring (modeled)" — for candidate counts, top winner, LCOE, uptime band (status: modeled)
+- "NREL utility-rates API" — for live LCOE references (status: live, when applicable)
+- "ArcGIS GeoEnrichment (Esri Canada)" — for live demographic citations (status: live)
+- "arXiv preprint reference" — for any news_items reference (status: frozen, detail: "<arXiv id>")
+- For regulatory mentions (Planning Act, Large Consumer rate classes, connection cost framework) or any industry pattern, status: llm."""
 
         try:
-            return await self.ask_claude(
+            text, sources = await synthesize_with_citations(
+                self,
                 system=SYSTEM_SYNTHESIS,
                 prompt=prompt,
-                max_tokens=1500,
+                max_tokens=2200,
             )
+            if text:
+                return text, sources
+            raise RuntimeError("synthesis returned empty text")
         except Exception as e:
             self.logger.warning(f"Executive summary generation failed: {e}")
             return (
                 f"Skorpio identified {len(workload.regions)} regions for "
                 f"{workload.normalized_name} and scored {total_generated} candidate sites, "
                 f"yielding {total_scored} feasible placements."
-            )
+            ), {}
 
     def _collect_safety_flags(self, libraries: list[SiteLibrary]) -> list[str]:
         """Collect operational / regulatory concerns across libraries."""

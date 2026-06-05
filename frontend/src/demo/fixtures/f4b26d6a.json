@@ -5,7 +5,7 @@
     "job_id": "f4b26d6a-c794-4552-83c4-4f46f6c74438",
     "workload_spec": "Score Mississauga (L5B) for EV and heat pump growth through 2030",
     "stage": "completed",
-    "progress": 100.0,
+    "progress": 100,
     "created_at": "2026-05-27T02:35:17.082073",
     "pipeline_id": "electrification-readiness",
     "imported": false,
@@ -15,7 +15,7 @@
     "job_id": "f4b26d6a-c794-4552-83c4-4f46f6c74438",
     "workload_spec": "Score Mississauga (L5B) for EV and heat pump growth through 2030",
     "stage": "completed",
-    "progress": 100.0,
+    "progress": 100,
     "message": "Readiness plan ready",
     "started_at": "2026-05-27T02:35:17.091672",
     "updated_at": "2026-05-27T02:35:49.168890",
@@ -162,8 +162,8 @@
           "semi_detached": 0.04153322988543696,
           "row": 0.03093532305457427,
           "apartment_low_rise": 0.7916405295651887,
-          "apartment_high_rise": 0.0,
-          "other": 0.0
+          "apartment_high_rise": 0,
+          "other": 0
         },
         "heating_mix": {
           "natural_gas": 0.62,
@@ -203,8 +203,8 @@
             "semi_detached": 0.04153322988543696,
             "row": 0.03093532305457427,
             "apartment_low_rise": 0.7916405295651887,
-            "apartment_high_rise": 0.0,
-            "other": 0.0
+            "apartment_high_rise": 0,
+            "other": 0
           },
           "heating_mix": {
             "natural_gas": 0.62,
@@ -409,14 +409,14 @@
           ],
           "peak_kw_per_household": 2.56,
           "peak_hour": 17,
-          "incremental_peak_mw": 14.0,
+          "incremental_peak_mw": 14,
           "transformer_overload_count": 478,
-          "panel_upgrade_household_pct": 0.0
+          "panel_upgrade_household_pct": 0
         },
         "readiness": {
           "fsa": "L5B",
           "scenario_name": "Conservative",
-          "grid_score": 0.0,
+          "grid_score": 0,
           "building_score": 0.885,
           "affordability_score": 0.981,
           "policy_score": 0.55,
@@ -445,8 +445,8 @@
             "semi_detached": 0.04153322988543696,
             "row": 0.03093532305457427,
             "apartment_low_rise": 0.7916405295651887,
-            "apartment_high_rise": 0.0,
-            "other": 0.0
+            "apartment_high_rise": 0,
+            "other": 0
           },
           "heating_mix": {
             "natural_gas": 0.62,
@@ -653,12 +653,12 @@
           "peak_hour": 18,
           "incremental_peak_mw": 76.09,
           "transformer_overload_count": 478,
-          "panel_upgrade_household_pct": 0.0
+          "panel_upgrade_household_pct": 0
         },
         "readiness": {
           "fsa": "L5B",
           "scenario_name": "Moderate",
-          "grid_score": 0.0,
+          "grid_score": 0,
           "building_score": 0.885,
           "affordability_score": 0.903,
           "policy_score": 0.55,
@@ -687,8 +687,8 @@
             "semi_detached": 0.04153322988543696,
             "row": 0.03093532305457427,
             "apartment_low_rise": 0.7916405295651887,
-            "apartment_high_rise": 0.0,
-            "other": 0.0
+            "apartment_high_rise": 0,
+            "other": 0
           },
           "heating_mix": {
             "natural_gas": 0.62,
@@ -895,12 +895,12 @@
           "peak_hour": 20,
           "incremental_peak_mw": 157.47,
           "transformer_overload_count": 478,
-          "panel_upgrade_household_pct": 0.0
+          "panel_upgrade_household_pct": 0
         },
         "readiness": {
           "fsa": "L5B",
           "scenario_name": "Aggressive",
-          "grid_score": 0.0,
+          "grid_score": 0,
           "building_score": 0.885,
           "affordability_score": 0.805,
           "policy_score": 0.55,
@@ -923,9 +923,9 @@
           "L5B"
         ],
         "households_unlocked": 19120,
-        "estimated_cost_cad": 8604000.0,
+        "estimated_cost_cad": 8604000,
         "deployment_months": 12,
-        "readiness_lift_pct": 18.0,
+        "readiness_lift_pct": 18,
         "rationale": "At the 2035 net-zero (50% hp, 60% ev) target, 478 pad-mount transformers are projected to exceed 75 kVA continuous loading. Replacing with 100/167 kVA units in the first capital cycle is cheaper than emergency replacement after a failure."
       },
       {
@@ -936,9 +936,9 @@
           "L5B"
         ],
         "households_unlocked": 11488,
-        "estimated_cost_cad": 350000.0,
+        "estimated_cost_cad": 350000,
         "deployment_months": 9,
-        "readiness_lift_pct": 10.0,
+        "readiness_lift_pct": 10,
         "rationale": "Shifting EV charge to overnight off-peak slots cuts the evening distribution peak by ~31.5 MW across the studied FSAs with no infrastructure spend. Opt-out tariff structure has the best uptake in field trials (Hydro One TOU pilot)."
       },
       {
@@ -949,13 +949,13 @@
           "L5B"
         ],
         "households_unlocked": 0,
-        "estimated_cost_cad": 80000.0,
+        "estimated_cost_cad": 80000,
         "deployment_months": 4,
-        "readiness_lift_pct": 4.0,
+        "readiness_lift_pct": 4,
         "rationale": "Adds ~$1.5K to new-build cost but avoids 6× retrofit cost. Vancouver and Burnaby have demonstrated this is politically feasible at the municipal layer; it stacks on provincial step-code requirements."
       }
     ],
-    "executive_summary": "# Executive Summary: Electrification Readiness Assessment for Mississauga FSA L5B\n\n**Verdict: Constrained**\n\nThe neighborhood electrification readiness study for Mississauga's L5B forward sortation area returns a headline verdict of CONSTRAINED. All three scenario pairings tested returned a constrained status, with zero pairings rated Ready and zero rated Blocked, meaning the distribution system can absorb near-term electrification load but will require deliberate intervention before mid-decade targets are achievable. This is not a crisis finding, but it is a clear signal that passive grid management is no longer sufficient for the growth trajectory the city has committed to.\n\n**Binding Constraint: Distribution Infrastructure**\n\nThe binding constraint across all tested pairings is local distribution capacity, specifically the transformer network serving L5B. The study identifies 478 local distribution transformers requiring upgrade as the single largest infrastructure gap, and since all three constrained pairings point to the same FSA, L5B is both the geographic focus and the primary driver of the overall constrained verdict. Data on panel-level capacity headroom and affordability indices were not provided in the source dataset, so those dimensions could not be independently scored and may represent additional latent constraints not captured here.\n\n**Scenario Sensitivity**\n\nThe current baseline scenario of 5 percent heat pump adoption and 7 percent electric vehicle penetration (Today scenario) already contributes to constrained conditions, indicating that the grid is not comfortably absorbing even today's electrification load in L5B. The 2030 Plans scenario (25 percent heat pumps, 30 percent EVs) and the 2035 Net-Zero scenario (50 percent heat pumps, 60 percent EVs) both amplify this stress, and without transformer upgrades, the 2035 targets in particular carry a meaningful risk of tipping constrained pairings toward blocked status as coincident peak demand grows. Industry rule of thumb in comparable Ontario regions suggests that EV and heat pump loads together can increase residential transformer peak demand by 40 to 70 percent above baseline, reinforcing the urgency of early capital deployment.\n\n**Modeling Caveats**\n\nThis assessment is based on scenario inputs and infrastructure data available at the time of study, and several fields relevant to a complete readiness picture, including specific headroom values in megawatts, customer counts by feeder, and real-time grid latency metrics, were not available in the source dataset and therefore could not be incorporated into the scoring. The constrained verdict should be interpreted as a directional finding that warrants detailed engineering validation by Alectra Utilities before capital commitments are finalized. Seasonal load diversity, behind-the-meter battery storage uptake, and future density changes in L5B could each materially shift the results in either direction.\n\n**Priority Intervention: Transformer Upgrades**\n\nThe single most leveraged action the council can fund and advance immediately is the program to upgrade all 478 flagged local distribution transformers in L5B, as this intervention directly addresses the binding constraint identified across every tested scenario. Pairing that capital program with a default-on managed EV charging tariff will reduce coincident peak demand and extend the useful life of upgraded assets, while a mandatory heat pump and EV rough-in requirement embedded in the zoning bylaw ensures that new construction does not add unmanaged load to a system still in transition. Together, these three interventions form a sequenced and mutually reinforcing package that the council should treat as a single coordinated initiative rather than independent line items.",
+    "executive_summary": "# Executive Summary: Electrification Readiness Assessment for Mississauga FSA L5B\n\n**Verdict: Constrained**\n\nThe neighborhood electrification readiness study for [[s1|Mississauga's L5B forward sortation area]] returns a headline [[s11|verdict of CONSTRAINED]]. [[s2|All three scenario pairings tested returned a constrained status, with zero pairings rated Ready and zero rated Blocked]], meaning the distribution system can absorb near-term electrification load but will require deliberate intervention before mid-decade targets are achievable. This is not a crisis finding, but it is a clear signal that [[s13|passive grid management is no longer sufficient for the growth trajectory the city has committed to]].\n\n**Binding Constraint: Distribution Infrastructure**\n\n[[s12|The binding constraint across all tested pairings is local distribution capacity]], specifically the transformer network serving L5B. The study identifies [[s3|478 local distribution transformers requiring upgrade]] as the single largest infrastructure gap, and since all three constrained pairings point to the same FSA, L5B is both the geographic focus and the primary driver of the overall constrained verdict. Data on panel-level capacity headroom and affordability indices were not provided in the source dataset, so those dimensions could not be independently scored and may represent additional latent constraints not captured here.\n\n**Scenario Sensitivity**\n\nThe current baseline scenario of [[s4|5 percent heat pump adoption and 7 percent electric vehicle penetration (Today scenario)]] already contributes to constrained conditions, indicating that the grid is not comfortably absorbing even today's electrification load in L5B. [[s5|The 2030 Plans scenario (25 percent heat pumps, 30 percent EVs)]] and [[s6|the 2035 Net-Zero scenario (50 percent heat pumps, 60 percent EVs)]] both amplify this stress, and without transformer upgrades, the 2035 targets in particular carry a meaningful risk of tipping constrained pairings toward blocked status as coincident peak demand grows. Industry rule of thumb in comparable Ontario regions suggests that [[s7|EV and heat pump loads together can increase residential transformer peak demand by 40 to 70 percent above baseline]], reinforcing the urgency of early capital deployment.\n\n**Modeling Caveats**\n\nThis assessment is based on scenario inputs and infrastructure data available at the time of study, and several fields relevant to a complete readiness picture, including specific headroom values in megawatts, customer counts by feeder, and real-time grid latency metrics, were not available in the source dataset and therefore could not be incorporated into the scoring. The constrained verdict should be interpreted as a directional finding that warrants detailed engineering validation by Alectra Utilities before capital commitments are finalized. [[s8|Seasonal load diversity, behind-the-meter battery storage uptake, and future density changes in L5B could each materially shift the results]] in either direction.\n\n**Priority Intervention: Transformer Upgrades**\n\nThe single most leveraged action the council can fund and advance immediately is the program to upgrade all 478 flagged local distribution transformers in L5B, as this intervention directly addresses the binding constraint identified across every tested scenario. Pairing that capital program with a [[s9|default-on managed EV charging tariff]] will reduce coincident peak demand and extend the useful life of upgraded assets, while a [[s10|mandatory heat pump and EV rough-in requirement embedded in the zoning bylaw]] ensures that new construction does not add unmanaged load to a system still in transition. Together, these [[s14|three interventions form a sequenced and mutually reinforcing package]] that the council should treat as a single coordinated initiative rather than independent line items.",
     "methodology_notes": "Per-FSA load impact built from a 24-hour winter peak day temperature curve scaled by ECCC HDD18 normals. Heat pump draws use NRCan ccASHP COP curves with backup engagement below -10 °C. EV charging follows IESO ResLoad evening L2 shape with cold-weather multipliers. Transformer overload heuristic: 75 kVA serving ~40 households, 0.95 PF. Panel upgrade trigger: continuous peak > 18 kW per home.",
     "safety_flags": [],
     "limitations": [
@@ -964,6 +964,92 @@
       "Panel age and gauge data are not available; the 18 kW trigger is a conservative proxy.",
       "Time-of-use price response (managed charging) is not modeled in the baseline."
     ],
-    "chart_paths": {}
+    "chart_paths": {},
+    "citation_sources": {
+      "s1": {
+        "source_id": "s1",
+        "label": "FSA scenario input (user-defined)",
+        "detail": "L5B selected at job submission; FSA boundary from StatsCan postal geometry",
+        "status": "frozen"
+      },
+      "s2": {
+        "source_id": "s2",
+        "label": "Scenario-pairing scorecard (modeled)",
+        "detail": "Output of readiness-scoring stage across 3 scenario × infrastructure pairings",
+        "status": "modeled"
+      },
+      "s3": {
+        "source_id": "s3",
+        "label": "Transformer gap count (modeled)",
+        "detail": "Output of capacity-screening stage against projected FSA load growth",
+        "status": "modeled"
+      },
+      "s4": {
+        "source_id": "s4",
+        "label": "Baseline (Today) scenario inputs",
+        "detail": "Canonical baseline row calibrated from StatsCan + IESO observations",
+        "status": "frozen"
+      },
+      "s5": {
+        "source_id": "s5",
+        "label": "2030 Plans scenario",
+        "detail": "Canonical scenario row aligned to Ontario electrification plan targets",
+        "status": "frozen"
+      },
+      "s6": {
+        "source_id": "s6",
+        "label": "2035 Net-Zero scenario",
+        "detail": "Canonical scenario row aligned to Canada Net-Zero 2035 trajectory",
+        "status": "frozen"
+      },
+      "s7": {
+        "source_id": "s7",
+        "label": "Industry rule of thumb",
+        "detail": "Sector-typical range; not derived from project-specific feeder telemetry",
+        "status": "llm"
+      },
+      "s8": {
+        "source_id": "s8",
+        "label": "Modeling-limitation framing",
+        "detail": "General-knowledge enumeration; these factors are not modeled in this run",
+        "status": "llm"
+      },
+      "s9": {
+        "source_id": "s9",
+        "label": "Recommendation framing · DR",
+        "detail": "General utility-industry intervention; specific tariff design requires OEB approval",
+        "status": "llm"
+      },
+      "s10": {
+        "source_id": "s10",
+        "label": "Recommendation framing · zoning",
+        "detail": "General regulatory mechanism; specific bylaw instruments require Mississauga council action",
+        "status": "llm"
+      },
+      "s11": {
+        "source_id": "s11",
+        "label": "Verdict rollup (modeled)",
+        "detail": "Rollup of the readiness scorecard across all 3 scenario pairings",
+        "status": "modeled"
+      },
+      "s12": {
+        "source_id": "s12",
+        "label": "Binding-constraint identification (modeled)",
+        "detail": "Output of the readiness-scoring stage; cross-pairing consensus",
+        "status": "modeled"
+      },
+      "s13": {
+        "source_id": "s13",
+        "label": "Planning-posture framing",
+        "detail": "General-knowledge utility-planning claim; not derived from a passive-management benchmark dataset",
+        "status": "llm"
+      },
+      "s14": {
+        "source_id": "s14",
+        "label": "Recommendation framing · sequencing",
+        "detail": "General-knowledge structuring of related interventions; not from a project-defined dependency model",
+        "status": "llm"
+      }
+    }
   }
 }

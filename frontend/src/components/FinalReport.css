@@ -571,3 +571,94 @@
   .fr-feedback-row { justify-content: flex-start; flex-wrap: wrap; gap: 6px; }
   .fr-meta { padding: 12px; }
 }
+
+/* ── Inline citation markers in the executive summary ──────────────────
+   Phase 1 — Surface specific cited phrases (numbers, proper nouns,
+   dataset names) with a quiet dotted underline + tinted foreground that
+   matches the four-state provenance chip palette. Hovering / tapping a
+   marker opens a popover (see .fr-cite-popup below) that reuses the
+   Mapbox popup design tokens. The colors round-trip with the Data
+   Provenance chip row at the bottom of every report so the reader can
+   visually connect "this orange-underlined number" to "that orange
+   MODELED chip" at a glance.
+   Foreground hues are pulled from the same Energy palette variables the
+   provenance chips already use, so anywhere the chip changes color the
+   citation marker follows. */
+.fr-cite {
+  border-bottom: 1px dashed color-mix(in srgb, currentColor 55%, transparent);
+  cursor: help;
+  text-underline-offset: 2px;
+  padding: 0 1px;
+  border-radius: 2px;
+  transition: background 0.12s ease;
+}
+.fr-cite:hover,
+.fr-cite:focus-visible {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  outline: none;
+}
+.fr-cite--live    { color: var(--energy-clean); }
+.fr-cite--frozen  { color: var(--energy-mid); }
+.fr-cite--modeled { color: var(--energy-dirty); }
+.fr-cite--llm     { color: #c889e6; }
+
+/* Hover popover — lifts the Mapbox popup tokens (.skorpio-map
+   .mapboxgl-popup-content) so it reads as a peer of the other hover
+   surfaces in the project. Portaled to <body> so the report panel's
+   overflow can't clip it. */
+.fr-cite-popup {
+  position: fixed;
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 10px 12px;
+  background: var(--bg-1);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-1);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fr-cite-popup-in 140ms ease-out;
+}
+@keyframes fr-cite-popup-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fr-cite-popup-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.fr-cite-popup-title {
+  font-family: var(--serif);
+  font-size: 14px;
+  margin: 2px 0 2px;
+  color: var(--fg-1);
+  line-height: 1.3;
+}
+.fr-cite-popup-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--fg-3);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+.fr-cite-popup .pc-badge {
+  align-self: flex-start;
+}
+
+/* Print: keep the dotted underline so the highlight is visible on paper,
+   but hide the floating popover (it'd render at fixed coords on the
+   wrong page). The Sources block at the bottom of the report still
+   carries the from-where information for the printed version. */
+@media print {
+  .fr-cite-popup { display: none; }
+  .fr-cite { cursor: text; }
+}

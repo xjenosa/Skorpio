@@ -64,6 +64,11 @@ export interface ReportShellProps {
   /** External-data citations rendered in a Sources block under the exec summary.
       Empty / undefined hides the block entirely. See REPORTS_COHESION.md §7. */
   sources?: string[] | null
+  /** Optional dict of source metadata keyed by short id (`s1`, `s2`, …). When
+      the executive summary contains `[[sN|cited text]]` markers, the matching
+      entry here drives the hover popover's label, detail, and provenance
+      status. Omit to disable citations (markers fall back to plain text). */
+  citationSources?: import('./reportMarkdown').CitationSources | null
   onPipelineChange?: (pipelineId: PipelineId) => void
 }
 
@@ -71,6 +76,8 @@ export interface ReportShellProps {
 // Strip markdown formatting so the clipboard receives clean plain text.
 function stripMarkdown(md: string): string {
   return md
+    // Unwrap citation markers first so a [[s1|$50M]] copies as "$50M".
+    .replace(/\[\[s\w+\|([^\]]+)\]\]/g, '$1')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
     .replace(/_(.+?)_/g, '$1')
@@ -369,6 +376,7 @@ export function ReportShell({
   sections,
   execSummary,
   sources,
+  citationSources,
   onPipelineChange,
 }: ReportShellProps) {
   const [openSection, setOpenSection] = useState<ReportSectionId | null>(null)
@@ -514,7 +522,7 @@ export function ReportShell({
         {execSummary && (
           <div className="fr-exec">
             <div className="t-eyebrow">Executive summary</div>
-            <div className="fr-md">{renderMarkdown(execSummary)}</div>
+            <div className="fr-md">{renderMarkdown(execSummary, citationSources ?? undefined)}</div>
           </div>
         )}
 

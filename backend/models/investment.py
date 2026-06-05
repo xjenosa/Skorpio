@@ -13,6 +13,7 @@ Mirrors the other pipeline model layouts:
 """
 from pydantic import BaseModel, Field
 from typing import Optional
+from backend.models.report import CitationSource
 
 
 # ── Inputs ────────────────────────────────────────────────────────────── #
@@ -118,6 +119,7 @@ class InvestmentPlan(BaseModel):
     safety_flags: list[str] = []
     limitations: list[str] = []
     sources: list[str] = []                                    # populated by agents (ArcGIS citation lands here)
+    citation_sources: dict[str, CitationSource] = {}           # inline-citation table for exec summary markers
     chart_paths: dict[str, str] = {}
 
 

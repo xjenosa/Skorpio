@@ -302,11 +302,28 @@ export function GuidedTour({ open, onClose }: GuidedTourProps) {
       // markTourSeen() runs at finish time. Used by finish() to
       // gate the demo fixture auto-hide on first-time-only.
       wasFirstRunRef.current = !hasSeenTour()
+      // Demo mode: reset the winter-peak fixture to its submitted+played
+      // state for the full duration of the tour, regardless of what the
+      // user did before opening it. Earlier steps (4-6 — agent-pipeline
+      // stages + cards) anchor on Sample-run elements that only render
+      // when the fixture is visible AND the tour's sample-suppress flag
+      // is clear; without this, a replay after a manual "hide" or after
+      // the first tour's auto-hide would silently drop those steps to
+      // centered-modal fallback. Clearing on every open is safe because
+      // finish() re-applies the suppression for first-time tours via
+      // wasFirstRunRef + hasUserRunPipeline gates.
+      if (demoMode && typeof window !== 'undefined') {
+        markFixtureSubmitted('winter-peak-stress')
+        markFixturePlayed('winter-peak-stress')
+        try {
+          window.localStorage.removeItem(TOUR_SAMPLE_SUPPRESSED_KEY)
+        } catch {}
+      }
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('skorpio-tour-open'))
       }
     }
-  }, [open])
+  }, [open, demoMode])
 
   // Toggle a body-level flag while the tour is active so the custom
   // white-arrow cursor CSS targets the whole page (including over the

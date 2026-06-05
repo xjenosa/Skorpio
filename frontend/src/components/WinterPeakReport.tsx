@@ -182,6 +182,7 @@ export function WinterPeakReport({ jobId, hasResults, onPipelineChange }: Winter
       sections={sections}
       execSummary={plan.executive_summary}
       sources={sources}
+      citationSources={(plan as { citation_sources?: Record<string, { source_id: string; label: string; detail?: string | null; status: 'live' | 'frozen' | 'modeled' | 'llm' }> }).citation_sources}
       onPipelineChange={onPipelineChange}
     />
   )

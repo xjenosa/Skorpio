@@ -839,8 +839,19 @@ function NewSessionView({
   // reads from the shared hook to gate placeholder text + suggestion cards;
   // flips happen elsewhere (DemoToggle), so we only need the value here.
   const [demoMode] = useDemoMode()
-  // One random placeholder per mount of the view.
-  const placeholder = useMemo(() => randomExample(), [])
+  // One random placeholder per mount of the view. Demo mode samples
+  // from the 5 captured prompts that match the pre-saved fixtures, so
+  // the placeholder doubles as a hint at the shape of input the demo
+  // intercept can actually route.
+  const placeholder = useMemo(
+    () => {
+      if (demoMode && DEMO_PROMPTS.length > 0) {
+        return DEMO_PROMPTS[Math.floor(Math.random() * DEMO_PROMPTS.length)].prompt
+      }
+      return randomExample()
+    },
+    [demoMode],
+  )
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -1037,7 +1048,7 @@ function NewSessionView({
       </div>
 
       <form
-        className={`composer${demoMode ? ' composer-demo' : ''}`}
+        className="composer"
         onSubmit={onSubmit}
         noValidate
         data-tour-anchor="composer"
@@ -1054,7 +1065,7 @@ function NewSessionView({
         >
           <textarea
             rows={2}
-            placeholder={demoMode ? '' : placeholder}
+            placeholder={placeholder}
             value={prompt}
             onChange={(e) => {
               setPrompt(e.target.value)
@@ -1073,17 +1084,8 @@ function NewSessionView({
                 form?.requestSubmit()
               }
             }}
-            // Demo mode: cards auto-fill, user can't edit. readOnly (not
-            // disabled) so the box keeps its full styling and remains
-            // selectable for cards to populate.
-            readOnly={demoMode}
             disabled={submitting}
           />
-          {demoMode && !prompt && (
-            <div className="composer-demo-overlay" aria-hidden="true" data-tour-anchor="demo-notice">
-              Pick a card below, or see this feature live during the in-person demo.
-            </div>
-          )}
         </div>
         <div className="composer-row">
           <div className="pipeline-picker" ref={pipelineRef}>
@@ -1093,11 +1095,9 @@ function NewSessionView({
               aria-haspopup="listbox"
               aria-expanded={pipelineOpen}
               onClick={() => setPipelineOpen((o) => !o)}
-              disabled={submitting || demoMode}
+              disabled={submitting}
               title={
-                demoMode
-                  ? 'Pipeline routing is locked to the selected suggestion card in demo mode'
-                  : displayedMeta
+                displayedMeta
                   ? `Routing locked to ${displayedMeta.label}`
                   : 'Agent picks the pipeline based on your prompt'
               }
@@ -1186,10 +1186,13 @@ function NewSessionView({
               aria-haspopup="listbox"
               aria-expanded={modelOpen}
               onClick={() => setModelOpen((o) => !o)}
-              disabled={submitting || demoMode}
-              title={demoMode ? 'Model is locked to Sonnet in demo mode' : undefined}
+              disabled={submitting}
+              // Demo mode: model picker is a visual dud — the demo flow
+              // bypasses the live API entirely, so whichever model the
+              // user picks here has no functional effect.
+              title={demoMode ? 'Model selection has no effect in demo mode' : undefined}
             >
-              Skorpio · {demoMode ? 'Sonnet' : activeModel.label}
+              Skorpio · {activeModel.label}
               <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 9l6 6 6-6" />
               </svg>
@@ -1232,25 +1235,7 @@ function NewSessionView({
         </div>
       </form>
 
-      {/* Below-composer notice slot. Errors win when present; in demo
-          mode without an active error a permanent demo notice fills
-          the slot so the user always sees the explanation for why
-          typing is locked, even once a card has populated the prompt
-          and the in-textarea overlay has stepped aside. Uses the same
-          red error-banner palette as the validation error so the slot
-          reads as one consistent UI element regardless of which
-          message it carries; the leading dot echoes the ReportChatBar
-          follow-up notice. */}
-      {error ? (
-        <div className="error-banner new-session-error">{error}</div>
-      ) : demoMode ? (
-        <div className="error-banner demo-notice new-session-error">
-          <span className="banner-dot" aria-hidden="true" />
-          <span>
-            <strong>Demo preview</strong> · Free-form prompts are disabled in demo mode.
-          </span>
-        </div>
-      ) : null}
+      {error && <div className="error-banner new-session-error">{error}</div>}
 
       <SuggestionGrid onPick={onChipPick} demoMode={demoMode} />
 
@@ -1809,22 +1794,18 @@ function ReportsView({
     setExportError(null)
     setExporting(true)
     try {
-      // Non-demo: bundle entirely in the browser using JobListItem rows
-      // already in state + per-job /api/results/<id> reads. Drops the
-      // dependency on the backend's `/api/jobs/export-bundle` endpoint
-      // (useful on offline-ish deploys and as a thinner backend
-      // contract). Demo mode still goes through `api.exportJobsBundle`
-      // because demo doesn't reach this branch in production anyway.
+      // Both demo and non-demo bundle entirely in the browser using
+      // JobListItem rows already in state. exportJobsBundleLocal fetches
+      // each job's result via `/api/results/<id>`, but the demo intercept
+      // layer in api/client.ts shortcuts fixture job_ids to the local
+      // JSON — so demo mode never hits the network. Non-demo goes through
+      // the real /api/results path. JSZip handles the .zip case for
+      // multi-report exports either way.
       const selectedJobs = (jobs ?? []).filter((j) => selectedIds.has(j.job_id))
-      const { blob, filename } = demoMode
-        ? await api.exportJobsBundle({
-            jobIds: ids,
-            fromEmail: loadUserEmail() || undefined,
-          })
-        : await api.exportJobsBundleLocal({
-            jobs: selectedJobs,
-            fromEmail: loadUserEmail() || undefined,
-          })
+      const { blob, filename } = await api.exportJobsBundleLocal({
+        jobs: selectedJobs,
+        fromEmail: loadUserEmail() || undefined,
+      })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
@@ -1987,8 +1968,15 @@ function ReportsView({
           </div>
           <button
             type="button"
-            onClick={onImportClick}
+            // Import requires a backend to write the parsed report into
+            // the DB — there's no destination in demo mode. The submit
+            // path is similarly gated via DemoDisabledError in client.ts.
+            // Visually identical in both modes; demo mode just blocks
+            // the click + swaps the hover cursor.
+            onClick={demoMode ? undefined : onImportClick}
             disabled={importing}
+            title={demoMode ? 'Import is disabled in demo mode. See this feature live during the in-person demo.' : undefined}
+            style={demoMode ? { cursor: 'not-allowed' } : undefined}
             data-tour-anchor="report-import"
           >
             {importing ? 'Importing…' : 'Import'}

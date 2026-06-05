@@ -423,6 +423,177 @@ vocabulary and shouldn't be casually extended.
 
 ---
 
+## 7c. Inline source citations — exec-summary highlights with hover detail
+
+Where §7b chips summarize *the pipeline's stage-level provenance* in a
+single row, **§7c chips operate inline within the executive summary
+prose** — every quantitative number, named asset, named regulation, and
+industry-pattern claim is wrapped in a colored highlight that opens a
+source card on hover/click.
+
+This is what gives a judge a defensible answer to the next-level question:
+"yes the pipeline cites data — but for *this specific sentence*, what
+source?"
+
+### Marker syntax
+
+Synthesis agents emit citations as inline markers in the
+`executive_summary` string:
+
+```
+…delivers a lifetime return of [[s4|3.62 times invested capital]],
+with avoided annual losses of [[s5|$2.8 million per year]].
+```
+
+Each `[[sN|cited text]]` references an id `sN` defined in a sibling
+`citation_sources` dict on the same plan object:
+
+```python
+{
+  "executive_summary": "...[[s4|3.62 times invested capital]]...",
+  "citation_sources": {
+    "s4": {
+      "source_id": "s4",
+      "label": "Lifetime ROI calculation (modeled)",
+      "detail": "Sum of project NPVs / committed capital, 26y horizon, 5% discount",
+      "status": "modeled"
+    },
+    ...
+  }
+}
+```
+
+The rendering layer ([`reportMarkdown.tsx`](./reportMarkdown.tsx)) parses
+markers FIRST in its inline tokenizer, before bold/italic/code, so a `*`
+inside cited text is safe. Unknown ids fall back to plain text — backward
+compatible with pipelines that haven't been wired yet.
+
+### Visual vocabulary — same 4 statuses as §7b
+
+Colors mirror the chip palette exactly:
+
+| Status | Color token | When to use |
+|---|---|---|
+| `live` | `--energy-clean` (green) | Cited value pulled from a live API on this run (ArcGIS GeoEnrichment, NREL utility-rates, IESO live carbon, arXiv) |
+| `frozen` | `--energy-mid` (yellow) | Ingested dataset, hand-curated catalog, OR user-supplied scenario input |
+| `modeled` | `--energy-dirty` (orange) | Computation over frozen/live sources by a pipeline stage |
+| `llm` | lavender (`CATEGORICAL_COLORS[3]`) | General-knowledge claim Claude added on top of the data (industry patterns, regulatory framing, recommendations) |
+
+Repeated mentions of the same fact reuse the same id (e.g. `$2.8M/yr`
+appearing in Verdict and again in Limitations both reference `s5`). One
+id, one popover card.
+
+### Desktop interaction
+
+- Hover over a highlight → portaled card appears above/below the anchor,
+  styled as a peer of the Mapbox popup (same `--bg-1` / `--rule-2`
+  tokens).
+- Card shows: status eyebrow, label (one-line source title), optional
+  detail (one-sentence "where the value came from"), and the matching
+  provenance status badge from §7b.
+- Click toggles persistently; click outside dismisses; focus opens (for
+  keyboard users).
+
+### Mobile interaction — highlights only, NO popover
+
+Touch devices (`@media (pointer: coarse)`) render the highlights with
+full color + dashed underline so the provenance signal still reads at a
+glance, but tap does NOT open a card. Rationale: on a 390px viewport, a
+popover blocks prose and forces a tap-outside dismissal before the user
+can scroll past — strictly worse UX than leaving the source detail
+unexposed. The Sources block below the exec summary already provides
+long-form citations for the curious.
+
+The detection lives in
+[`reportMarkdown.tsx::CitationSpan`](./reportMarkdown.tsx); the touch
+branch skips both the popover render and the click/hover handlers.
+
+### Density target — applies uniformly across pipelines
+
+**One marker per 250–350 characters of exec-summary prose.** No factual
+paragraph (any quantitative claim, named asset, industry pattern, or
+regulatory reference) should be uncited. Hand-curation in Phase 1 showed
+that without this rule, descriptive pipelines (Siting, Winter, Expansion)
+end up sparser than prescriptive ones (Investment, Electrification),
+which judges read as inconsistent rigor.
+
+After applying the target, expected per-pipeline density falls in a
+3.0–5.5/k char window (varies with the report's natural prose length).
+
+### Expected `llm`-status share by pipeline type
+
+LLM share varies systematically and that's **expected**, not a bug:
+
+| Pipeline | Output style | Expected `llm` share |
+|---|---|---|
+| Investment | Prescriptive (board recommendations) | 35–45% |
+| Electrification | Prescriptive (council policy) | 35–45% |
+| Siting | Descriptive (which site wins) | 20–30% |
+| Expansion | Descriptive (target hit / miss) | 15–25% |
+| Winter | Descriptive (do feeders survive) | 15–25% |
+
+If a real run shows 0% `llm` on Investment, the prompt is letting
+hallucinated industry-pattern claims slip through unmarked. If Siting
+shows 40%+ `llm`, the prompt is fabricating reasoning instead of citing
+measurements. Both are regressions.
+
+### Guardrails for synthesis prompts (anti-fabrication)
+
+The synthesis agent receives a **whitelist of allowed source labels**
+(IESO, ECCC station IDs, OEB filings, NREL endpoints, StatsCan table
+numbers, hand-curated catalog header strings). Citations must draw labels
+from that list; free-form source names = automatic hallucination risk.
+
+Specific tendencies the prompt must guard against, learned from Phase 1
+audit of all 5 demo fixtures:
+
+1. **Overstating which dataset a value came from.** Service-territory
+   data ingested from OEB KMZ ≠ "Alectra Annual Report." Prompt must
+   force the label to match the actual ingest source.
+2. **Citing the regulator's name as a data source.** "OEB" without a
+   quantitative claim attached is not a citation candidate.
+3. **Mixing inputs with outputs.** A user-supplied $50M budget is
+   `frozen` ("Scenario inputs"), not `modeled` ("knapsack output").
+4. **Overstating a hand-curated catalog as a single filing.** Cite the
+   catalog as `"Hand-curated catalog · {scope}"` with a detail naming the
+   filings it calibrates against — never as a single filing name.
+5. **Leaving industry-pattern claims unmarked.** "Vegetation contact is
+   the leading cause of overhead outages" is `llm`, not unmarked prose.
+   Unmarked + plausible = sleight of hand once the rest is cited.
+6. **Synthesis copies internal field names into prose.** Parentheticals
+   like `"(headroom_mw and peak_mw, scenario data)"` leak Python field
+   names. The popover replaces this metadata; the inline parenthetical
+   must go.
+7. **Numerical sanity slips.** Past fixtures shipped `"$50000000 million"`
+   (= 50 trillion), `"headroom = peak"` duplicates, and 67% × 30 ≠ 30
+   parenthetical errors. The validation hook must catch:
+   - Headroom ≥ 0
+   - Headroom + peak ≈ baseline peak
+   - Numbers repeated across the same exec summary must agree
+   - Percentages must be consistent with the underlying numbers cited.
+
+### Validation hook
+
+Before returning a plan, the orchestrator runs a `_validate_citations`
+pass that rejects (and retries) any synthesis output where:
+
+- A `[[sN|...]]` marker has no matching `citation_sources[N]` entry, OR
+- A `citation_sources` id is never referenced in `executive_summary` (an
+  orphan source is a fabricated source the LLM never used), OR
+- A `frozen` or `live` label is not in the backend's whitelist of real
+  source names.
+
+The error message includes the offending id and is appended to the prompt
+on retry. One retry only; on second failure, fall back to the stub
+exec_summary path.
+
+**Reviewer rule:** if a synthesis prompt is changed in a way that drops
+the citation marker contract, the validation hook will start rejecting
+output and the stub fallback fires silently. Watch the `is_synthesized`
+flag and the agent's retry log — both should remain green in CI fixtures.
+
+---
+
 ## 8. Backend invariant — always render *something*
 
 Every pipeline must guarantee its report always has data to plot, even when

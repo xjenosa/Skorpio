@@ -13,6 +13,7 @@ Five model layers:
 """
 from pydantic import BaseModel, Field
 from typing import Optional
+from backend.models.report import CitationSource
 
 
 # ── Inputs ────────────────────────────────────────────────────────────── #
@@ -220,6 +221,7 @@ class ResiliencePlan(BaseModel):
     methodology_notes: str = ""
     safety_flags: list[str] = []                 # e.g. "Voltage sag risk to medical devices"
     limitations: list[str] = []                  # data gaps / synthesis caveats
+    citation_sources: dict[str, CitationSource] = {}   # inline-citation table for exec summary markers
     chart_paths: dict[str, str] = {}             # {"load_curve": "/data/winter/<job>/load.json", ...}
 
 

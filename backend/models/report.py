@@ -1,8 +1,27 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Literal, Optional
 from enum import Enum
 from datetime import datetime
 from backend.models.site import ObjectiveWeights
+
+
+# ── Inline source citations (Phase 2 of REPORTS_COHESION §7c) ───────────── #
+#
+# Synthesis agents emit `[[sN|cited text]]` markers inside the
+# `executive_summary` string and populate the corresponding ids in
+# `citation_sources` on the plan. The frontend's reportMarkdown renderer
+# resolves each id to one of these entries to paint a hover popover with
+# source provenance. See frontend/src/components/REPORTS_COHESION.md §7c.
+
+CitationStatus = Literal["live", "frozen", "modeled", "llm"]
+
+
+class CitationSource(BaseModel):
+    """One source referenced by a `[[sN|...]]` marker in the exec summary."""
+    source_id: str                       # matches the `sN` id used in markers
+    label: str                           # short title rendered in the popover header
+    detail: Optional[str] = None         # one-line "where the value came from"
+    status: CitationStatus               # one of: live | frozen | modeled | llm
 
 
 class NewsItem(BaseModel):
@@ -142,6 +161,7 @@ class SitingPlan(BaseModel):
     news_items: list[NewsItem] = []          # workload-level grid / policy preprints
     pareto_analysis: Optional[ParetoAnalysis] = None
     sources: list[str] = []                  # extra dynamic citations (e.g. ArcGIS GeoEnrichment when configured)
+    citation_sources: dict[str, CitationSource] = {}   # inline-citation table, keyed by source_id; populated by synthesis agent
 
 
 class PipelineJob(BaseModel):

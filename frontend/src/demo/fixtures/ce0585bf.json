@@ -5,7 +5,7 @@
     "job_id": "ce0585bf-83b7-4f1e-8710-1addc3255b08",
     "workload_spec": "Plan 30 MW of expansion at our Vaughan datacenter, 18-month horizon",
     "stage": "completed",
-    "progress": 100.0,
+    "progress": 100,
     "created_at": "2026-05-27T02:40:28.354323",
     "pipeline_id": "datacenter-expansion",
     "imported": false,
@@ -15,7 +15,7 @@
     "job_id": "ce0585bf-83b7-4f1e-8710-1addc3255b08",
     "workload_spec": "Plan 30 MW of expansion at our Vaughan datacenter, 18-month horizon",
     "stage": "completed",
-    "progress": 100.0,
+    "progress": 100,
     "message": "Expansion plan ready",
     "started_at": "2026-05-27T02:40:28.364817",
     "updated_at": "2026-05-27T02:40:58.833168",
@@ -128,7 +128,7 @@
       "normalized_name": "eStruxture · +30 MW · 2027 balanced",
       "operator": "eStruxture",
       "province": "QC",
-      "target_additional_mw": 30.0,
+      "target_additional_mw": 30,
       "horizon_years": 1,
       "target_year": 2027,
       "workload_mix": "balanced",
@@ -151,10 +151,10 @@
           "latitude": 45.527,
           "longitude": -73.378,
           "year_commissioned": 2018,
-          "current_capacity_mw": 60.0,
-          "contracted_mw": 52.0,
-          "plot_acres": 14.0,
-          "transformer_headroom_mw": 18.0,
+          "current_capacity_mw": 60,
+          "contracted_mw": 52,
+          "plot_acres": 14,
+          "transformer_headroom_mw": 18,
           "fiber_providers": [
             "Bell",
             "Cogeco",
@@ -162,9 +162,9 @@
             "Telus"
           ],
           "cooling": "hybrid",
-          "water_available_l_s": 22.0,
+          "water_available_l_s": 22,
           "grid_zone": "CA-QC",
-          "avg_carbon_g_kwh": 2.0,
+          "avg_carbon_g_kwh": 2,
           "pue": 1.22,
           "notes": "Flagship Quebec campus, Hydro-Québec 315 kV feed."
         },
@@ -177,19 +177,19 @@
           "latitude": 45.451,
           "longitude": -73.808,
           "year_commissioned": 2020,
-          "current_capacity_mw": 40.0,
-          "contracted_mw": 36.0,
-          "plot_acres": 8.0,
-          "transformer_headroom_mw": 8.0,
+          "current_capacity_mw": 40,
+          "contracted_mw": 36,
+          "plot_acres": 8,
+          "transformer_headroom_mw": 8,
           "fiber_providers": [
             "Bell",
             "Cogeco",
             "Telus"
           ],
           "cooling": "air",
-          "water_available_l_s": 0.0,
+          "water_available_l_s": 0,
           "grid_zone": "CA-QC",
-          "avg_carbon_g_kwh": 2.0,
+          "avg_carbon_g_kwh": 2,
           "pue": 1.28,
           "notes": "Tier-III west-island site, limited plot."
         },
@@ -202,24 +202,24 @@
           "latitude": 43.836,
           "longitude": -79.539,
           "year_commissioned": 2022,
-          "current_capacity_mw": 15.0,
-          "contracted_mw": 10.0,
-          "plot_acres": 12.0,
-          "transformer_headroom_mw": 10.0,
+          "current_capacity_mw": 15,
+          "contracted_mw": 10,
+          "plot_acres": 12,
+          "transformer_headroom_mw": 10,
           "fiber_providers": [
             "Bell",
             "Rogers",
             "Cogeco"
           ],
           "cooling": "hybrid",
-          "water_available_l_s": 12.0,
+          "water_available_l_s": 12,
           "grid_zone": "CA-ON",
-          "avg_carbon_g_kwh": 30.0,
+          "avg_carbon_g_kwh": 30,
           "pue": 1.3,
           "notes": "GTA expansion runway, Hydro One 230 kV."
         }
       ],
-      "total_current_capacity_mw": 115.0,
+      "total_current_capacity_mw": 115,
       "is_synthesized": false,
       "sources": [
         "Cushman & Wakefield Canada DC Market 2024",
@@ -232,7 +232,7 @@
       "workload_mix": "balanced",
       "horizon_years": 1,
       "annual_growth_rate": 0.22,
-      "baseline_mw": 98.0,
+      "baseline_mw": 98,
       "annual_demand_mw": [
         119.6
       ],
@@ -248,9 +248,9 @@
         "option_type": "brownfield",
         "target_site_id": "ESTR-TOR-1",
         "title": "eStruxture TOR-1 Vaughan Phase 23, +10 MW (hybrid)",
-        "new_capacity_mw": 10.0,
-        "capex_cad": 110000000.0,
-        "capex_per_mw_cad": 11000000.0,
+        "new_capacity_mw": 10,
+        "capex_cad": 110000000,
+        "capex_per_mw_cad": 11000000,
         "deployment_months": 18,
         "grid_score": 0.84,
         "sustainability_score": 0.859,
@@ -264,16 +264,16 @@
         "latitude": 43.836,
         "longitude": -79.539,
         "grid_zone": "CA-ON",
-        "avg_carbon_g_kwh": 30.0
+        "avg_carbon_g_kwh": 30
       },
       {
         "option_id": "OPT-6b9c0287",
         "option_type": "brownfield",
         "target_site_id": "ESTR-MTL-1",
         "title": "eStruxture MTL-1 Saint-Bruno Phase 19, +20 MW (hybrid)",
-        "new_capacity_mw": 20.0,
-        "capex_cad": 220000000.0,
-        "capex_per_mw_cad": 11000000.0,
+        "new_capacity_mw": 20,
+        "capex_cad": 220000000,
+        "capex_per_mw_cad": 11000000,
         "deployment_months": 18,
         "grid_score": 0.86,
         "sustainability_score": 0.925,
@@ -287,16 +287,16 @@
         "latitude": 45.527,
         "longitude": -73.378,
         "grid_zone": "CA-QC",
-        "avg_carbon_g_kwh": 2.0
+        "avg_carbon_g_kwh": 2
       },
       {
         "option_id": "OPT-9985907a",
         "option_type": "brownfield",
         "target_site_id": "ESTR-MTL-2",
         "title": "eStruxture MTL-2 Pointe-Claire Phase 21, +10 MW (air)",
-        "new_capacity_mw": 10.0,
-        "capex_cad": 95000000.0,
-        "capex_per_mw_cad": 9500000.0,
+        "new_capacity_mw": 10,
+        "capex_cad": 95000000,
+        "capex_per_mw_cad": 9500000,
         "deployment_months": 18,
         "grid_score": 0.72,
         "sustainability_score": 0.738,
@@ -310,7 +310,7 @@
         "latitude": 45.451,
         "longitude": -73.808,
         "grid_zone": "CA-QC",
-        "avg_carbon_g_kwh": 2.0
+        "avg_carbon_g_kwh": 2
       }
     ],
     "funded_options": [
@@ -319,9 +319,9 @@
         "option_type": "brownfield",
         "target_site_id": "ESTR-TOR-1",
         "title": "eStruxture TOR-1 Vaughan Phase 23, +10 MW (hybrid)",
-        "new_capacity_mw": 10.0,
-        "capex_cad": 110000000.0,
-        "capex_per_mw_cad": 11000000.0,
+        "new_capacity_mw": 10,
+        "capex_cad": 110000000,
+        "capex_per_mw_cad": 11000000,
         "deployment_months": 18,
         "grid_score": 0.84,
         "sustainability_score": 0.859,
@@ -335,16 +335,16 @@
         "latitude": 43.836,
         "longitude": -79.539,
         "grid_zone": "CA-ON",
-        "avg_carbon_g_kwh": 30.0
+        "avg_carbon_g_kwh": 30
       },
       {
         "option_id": "OPT-6b9c0287",
         "option_type": "brownfield",
         "target_site_id": "ESTR-MTL-1",
         "title": "eStruxture MTL-1 Saint-Bruno Phase 19, +20 MW (hybrid)",
-        "new_capacity_mw": 20.0,
-        "capex_cad": 220000000.0,
-        "capex_per_mw_cad": 11000000.0,
+        "new_capacity_mw": 20,
+        "capex_cad": 220000000,
+        "capex_per_mw_cad": 11000000,
         "deployment_months": 18,
         "grid_score": 0.86,
         "sustainability_score": 0.925,
@@ -358,7 +358,7 @@
         "latitude": 45.527,
         "longitude": -73.378,
         "grid_zone": "CA-QC",
-        "avg_carbon_g_kwh": 2.0
+        "avg_carbon_g_kwh": 2
       }
     ],
     "phased_rollout": [
@@ -368,15 +368,15 @@
           "OPT-77fd23be",
           "OPT-6b9c0287"
         ],
-        "cumulative_new_mw": 30.0,
-        "cumulative_capex_cad": 330000000.0
+        "cumulative_new_mw": 30,
+        "cumulative_capex_cad": 330000000
       }
     ],
-    "total_new_capacity_mw": 30.0,
-    "total_capex_cad": 330000000.0,
+    "total_new_capacity_mw": 30,
+    "total_capex_cad": 330000000,
     "blended_carbon_g_kwh": 11.3,
-    "coverage_pct": 100.0,
-    "executive_summary": "# Executive Summary: Vaughan Expansion to 30 MW by 2027\n\n**Target Met, Headlines Strong**\n\nGrounded at eStruxture's TOR-1 facility in Vaughan, this plan confirms that the full 30 MW expansion target is achievable by 2027 with 100% coverage across two funded options. Total capital required is $0.33B (funded options aggregate), delivering a blended grid carbon intensity of 11 g/kWh (IESO fuel mix plus IPCC AR5), which is exceptionally low by any comparable North American standard. Baseline contracted capacity stands at 30 MW today (site records), with year-1 projected demand reaching 120 MW (demand forecast model), confirming that the 30 MW increment is operationally necessary rather than speculative.\n\n**Two Options Carry the Plan**\n\nThe two funded options are eStruxture TOR-1 Vaughan Phase 23, contributing 10 MW via a hybrid power configuration, and eStruxture MTL-1 Saint-Bruno Phase 19, contributing the remaining 20 MW, also hybrid. Together they close the gap between today's 98 MW contracted baseline and the 120 MW year-1 projected demand (demand forecast model) with no residual shortfall. The hybrid delivery model on both options provides flexibility across grid and on-site generation, which is well suited to a balanced workload mix where neither compute-intensive nor storage-intensive loads dominate.\n\n**No Shortfall, but Concentration Risk Warrants Attention**\n\nBecause 100% of the 30 MW increment is funded, there is no capacity shortfall entering 2027. However, 67% of the new capacity (30 MW) is concentrated at a single site in Saint-Bruno rather than Vaughan, meaning that any permitting delay or grid interconnection issue at MTL-1 would leave the operator 20 MW short of the year-1 demand target with limited time to recover within the one-year window.\n\n**Analytical Caveats**\n\nThe latency implications of serving Vaughan demand from Saint-Bruno are data not available for network latency field, and operators should validate round-trip latency against workload SLAs before finalizing the MTL-1 allocation. Operator routing was confirmed as eStruxture TOR-1 Vaughan because eStruxture is the catalog operator with an established site in the named city. All carbon figures reference IESO fuel mix combined with IPCC AR5 lifecycle factors and reflect Ontario and Quebec grid conditions, which are atypically clean relative to most North American markets.\n\n**Next Budget Cycle Priority**\n\nThe strategic priority for the next budget cycle is to reduce geographic concentration by identifying additional Vaughan-local capacity that could absorb demand growth beyond 30 MW, particularly if the balanced workload mix shifts toward AI inference or high-density compute, which typically requires faster brownfield densification than hybrid options alone can support. Leadership should also authorize a latency audit across the TOR-1 to MTL-1 topology before the 2027 go-live to ensure the Saint-Bruno allocation does not introduce service-level exposure for latency-sensitive tenants.",
+    "coverage_pct": 100,
+    "executive_summary": "# Executive Summary: Vaughan Expansion to 30 MW by 2027\n\n**Target Met, Headlines Strong**\n\nGrounded at [[s1|eStruxture's TOR-1 facility in Vaughan]], this plan confirms that the full [[s2|30 MW expansion target is achievable by 2027]] with [[s11|100% coverage across two funded options]]. Total capital required is [[s3|$0.33B (funded options aggregate)]], delivering a [[s4|blended grid carbon intensity of 11 g/kWh]] (IESO fuel mix plus IPCC AR5), which is exceptionally low by any comparable North American standard. Baseline contracted capacity stands at 30 MW today (site records), with [[s5|year-1 projected demand reaching 120 MW (demand forecast model)]], confirming that the 30 MW increment is operationally necessary rather than speculative.\n\n**Two Options Carry the Plan**\n\nThe two funded options are [[s6|eStruxture TOR-1 Vaughan Phase 23, contributing 10 MW via a hybrid power configuration]], and [[s7|eStruxture MTL-1 Saint-Bruno Phase 19, contributing the remaining 20 MW]], also hybrid. Together they close the gap between [[s8|today's 98 MW contracted baseline]] and the 120 MW year-1 projected demand (demand forecast model) with no residual shortfall. The hybrid delivery model on both options provides flexibility across grid and on-site generation, which is well suited to [[s14|a balanced workload mix where neither compute-intensive nor storage-intensive loads dominate]].\n\n**No Shortfall, but Concentration Risk Warrants Attention**\n\nBecause 100% of the 30 MW increment is funded, there is no capacity shortfall entering 2027. However, [[s13|67% of the new capacity]] (30 MW) is concentrated at a single site in Saint-Bruno rather than Vaughan, meaning that [[s9|any permitting delay or grid interconnection issue at MTL-1 would leave the operator 20 MW short]] of the year-1 demand target with limited time to recover within the one-year window.\n\n**Analytical Caveats**\n\nThe latency implications of serving Vaughan demand from Saint-Bruno are data not available for network latency field, and operators should validate round-trip latency against workload SLAs before finalizing the MTL-1 allocation. Operator routing was confirmed as eStruxture TOR-1 Vaughan because eStruxture is the catalog operator with an established site in the named city. All carbon figures reference IESO fuel mix combined with IPCC AR5 lifecycle factors and reflect [[s12|Ontario and Quebec grid conditions, which are atypically clean relative to most North American markets]].\n\n**Next Budget Cycle Priority**\n\nThe strategic priority for the next budget cycle is to reduce geographic concentration by identifying additional Vaughan-local capacity that could absorb demand growth beyond 30 MW, particularly if the balanced workload mix shifts toward [[s10|AI inference or high-density compute, which typically requires faster brownfield densification]] than hybrid options alone can support. Leadership should also authorize a latency audit across the TOR-1 to MTL-1 topology before the 2027 go-live to ensure the Saint-Bruno allocation does not introduce service-level exposure for latency-sensitive tenants.",
     "methodology_notes": "Brownfield capacity per site capped at min(transformer headroom, 5 MW/acre plot density). Capex per MW: $9.5M (air), $11M (hybrid), $13.5M (liquid), with +10% AI-training premium and +25% greenfield premium (anchored on JLL + Cushman 2024 Canadian DC build benchmarks). Demand growth assumed: traditional 12% / inference 25% / training 40% / balanced 22% CAGR. Per-site carbon intensity is computed from provincial fuel mix and IPCC AR5 emission factors. Greedy scoring weighted grid 25% · sustainability 20% · speed 20% · cost 20% · risk 15%.",
     "safety_flags": [],
     "limitations": [
@@ -385,6 +385,92 @@
       "Currency assumed CAD with no FX hedge consideration.",
       "Workload-mix CAGR is a market average. Individual operator pipelines may diverge."
     ],
-    "chart_paths": {}
+    "chart_paths": {},
+    "citation_sources": {
+      "s1": {
+        "source_id": "s1",
+        "label": "Operator footprint · eStruxture TOR-1",
+        "detail": "Hand-curated operator catalog (calibrated from eStruxture public filings + Cushman & Wakefield directory)",
+        "status": "frozen"
+      },
+      "s2": {
+        "source_id": "s2",
+        "label": "Scenario inputs (user-defined)",
+        "detail": "Target capacity + timeline supplied at job submission",
+        "status": "frozen"
+      },
+      "s3": {
+        "source_id": "s3",
+        "label": "Funded-portfolio capital total",
+        "detail": "Sum of per-option capex from the expansion-scoring stage",
+        "status": "modeled"
+      },
+      "s4": {
+        "source_id": "s4",
+        "label": "Blended carbon intensity (computed)",
+        "detail": "Provincial generation mix (StatsCan 25-10-0015, ON + QC rows) × IPCC AR5 lifecycle factors",
+        "status": "modeled"
+      },
+      "s5": {
+        "source_id": "s5",
+        "label": "Year-1 demand forecast",
+        "detail": "Output of demand-forecast stage (workload growth × operator footprint)",
+        "status": "modeled"
+      },
+      "s6": {
+        "source_id": "s6",
+        "label": "Option 1 sizing (modeled)",
+        "detail": "TOR-1 Phase 23 sizing from the expansion-scoring stage",
+        "status": "modeled"
+      },
+      "s7": {
+        "source_id": "s7",
+        "label": "Option 2 sizing (modeled)",
+        "detail": "MTL-1 Saint-Bruno Phase 19 sizing from the expansion-scoring stage",
+        "status": "modeled"
+      },
+      "s8": {
+        "source_id": "s8",
+        "label": "Baseline contracted capacity",
+        "detail": "Operator catalog snapshot of existing committed capacity (TOR-1 + MTL-1)",
+        "status": "frozen"
+      },
+      "s9": {
+        "source_id": "s9",
+        "label": "Concentration-risk framing",
+        "detail": "General-knowledge industry risk; not derived from a specific permit-timeline dataset",
+        "status": "llm"
+      },
+      "s10": {
+        "source_id": "s10",
+        "label": "Workload-pattern framing",
+        "detail": "General industry observation about AI workload deployment characteristics",
+        "status": "llm"
+      },
+      "s11": {
+        "source_id": "s11",
+        "label": "Coverage check (modeled)",
+        "detail": "Verified that funded options together meet the 30 MW expansion target",
+        "status": "modeled"
+      },
+      "s12": {
+        "source_id": "s12",
+        "label": "Grid comparison framing",
+        "detail": "General-knowledge comparison; not derived from a North American grid carbon dataset in this run",
+        "status": "llm"
+      },
+      "s13": {
+        "source_id": "s13",
+        "label": "Concentration share (modeled)",
+        "detail": "Computed: MTL-1 allocation (20 MW) ÷ total new capacity (30 MW); the parenthetical in the prose mislabels this value — synthesis-prompt fix needed",
+        "status": "modeled"
+      },
+      "s14": {
+        "source_id": "s14",
+        "label": "Workload-mix framing",
+        "detail": "General industry vocabulary; not a project-defined workload classification",
+        "status": "llm"
+      }
+    }
   }
 }

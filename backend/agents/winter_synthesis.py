@@ -7,6 +7,7 @@ ranked mitigation recommendations.
 """
 from backend.agents.base_agent import BaseAgent
 from backend.agents.grounding import GROUNDING_RULES
+from backend.models.report import CitationSource
 from backend.models.winter_peak import (
     ColdEvent,
     DistributionNetwork,
@@ -14,6 +15,11 @@ from backend.models.winter_peak import (
     ResiliencePlan,
     ScenarioOutcome,
     WinterPeakSpec,
+)
+from backend.utils.citations import (
+    CITATION_PROMPT_RULES,
+    format_errors_for_retry,
+    validate_citations,
 )
 from backend.utils.reconciliation import reconcile
 
@@ -87,6 +93,7 @@ class WinterSynthesisAgent(BaseAgent):
             scenarios=scenario_outcomes,
             mitigations=self._parse_mitigations(narrative.get("mitigations", []), scenario_outcomes),
             executive_summary=exec_summary,
+            citation_sources=self._parse_citation_sources(narrative.get("citation_sources", {})),
             methodology_notes=narrative.get("methodology_notes", self._default_methodology()),
             safety_flags=safety_flags,
             limitations=narrative.get("limitations", self._default_limitations(network)),
@@ -232,7 +239,11 @@ class WinterSynthesisAgent(BaseAgent):
 
 Return JSON shape:
 {{
-  "executive_summary": "4-5 paragraph markdown. Open with '# Executive Summary: <one-line topic>'. Each paragraph begins with '**<2-5 word bold title>**' on its own line, then a blank line, then the prose. Separate paragraphs with blank lines only. Do NOT insert '---' or any horizontal-rule dividers, and do NOT use markdown tables (the renderer does not display them). Paragraph 1: headline finding (verdict and one-sentence why). Paragraph 2: most important supporting evidence (which scenarios failed or passed and by how much). Paragraph 3: at-risk assets and customers. Paragraph 4: caveats and limitations. Paragraph 5: recommended next action. Write for a utility executive who will skim, in plain English, no jargon. Avoid em dashes anywhere in the prose, use commas, periods, or parentheses instead.",
+  "executive_summary": "4-5 paragraph markdown. Open with '# Executive Summary: <one-line topic>'. Each paragraph begins with '**<2-5 word bold title>**' on its own line, then a blank line, then the prose. Separate paragraphs with blank lines only. Do NOT insert '---' or any horizontal-rule dividers, and do NOT use markdown tables (the renderer does not display them). Paragraph 1: headline finding (verdict and one-sentence why). Paragraph 2: most important supporting evidence (which scenarios failed or passed and by how much). Paragraph 3: at-risk assets and customers. Paragraph 4: caveats and limitations. Paragraph 5: recommended next action. Write for a utility executive who will skim, in plain English, no jargon. Avoid em dashes anywhere in the prose, use commas, periods, or parentheses instead. Every quantitative claim, named feeder/substation, named regulation, and industry-pattern claim MUST be wrapped in a [[sN|cited text]] citation marker — see CITATION RULES below.",
+  "citation_sources": {{
+    "s1": {{"source_id": "s1", "label": "Scenario inputs (user-defined)", "detail": "Electrification penetration + city supplied at job submission", "status": "frozen"}},
+    "s2": {{"source_id": "s2", "label": "...", "detail": "...", "status": "frozen|modeled|live|llm"}}
+  }},
   "methodology_notes": "2-3 sentence methodology. Mention the deterministic load model, the COP-adjusted heat pump curves, and that per-feeder values are modeled (if synthesized).",
   "safety_flags": ["..."],  // 0-3 plain-English risk flags relevant to public safety (medical devices, vulnerable populations)
   "limitations": ["..."],  // 1-3 honest caveats about the analysis
@@ -249,6 +260,15 @@ Return JSON shape:
   ]
 }}
 
+DATA SOURCES YOU CAN CITE (use these labels verbatim; do NOT invent source names):
+- "Scenario inputs (user-defined)" — penetration rates, city (status: frozen)
+- "OEB Licensed Distributor Territories (KMZ)" — for service-territory + utility (status: frozen)
+- "Polar Vortex 2014 event record" — for the cold-event temperature curve + duration (status: frozen, detail: "ECCC Toronto Pearson station + IESO 18-Month Outlook")
+- "Synthesized feeder catalog" — for feeder topology + thermal ratings (status: frozen)
+- "Cold-event load simulation (modeled)" — for system peak, per-feeder utilization (status: modeled)
+- "Network catalog metadata" — for customer counts + substation/feeder totals (status: frozen)
+- For any industry-pattern or recommendation framing claim, status: llm.
+
 Mitigation guidance:
   - Always include 3-5 mitigations.
   - Mix categories: at least one demand-side (DR / load shift) and one
@@ -256,17 +276,47 @@ Mitigation guidance:
   - Targeted, specific costs in CAD. Be conservative: typical Canadian
     feeder reconductor is $0.5-2M per feeder; transformer upgrade is
     $1-5M; demand-response programs are $50-300/customer enrolled.
-  - risk_reduction_pct is the percent reduction in aggregate peak risk."""
+  - risk_reduction_pct is the percent reduction in aggregate peak risk.
+
+""" + CITATION_PROMPT_RULES
 
         try:
             # Observed: at 2500 the call truncated at ~9352 chars (≈2340 tokens)
             # mid-mitigation. The mitigations array (3-5 objects × 7 fields each
             # including verbose `rationale` strings) dominates the response size
-            # and Claude can be unpredictably wordy. 3500 gives ~40% headroom
-            # over the largest observed run. If you see truncation in the
-            # safety_flags block again, either bump further or split the call
-            # into exec-summary-and-methodology + mitigations (two smaller asks).
-            return await self.ask_claude_json(SYSTEM_WINTER_SYNTHESIS, prompt, max_tokens=3500)
+            # and Claude can be unpredictably wordy. Phase 2 added citation
+            # markers + a `citation_sources` dict, so 4500 gives headroom for
+            # both the mitigations AND the citation table.
+            attempt_prompt = prompt
+            last_result: dict = {}
+            for attempt in range(3):  # 1 initial + 2 retries (Phase 1 audit needed 3 passes)
+                last_result = await self.ask_claude_json(
+                    SYSTEM_WINTER_SYNTHESIS, attempt_prompt, max_tokens=4500,
+                )
+                exec_text = (last_result or {}).get("executive_summary", "") or ""
+                raw_sources = (last_result or {}).get("citation_sources", {}) or {}
+                try:
+                    parsed = {
+                        k: CitationSource(**v) if not isinstance(v, CitationSource) else v
+                        for k, v in raw_sources.items()
+                    }
+                except Exception as parse_exc:
+                    self.logger.warning(
+                        "Winter citation_sources parse failed on attempt %d: %s",
+                        attempt + 1, parse_exc,
+                    )
+                    parsed = {}
+                errors = validate_citations(exec_text, parsed)
+                if not errors:
+                    return last_result
+                self.logger.warning(
+                    "Winter citation validation failed on attempt %d: %s",
+                    attempt + 1, "; ".join(e.code for e in errors),
+                )
+                attempt_prompt = prompt + "\n\n" + format_errors_for_retry(errors)
+            # Final attempt's output is returned even if validation still fails
+            # — the orchestrator's stub fallback path will catch downstream.
+            return last_result
         except Exception as e:
             # Anthropic 529s and other transient failures already got 3 retries
             # in base_agent. If we're here, the LLM is genuinely unavailable —
@@ -406,6 +456,25 @@ Mitigation guidance:
             + "\n\n".join([para1, para2, para3, para4, para5])
         )
 
+
+    def _parse_citation_sources(self, raw: dict) -> dict[str, CitationSource]:
+        """Coerce LLM-returned citation_sources dict into CitationSource
+        Pydantic instances. Drops entries that fail parsing rather than
+        failing the whole report — the validator already retried twice
+        before we got here, and a partial citation table is more honest
+        than no citations at all."""
+        out: dict[str, CitationSource] = {}
+        if not isinstance(raw, dict):
+            return out
+        for key, val in raw.items():
+            if isinstance(val, CitationSource):
+                out[key] = val
+                continue
+            try:
+                out[key] = CitationSource(**val)
+            except Exception as e:
+                self.logger.debug("Skipping malformed citation source %r: %s", key, e)
+        return out
 
     def _parse_mitigations(self, raw: list[dict], scenario_outcomes: list[ScenarioOutcome]) -> list[Mitigation]:
         """Convert raw Claude mitigation dicts into Mitigation models."""
