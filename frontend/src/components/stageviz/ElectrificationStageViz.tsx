@@ -98,7 +98,7 @@ function WorkloadSpecViz({ plan }: { plan: ElectrificationPlan }) {
             <span className="viz-tile-label">{t.label}</span>
           </div>
           <div style={{ padding: '8px 12px 12px' }}>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
             <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>{t.sub}</div>
           </div>
         </div>
@@ -138,7 +138,7 @@ function NeighborhoodMixViz({ plan }: { plan: ElectrificationPlan }) {
               <span className="viz-tile-label">{t.label}</span>
             </div>
             <div style={{ padding: '8px 12px 12px' }}>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
               {t.sub && <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>{t.sub}</div>}
             </div>
           </div>
@@ -146,7 +146,7 @@ function NeighborhoodMixViz({ plan }: { plan: ElectrificationPlan }) {
       </div>
       {profiles.some((p) => p.is_synthesized) && (
         <div style={{ marginTop: 8, fontSize: 11, color: 'var(--fg-3)' }}>
-          ⓘ Some FSAs synthesized from province averages. See report for sources.
+          Some FSAs synthesized from province averages. See report for sources.
         </div>
       )}
     </>
@@ -215,19 +215,19 @@ function ReadinessMiniViz({ plan }: { plan: ElectrificationPlan }) {
           const c = VERDICT_COLOR[r.verdict] ?? '#b3b1a8'
           return (
             <div key={o.profile.fsa} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-3)', width: 36 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-3)', width: 36 }}>
                 {o.profile.fsa}
               </span>
               <span style={{ flex: 1, fontSize: 12, color: 'var(--fg-1)' }}>
                 {o.profile.label.split(' · ')[1] ?? o.profile.label}
               </span>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: c, fontWeight: 600 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: c, fontWeight: 600 }}>
                 {r.verdict}
               </span>
               <div style={{ width: 100, height: 6, background: '#2a2824', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{ width: `${Math.round(r.overall_score * 100)}%`, height: '100%', background: c }} />
               </div>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-2)', width: 40, textAlign: 'right' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-2)', width: 40, textAlign: 'right' }}>
                 {(r.overall_score * 100).toFixed(0)}
               </span>
             </div>
@@ -252,10 +252,10 @@ function FinalVerdictsViz({ plan }: { plan: ElectrificationPlan }) {
         const headlineColor = items[0] ? VERDICT_COLOR[items[0].readiness.verdict] ?? '#b3b1a8' : '#b3b1a8'
         return (
           <div key={sc.name} style={{ background: 'var(--bg-2)', padding: 12, borderRadius: 4 }}>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--fg-3)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-3)' }}>
               {sc.label.toUpperCase()}
             </div>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 12, color: headlineColor, fontWeight: 700, marginTop: 6 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: headlineColor, fontWeight: 700, marginTop: 6 }}>
               {items[0]?.readiness.verdict ?? '—'}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8 }}>
@@ -274,8 +274,8 @@ function FsaRow({ o }: { o: FSAOutcome }) {
   const c = VERDICT_COLOR[o.readiness.verdict] ?? '#b3b1a8'
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11 }}>
-      <span style={{ fontFamily: 'var(--mono)', color: 'var(--fg-2)' }}>{o.profile.fsa}</span>
-      <span style={{ color: c, fontFamily: 'var(--mono)' }}>{o.readiness.verdict}</span>
+      <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--fg-2)' }}>{o.profile.fsa}</span>
+      <span style={{ color: c, fontFamily: 'var(--font-mono)' }}>{o.readiness.verdict}</span>
     </div>
   )
 }

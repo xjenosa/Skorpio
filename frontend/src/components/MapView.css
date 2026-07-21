@@ -103,7 +103,7 @@
   border-bottom-color: var(--bg-1);
 }
 .skorpio-popup-title {
-  font-family: var(--serif);
+  font-family: var(--font-serif);
   font-size: 14px;
   margin-bottom: 4px;
   color: var(--fg-1);

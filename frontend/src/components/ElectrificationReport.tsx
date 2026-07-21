@@ -48,7 +48,8 @@ function fmt(n: number | null | undefined, digits = 1, fallback = '—') {
 
 function fmtCAD(n: number | null | undefined) {
   if (n == null) return '—'
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`
+  if (n >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(2)}B`
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(0)}M`
   if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`
   return `$${n.toFixed(0)}`
 }
@@ -390,7 +391,7 @@ function ReadinessRow({ fsa, scenarioLabel, r }: { fsa: string; scenarioLabel: s
       <td className="num">{(r.affordability_score * 100).toFixed(0)}</td>
       <td className="num">{(r.policy_score * 100).toFixed(0)}</td>
       <td className="num" style={{ color: c, fontWeight: 600 }}>{(r.overall_score * 100).toFixed(0)}</td>
-      <td style={{ color: c, fontFamily: 'var(--mono)', fontSize: 11 }}>{r.verdict}</td>
+      <td style={{ color: c, fontFamily: 'var(--font-mono)', fontSize: 11 }}>{r.verdict}</td>
       <td style={{ color: 'var(--fg-2)', fontSize: 12 }}>{r.rationale || '—'}</td>
     </tr>
   )
@@ -438,10 +439,10 @@ function Section03Interventions({ plan }: { plan: ElectrificationPlan }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10, marginTop: 8 }}>
               {plan.interventions.map((iv) => (
                 <div key={iv.intervention_id} style={{ background: 'var(--bg-2)', padding: 12, borderRadius: 4 }}>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: 1 }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: 1 }}>
                     {iv.category.replace(/_/g, ' ').toUpperCase()}
                   </div>
-                  <div style={{ fontFamily: 'var(--serif)', fontSize: 15, color: 'var(--fg-1)', marginTop: 4 }}>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--fg-1)', marginTop: 4 }}>
                     {iv.title}
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, fontSize: 11, color: 'var(--fg-2)', marginTop: 6 }}>
@@ -478,7 +479,7 @@ function Section03Interventions({ plan }: { plan: ElectrificationPlan }) {
         )}
         {plan.neighborhoods.some((n) => n.is_synthesized) && (
           <div style={{ marginTop: 8, fontSize: 11, color: 'var(--fg-3)' }}>
-            ⓘ Some FSAs were synthesized from province averages. See per-FSA sources in the data.
+            Some FSAs were synthesized from province averages. See per-FSA sources in the data.
           </div>
         )}
       </div>

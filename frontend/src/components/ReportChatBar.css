@@ -438,7 +438,7 @@
 .report-chatbar-msg--assistant .report-chatbar-msg-body h2,
 .report-chatbar-msg--assistant .report-chatbar-msg-body h3,
 .report-chatbar-msg--assistant .report-chatbar-msg-body h4 {
-  font-family: var(--serif);
+  font-family: var(--font-serif);
   font-weight: 600;
   margin: 8px 0 4px;
 }
@@ -459,9 +459,9 @@
 .report-chatbar-error {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: #f38764;
+  color: var(--err);
   padding: 6px 8px;
-  border: 1px dashed #f38764;
+  border: 1px dashed var(--err);
   border-radius: var(--radius-sm);
 }
 

@@ -420,12 +420,12 @@ export function ReportChatBar({ jobId, pipelineId, onPipelineChange }: ReportCha
                 width: 8,
                 height: 8,
                 borderRadius: '50%',
-                background: '#F38764',
+                background: 'var(--accent)',
                 flexShrink: 0,
               }}
             />
             <span>
-              <strong style={{ color: '#F38764' }}>Demo preview</strong> ·
+              <strong style={{ color: 'var(--accent)' }}>Demo preview</strong> ·
               Follow-up chat is disabled in demo mode. See this feature
               live during the in-person demo.
             </span>

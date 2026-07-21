@@ -417,7 +417,7 @@ export function ReportShell({
         <HeaderRow jobId={jobId} userPrompt={userPrompt} printOnClick={print} />
         <div
           className="panel-pipeline fr-panel"
-          style={{ padding: 16, color: '#f38764' }}
+          style={{ padding: 16, color: 'var(--err)' }}
         >
           {errorLabel}: {error}
         </div>

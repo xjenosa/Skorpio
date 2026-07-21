@@ -38,7 +38,7 @@ export const PIPELINES: PipelineMeta[] = [
     blurb: 'Place new AI/HPC capacity by carbon, latency, and cost.',
     accent: '#f38764',
     examples: [
-      'Find the best site for a 75 MW AI training cluster in Alectra’s service territory, lowest carbon.',
+      "Find the best site for a 75 MW AI training cluster in Alectra's service territory, lowest carbon.",
       'Where should I site a 120 MW inference datacenter in southern Ontario with sub-15 ms latency to Toronto?',
       'Score 5 candidate sites near Mississauga for a 200 MW HPC build, prioritize hydro.',
     ],
@@ -59,7 +59,7 @@ export const PIPELINES: PipelineMeta[] = [
       'How much can I grow our Brampton site without a new substation?',
     ],
     chatStarters: [
-      'What is driving the top option’s ranking?',
+      "What is driving the top option's ranking?",
       'What blocks the top option from deploying faster?',
     ],
   },
@@ -70,8 +70,8 @@ export const PIPELINES: PipelineMeta[] = [
     blurb: 'Simulate extreme cold on a regional grid: heat pump COP loss, EV cold-weather draw, baseboard spikes.',
     accent: '#6fcf8e',
     examples: [
-      'Will Mississauga’s grid hold a -25°C polar vortex with 30% heat pump adoption?',
-      'Stress-test Mississauga’s feeders for a 5-day cold snap with 50% heat pumps by 2030.',
+      "Will Mississauga's grid hold a -25°C polar vortex with 30% heat pump adoption?",
+      "Stress-test Mississauga's feeders for a 5-day cold snap with 50% heat pumps by 2030.",
       'How does a -30°C event affect EV charging load in Mississauga?',
     ],
     chatStarters: [
@@ -103,7 +103,7 @@ export const PIPELINES: PipelineMeta[] = [
     accent: '#c889e6',
     examples: [
       'How should Alectra spend $50M to maximize 2050 climate resilience in Mississauga?',
-      'Optimize a $200M investment plan for Alectra’s GTHA feeders.',
+      "Optimize a $200M investment plan for Alectra's GTHA feeders.",
       'Recommend grid upgrades for Alectra under a 2°C warming scenario.',
     ],
     chatStarters: [

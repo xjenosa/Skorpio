@@ -637,7 +637,7 @@
   color: var(--fg-3);
 }
 .fr-cite-popup-title {
-  font-family: var(--serif);
+  font-family: var(--font-serif);
   font-size: 14px;
   margin: 2px 0 2px;
   color: var(--fg-1);

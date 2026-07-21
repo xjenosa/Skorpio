@@ -96,7 +96,7 @@ function WorkloadSpecViz({ plan }: { plan: ResiliencePlan }) {
             <span className="viz-tile-label">{t.label}</span>
           </div>
           <div style={{ padding: '8px 12px 12px' }}>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
             <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>{t.sub}</div>
           </div>
         </div>
@@ -125,7 +125,7 @@ function NetworkSummaryViz({ plan }: { plan: ResiliencePlan }) {
               <span className="viz-tile-label">{t.label}</span>
             </div>
             <div style={{ padding: '8px 12px 12px' }}>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
               {t.sub && <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>{t.sub}</div>}
             </div>
           </div>
@@ -133,7 +133,7 @@ function NetworkSummaryViz({ plan }: { plan: ResiliencePlan }) {
       </div>
       {network.is_synthesized && (
         <div style={{ marginTop: 8, fontSize: 11, color: 'var(--fg-3)' }}>
-          ⓘ Per-feeder values modeled from {network.sources.length} public source(s).
+          Per-feeder values modeled from {network.sources.length} public source(s).
         </div>
       )}
     </>
@@ -170,10 +170,10 @@ function LoadCurveMiniViz({ plan }: { plan: ResiliencePlan }) {
       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${peakLoads.length}, 1fr)`, gap: 8, marginTop: 8 }}>
         {peakLoads.map((p) => (
           <div key={p.name} style={{ background: 'var(--bg-2)', padding: 10, borderRadius: 4 }}>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--fg-3)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-3)' }}>
               {p.name.toUpperCase()}
             </div>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 18, color: p.color, marginTop: 4 }}>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: p.color, marginTop: 4 }}>
               {p.peak.toFixed(0)} MW
             </div>
             <div style={{ color: 'var(--fg-3)', fontSize: 10 }}>{p.headroom.toFixed(0)}% headroom</div>
@@ -201,17 +201,17 @@ function FeederRiskMiniViz({ plan }: { plan: ResiliencePlan }) {
           const c = fr.overload_risk >= 0.8 ? STYLE_VERDICT.critical : fr.overload_risk >= 0.5 ? STYLE_VERDICT.warning : STYLE_VERDICT.good
           return (
             <div key={fr.feeder_id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-3)', width: 24 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-3)', width: 24 }}>
                 #{fr.rank}
               </span>
               <span style={{ flex: 1, fontSize: 12, color: 'var(--fg-1)' }}>{fr.feeder_name}</span>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-3)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-3)' }}>
                 {fr.capacity_utilization_pct.toFixed(0)}% util
               </span>
               <div style={{ width: 100, height: 6, background: '#2a2824', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{ width: `${Math.min(100, fr.overload_risk * 100)}%`, height: '100%', background: c }} />
               </div>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: c, width: 36, textAlign: 'right' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: c, width: 36, textAlign: 'right' }}>
                 {(fr.overload_risk * 100).toFixed(0)}%
               </span>
             </div>
@@ -231,13 +231,13 @@ function ScenarioVerdictViz({ plan }: { plan: ResiliencePlan }) {
         const c = VERDICT_COLOR[s.summary_verdict] ?? '#b3b1a8'
         return (
           <div key={s.scenario.name} style={{ background: 'var(--bg-2)', padding: 12, borderRadius: 4 }}>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--fg-3)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-3)' }}>
               {s.scenario.label.toUpperCase()}
             </div>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 12, color: c, fontWeight: 700, marginTop: 6 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: c, fontWeight: 700, marginTop: 6 }}>
               {s.summary_verdict}
             </div>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 18, color: 'var(--fg-1)', marginTop: 4 }}>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: 'var(--fg-1)', marginTop: 4 }}>
               {s.load_profile.peak_load_mw.toFixed(0)} MW
             </div>
             <div style={{ color: 'var(--fg-2)', fontSize: 11, marginTop: 2 }}>{s.headline}</div>

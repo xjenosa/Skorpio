@@ -213,7 +213,7 @@ export function LoginPage() {
         <section className="left">
           <div className="eyebrow-row">
             <span className="dot" aria-hidden="true"></span>
-            <span className="label">OPERATOR CONSOLE · V0.1</span>
+            <span className="label">OPERATOR CONSOLE · V0.1.0</span>
           </div>
 
           <h1 className="headline">
@@ -221,7 +221,8 @@ export function LoginPage() {
           </h1>
           <p className="subhead">
             Sign in to run datacenter siting, winter peak stress tests, neighborhood
-            electrification scoring, and grid investment plans across Canada.
+            electrification scoring, grid investment planning, and datacenter
+            expansion planning across Canada.
           </p>
 
           {phase === 'sso' ? (
@@ -319,7 +320,7 @@ export function LoginPage() {
             <span>REGION · <strong>ONTARIO · IESO</strong></span>
           </div>
           <div className="hud hud-bl">
-            <span>CO₂ · <strong>138</strong> g/kWh</span>
+            <span>CO₂ · <strong>30</strong> g/kWh</span>
           </div>
           <div className="hud hud-br">
             <span>DEMAND · <strong>17.4</strong> GW</span>

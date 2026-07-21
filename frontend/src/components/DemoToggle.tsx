@@ -23,9 +23,7 @@ export function DemoToggle() {
   // re-firing this on every flip is cheap.
   useEffect(() => {
     if (!demo) return
-    resolveDemoJobIds().catch((err) => {
-      console.warn('[demo] failed to resolve demo job ids:', err)
-    })
+    resolveDemoJobIds().catch(() => {})
   }, [demo])
 
   // Clear `?job=` in the SAME click handler that flips the toggle so React

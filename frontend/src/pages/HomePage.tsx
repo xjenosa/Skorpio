@@ -49,8 +49,8 @@ import sampleRunFixture from '../demo/fixtures/e5d77262.json'
 const USER_EMAIL_KEY = 'skorpio.user.email'
 
 function loadUserEmail(): string {
-  if (typeof window === 'undefined') return 'me@skorpio.local'
-  return window.localStorage.getItem(USER_EMAIL_KEY) || 'me@skorpio.local'
+  if (typeof window === 'undefined') return 'max@skorpio.ai'
+  return window.localStorage.getItem(USER_EMAIL_KEY) || 'max@skorpio.ai'
 }
 
 // Reports sort options.
@@ -683,6 +683,13 @@ function AccountPopup() {
 }
 
 function UpgradePlanModal({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" role="dialog" aria-label="Upgrade plan" onClick={(e) => e.stopPropagation()}>
@@ -1463,9 +1470,8 @@ function AgentPipelineView({
     )
     try {
       await api.updateJobPipeline(featured.job_id, pid)
-    } catch (e) {
+    } catch {
       onJobsChanged(prev)
-      console.error('Failed to re-tag pipeline:', e)
     }
   }
 
@@ -2142,9 +2148,8 @@ function ReportsView({
                           }
                           try {
                             await api.updateJobPipeline(j.job_id, newPid)
-                          } catch (err) {
+                          } catch {
                             onJobsChanged(prevJobs)
-                            console.error('Failed to re-tag pipeline:', err)
                           }
                         }}
                         renderTrigger={({ open, toggle, triggerRef }) => (
@@ -2341,6 +2346,14 @@ function CollisionDialog({
   const setAll = (s: ImportStrategy) =>
     setStrategies(Object.fromEntries(conflicts.map((c) => [c.job_id, s])))
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onCancel])
+
   return (
     <div className="modal-backdrop" onClick={onCancel}>
       <div className="modal collision-modal" role="dialog" aria-label="Resolve import conflicts" onClick={(e) => e.stopPropagation()}>
@@ -2411,11 +2424,10 @@ function ConfirmDeleteDialog({
     const onKey = (e: KeyboardEvent) => {
       if (busy) return
       if (e.key === 'Escape') onCancel()
-      if (e.key === 'Enter') onConfirm()
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [busy, onCancel, onConfirm])
+  }, [busy, onCancel])
 
   return (
     <div className="modal-backdrop" onClick={busy ? undefined : onCancel}>
@@ -2543,7 +2555,7 @@ function DashboardView() {
           </h1>
           <div className="sub">
             SKORPIO OPERATIONS · {TIMEFRAME_LABELS[timeframe].toUpperCase()}
-            {error && <> · <span style={{ color: '#f38764' }}>{error}</span></>}
+            {error && <> · <span style={{ color: 'var(--err)' }}>{error}</span></>}
           </div>
         </div>
         <div className="actions">
@@ -2717,7 +2729,7 @@ function DashboardView() {
                     {f.error && (
                       <div
                         style={{
-                          color: '#f38764',
+                          color: 'var(--err)',
                           fontFamily: 'var(--font-mono)',
                           fontSize: 11,
                           marginTop: 4,
@@ -2761,7 +2773,7 @@ function SettingsView() {
           <tbody>
             <tr><td className="label" style={{ width: 240 }}>Default region</td><td>Ontario · IESO</td><td className="action"><a href="#">Edit ›</a></td></tr>
             <tr><td className="label">Units</td><td>Metric · Canadian English</td><td className="action"><a href="#">Edit ›</a></td></tr>
-            <tr><td className="label">Notifications</td><td>Email · alimximln@gmail.com</td><td className="action"><a href="#">Edit ›</a></td></tr>
+            <tr><td className="label">Notifications</td><td>Email · max@skorpio.ai</td><td className="action"><a href="#">Edit ›</a></td></tr>
             <tr><td className="label">Plan</td><td>Pro · seats 4 / 8</td><td className="action"><a href="#">Manage ›</a></td></tr>
             <tr><td className="label">API keys</td><td>2 active</td><td className="action"><a href="#">Manage ›</a></td></tr>
           </tbody>

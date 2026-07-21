@@ -289,12 +289,6 @@ main.workspace {
   letter-spacing: 0.06em;
   color: var(--fg-3);
   cursor: default;
-  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
-}
-.telemetry .tcell:hover {
-  background: var(--bg-2);
-  color: var(--fg-1);
-  border-color: var(--rule-3);
 }
 .telemetry .tcell strong {
   color: var(--fg-1);
@@ -382,7 +376,7 @@ main.workspace {
 }
 .page-head .actions button.run-control--stop:hover {
   background: rgba(243, 135, 100, 0.12);
-  color: #f38764;
+  color: var(--accent);
   border-color: rgba(243, 135, 100, 0.5);
 }
 
@@ -427,7 +421,7 @@ main.workspace {
 }
 .page-head .actions button.run-control--stop.run-control--busy {
   background: rgba(243, 135, 100, 0.10);
-  color: #f38764;
+  color: var(--accent);
   border-color: rgba(243, 135, 100, 0.45);
 }
 .page-head .actions button.run-control .ico-spin {
@@ -539,12 +533,12 @@ main.workspace {
 }
 .reports button.row-delete:hover,
 .reports button.row-delete:focus-visible {
-  color: #f38764;
+  color: var(--accent);
   border-color: rgba(243,135,100,0.35);
   background: rgba(243,135,100,0.08);
 }
 .reports tbody tr:hover td.action button.row-delete { color: var(--fg-2); }
-.reports tbody tr:hover td.action button.row-delete:hover { color: #f38764; }
+.reports tbody tr:hover td.action button.row-delete:hover { color: var(--accent); }
 
 .reports a.row-open,
 .reports button.row-open {
@@ -1116,7 +1110,7 @@ main.workspace {
   color: var(--fg-2, #cfcbc6);
 }
 .composer-demo-overlay strong {
-  color: #F38764;
+  color: var(--accent);
 }
 /* Demo-mode keeps the row divider and the (disabled) pickers at full
    strength in the same grey as the overlay text — without these

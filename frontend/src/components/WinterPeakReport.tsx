@@ -46,7 +46,8 @@ function fmt(n: number | null | undefined, digits = 1, fallback = '—') {
 
 function fmtCAD(n: number | null | undefined) {
   if (n == null) return '—'
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`
+  if (n >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(2)}B`
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(0)}M`
   if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`
   return `$${n.toFixed(0)}`
 }
@@ -449,10 +450,10 @@ function Section03Mitigations({ plan }: { plan: ResiliencePlan }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10, marginTop: 8 }}>
               {plan.mitigations.map((m) => (
                 <div key={m.mitigation_id} style={{ background: 'var(--bg-2)', padding: 12, borderRadius: 4 }}>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: 1 }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: 1 }}>
                     {m.category.replace(/_/g, ' ').toUpperCase()}
                   </div>
-                  <div style={{ fontFamily: 'var(--serif)', fontSize: 15, color: 'var(--fg-1)', marginTop: 4 }}>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--fg-1)', marginTop: 4 }}>
                     {m.title}
                   </div>
                   <div style={{ display: 'flex', gap: 10, fontSize: 11, color: 'var(--fg-2)', marginTop: 6 }}>
@@ -488,7 +489,7 @@ function Section03Mitigations({ plan }: { plan: ResiliencePlan }) {
         )}
         {plan.network.is_synthesized && (
           <div style={{ marginTop: 8, fontSize: 11, color: 'var(--fg-3)' }}>
-            ⓘ Per-feeder topology values are modeled from public utility filings. Sources: {plan.network.sources.join('; ')}.
+            Per-feeder topology values are modeled from public utility filings. Sources: {plan.network.sources.join('; ')}.
           </div>
         )}
       </div>

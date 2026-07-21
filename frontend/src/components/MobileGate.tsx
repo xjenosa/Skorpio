@@ -149,7 +149,7 @@ export function MobileGate() {
             so a judge already on /?tab=reports lands on the right page
             after pasting. */}
         <p className="mobile-gate-url" aria-hidden="true">
-          pre-skorpio.vercel.app
+          skorpio.vercel.app
         </p>
 
         <button

@@ -93,7 +93,7 @@ function WorkloadSpecViz({ plan }: { plan: ExpansionPlan }) {
             <span className="viz-tile-label">{t.label}</span>
           </div>
           <div style={{ padding: '8px 12px 12px' }}>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
             <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>{t.sub}</div>
           </div>
         </div>
@@ -128,7 +128,7 @@ function FootprintViz({ plan }: { plan: ExpansionPlan }) {
               <span className="viz-tile-label">{t.label}</span>
             </div>
             <div style={{ padding: '8px 12px 12px' }}>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
               {t.sub && <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>{t.sub}</div>}
             </div>
           </div>
@@ -137,9 +137,9 @@ function FootprintViz({ plan }: { plan: ExpansionPlan }) {
       <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 4 }}>
         {sites.map((s) => (
           <div key={s.site_id} style={{ display: 'flex', gap: 8, fontSize: 11, color: 'var(--fg-2)' }}>
-            <span style={{ fontFamily: 'var(--mono)', color: 'var(--fg-3)', width: 110 }}>{s.site_id}</span>
+            <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--fg-3)', width: 110 }}>{s.site_id}</span>
             <span style={{ flex: 1 }}>{s.name}</span>
-            <span style={{ fontFamily: 'var(--mono)', color: 'var(--fg-3)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--fg-3)' }}>
               {s.current_capacity_mw.toFixed(0)} MW · {s.cooling.replace(/_/g, ' ')}
             </span>
           </div>
@@ -202,15 +202,15 @@ function ScoringMiniViz({ plan }: { plan: ExpansionPlan }) {
           const c = TYPE_COLOR[o.option_type] ?? '#b3b1a8'
           return (
             <div key={o.option_id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-3)', width: 28 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-3)', width: 28 }}>
                 #{o.rank}
               </span>
               <span style={{ flex: 1, fontSize: 12, color: 'var(--fg-1)' }}>{o.title}</span>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: c }}>{o.option_type}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: c }}>{o.option_type}</span>
               <div style={{ width: 80, height: 6, background: '#2a2824', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{ width: `${Math.round(o.overall_score * 100)}%`, height: '100%', background: c }} />
               </div>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-2)', width: 40, textAlign: 'right' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-2)', width: 40, textAlign: 'right' }}>
                 {(o.overall_score * 100).toFixed(0)}
               </span>
             </div>
@@ -228,8 +228,8 @@ function RolloutViz({ plan }: { plan: ExpansionPlan }) {
     <div style={{ display: 'grid', gridTemplateColumns: `repeat(${plan.phased_rollout.length}, 1fr)`, gap: 10 }}>
       {plan.phased_rollout.map((p) => (
         <div key={p.year} style={{ background: 'var(--bg-2)', padding: 12, borderRadius: 4 }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--fg-3)' }}>YEAR {p.year}</div>
-          <div style={{ fontFamily: 'var(--serif)', fontSize: 18, color: 'var(--fg-1)', marginTop: 6 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-3)' }}>YEAR {p.year}</div>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: 'var(--fg-1)', marginTop: 6 }}>
             {p.cumulative_new_mw.toFixed(0)} MW
           </div>
           <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>

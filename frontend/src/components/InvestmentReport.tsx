@@ -35,7 +35,7 @@ import type { PipelineId } from '../pipelines'
 // Climate-Adapted Grid Investment Optimizer — Final report. Sections:
 //   01 · Funded portfolio (chart)
 //   02 · At-risk asset map (signature MAP)
-//   03 · Unfunded + methodology (text + hazard-exposure donut)
+//   03 · Unfunded projects & methodology (text + hazard-exposure donut)
 
 const TIER_COLOR: Record<string, string> = {
   critical: VERDICT_COLOR.critical,
@@ -157,7 +157,7 @@ export function InvestmentReport({ jobId, hasResults, onPipelineChange }: Invest
     },
     {
       id: '03',
-      title: '03 · Unfunded + methodology',
+      title: '03 · Unfunded projects & methodology',
       sub: 'Hazard exposure breakdown, unfunded candidates, methodology notes.',
       body: <Section03UnfundedAndMethod plan={plan} />,
     },
@@ -371,7 +371,7 @@ function RiskTable({ plan }: { plan: InvestmentPlan }) {
                 <td>{a?.asset_type.replace(/_/g, ' ') ?? '—'}</td>
                 <td className="num">{a?.age_years ?? '—'}y</td>
                 <td className="num" style={{ color: tierC, fontWeight: 600 }}>{fmtCAD(p.aggregate_annual_loss_cad)}</td>
-                <td style={{ color: tierC, fontFamily: 'var(--mono)', fontSize: 11 }}>{p.risk_tier.toUpperCase()}</td>
+                <td style={{ color: tierC, fontFamily: 'var(--font-mono)', fontSize: 11 }}>{p.risk_tier.toUpperCase()}</td>
                 <td>{fundedAssetIds.has(p.asset_id) ? 'Yes' : '—'}</td>
                 <td style={{ fontSize: 12, color: 'var(--fg-2)' }}>{dominant}</td>
               </tr>
@@ -452,10 +452,10 @@ function Section03UnfundedAndMethod({ plan }: { plan: InvestmentPlan }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10, marginTop: 8 }}>
               {unfundedTop.map((p) => (
                 <div key={p.project_id} style={{ background: 'var(--bg-2)', padding: 12, borderRadius: 4 }}>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: 1 }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--accent)', letterSpacing: 1 }}>
                     {p.category.replace(/_/g, ' ').toUpperCase()}
                   </div>
-                  <div style={{ fontFamily: 'var(--serif)', fontSize: 15, color: 'var(--fg-1)', marginTop: 4 }}>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--fg-1)', marginTop: 4 }}>
                     {p.title}
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, fontSize: 11, color: 'var(--fg-2)', marginTop: 6 }}>

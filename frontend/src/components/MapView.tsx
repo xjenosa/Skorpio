@@ -291,7 +291,7 @@ export function MapView({
         marker.addTo(map)
         markerObjectsRef.current.push(marker)
 
-        if (m.popup) {
+        if (m.popup && !(typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)) {
           // Hover-only popup. We don't use `marker.setPopup()` because that
           // binds click-to-toggle; the spec is pure hover. `closeButton:
           // false` removes the x (no click target needed) and
@@ -299,6 +299,11 @@ export function MapView({
           // dismissing it before the cursor leaves. A short grace period
           // lets the cursor cross the gap from marker to popup body
           // without flicker.
+          //
+          // Touch devices are excluded — mouseenter fires on tap but the
+          // `closeOnClick: false` + no-x setup means the popup gets stuck
+          // with no way to dismiss it. The static-map fallback on coarse
+          // pointers already trades interactivity for glanceability.
           const html = `
             ${m.popup.eyebrow ? `<div class="skorpio-popup-eyebrow">${escapeHtml(m.popup.eyebrow)}</div>` : ''}
             <div class="skorpio-popup-title">${escapeHtml(m.popup.title)}</div>

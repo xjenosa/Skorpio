@@ -80,7 +80,7 @@ function WorkloadSpecViz({ plan }: { plan: InvestmentPlan }) {
             <span className="viz-tile-label">{t.label}</span>
           </div>
           <div style={{ padding: '8px 12px 12px' }}>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
             <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>{t.sub}</div>
           </div>
         </div>
@@ -114,7 +114,7 @@ function AssetCatalogViz({ plan }: { plan: InvestmentPlan }) {
               <span className="viz-tile-label">{t.label}</span>
             </div>
             <div style={{ padding: '8px 12px 12px' }}>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
             </div>
           </div>
         ))}
@@ -123,7 +123,7 @@ function AssetCatalogViz({ plan }: { plan: InvestmentPlan }) {
         {Object.entries(byType).map(([type, n]) => (
           <span key={type} style={{
             fontSize: 10, padding: '4px 8px', borderRadius: 999,
-            background: 'var(--bg-2)', color: 'var(--fg-2)', fontFamily: 'var(--mono)',
+            background: 'var(--bg-2)', color: 'var(--fg-2)', fontFamily: 'var(--font-mono)',
           }}>
             {type.replace(/_/g, ' ')} · {n}
           </span>
@@ -153,14 +153,14 @@ function RiskMiniViz({ plan }: { plan: InvestmentPlan }) {
           const pct = Math.round((p.aggregate_annual_loss_cad / max) * 100)
           return (
             <div key={p.asset_id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-3)', width: 28 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-3)', width: 28 }}>
                 #{p.rank}
               </span>
               <span style={{ flex: 1, fontSize: 12, color: 'var(--fg-1)' }}>{name}</span>
               <div style={{ width: 120, height: 6, background: '#2a2824', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{ width: `${pct}%`, height: '100%', background: c }} />
               </div>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: c, width: 56, textAlign: 'right' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: c, width: 56, textAlign: 'right' }}>
                 ${(p.aggregate_annual_loss_cad / 1e6).toFixed(1)}M
               </span>
             </div>
@@ -190,7 +190,7 @@ function OptimizerMiniViz({ plan }: { plan: InvestmentPlan }) {
               <span className="viz-tile-label">{t.label}</span>
             </div>
             <div style={{ padding: '8px 12px 12px' }}>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: 'var(--fg-1)' }}>{t.value}</div>
             </div>
           </div>
         ))}
@@ -198,9 +198,9 @@ function OptimizerMiniViz({ plan }: { plan: InvestmentPlan }) {
       <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 4 }}>
         {top.map((f) => (
           <div key={f.project.project_id} style={{ display: 'flex', gap: 8, fontSize: 11, color: 'var(--fg-2)' }}>
-            <span style={{ fontFamily: 'var(--mono)', color: 'var(--fg-3)', width: 26 }}>#{f.rank}</span>
+            <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--fg-3)', width: 26 }}>#{f.rank}</span>
             <span style={{ flex: 1 }}>{f.project.title}</span>
-            <span style={{ fontFamily: 'var(--mono)', color: 'var(--accent)' }}>{f.roi_ratio.toFixed(1)}×</span>
+            <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>{f.roi_ratio.toFixed(1)}×</span>
           </div>
         ))}
       </div>
@@ -221,10 +221,10 @@ function FundedPortfolioViz({ plan }: { plan: InvestmentPlan }) {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10 }}>
       {entries.map(([cat, v]) => (
         <div key={cat} style={{ background: 'var(--bg-2)', padding: 12, borderRadius: 4 }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--fg-3)' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--fg-3)' }}>
             {cat.replace(/_/g, ' ').toUpperCase()}
           </div>
-          <div style={{ fontFamily: 'var(--serif)', fontSize: 20, color: 'var(--fg-1)', marginTop: 6 }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 20, color: 'var(--fg-1)', marginTop: 6 }}>
             ${(v / 1e6).toFixed(0)}M
           </div>
           <div style={{ color: 'var(--fg-3)', fontSize: 11, marginTop: 2 }}>

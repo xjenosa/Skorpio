@@ -34,7 +34,7 @@ import type { PipelineId } from '../pipelines'
 // Datacenter Expansion Planner — Final report. Sections:
 //   01 · Phased rollout (line chart)
 //   02 · Operator footprint map (signature MAP)
-//   03 · Methodology + limitations (text + brownfield/greenfield donut)
+//   03 · Methodology & limitations (text + brownfield/greenfield donut)
 
 const TYPE_COLOR: Record<string, string> = {
   brownfield: VERDICT_COLOR.good,
@@ -157,7 +157,7 @@ export function ExpansionReport({ jobId, hasResults, onPipelineChange }: Expansi
     },
     {
       id: '03',
-      title: '03 · Methodology + limitations',
+      title: '03 · Methodology & limitations',
       sub: 'Capacity-type mix donut, demand drivers, assumptions, safety flags.',
       body: <Section03Methodology plan={plan} />,
     },
@@ -484,7 +484,7 @@ function Section03Methodology({ plan }: { plan: ExpansionPlan }) {
         )}
         {plan.footprint.sources.length > 0 && (
           <div style={{ marginTop: 8, fontSize: 11, color: 'var(--fg-3)' }}>
-            ⓘ Footprint sources: {plan.footprint.sources.join('; ')}.
+            Footprint sources: {plan.footprint.sources.join('; ')}.
           </div>
         )}
       </div>
