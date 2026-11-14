@@ -3,6 +3,8 @@
 
 **[Live Demo](https://skorpio-xjenosa-s-projects.vercel.app)** · **[Sample Reports](presentation/reports)** · **[Demo Video (YouTube)](https://youtu.be/Gw9yvq4lHWE)**
 
+![A finished Skorpio report for a 75 MW datacenter siting question: Markham, Ontario ranks best overall, above the ranked candidates and an executive summary whose claims link to their sources](docs/screenshot.jpg)
+
 ---
 
 ## 🌍 Inspiration
